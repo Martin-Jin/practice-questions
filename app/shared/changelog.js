@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.28';
+export const VERSION = '2.29';
 
 export const CHANGELOG = [
+  {
+    version: '2.29', date: '2026-11-01', title: 'Tidier practice panel',
+    items: [
+      'Practice mode on an imported set is an underlined drop-down like the section picker, and the space under the Practise heading is tighter. See all sessions lines up with the Leave out completed line, and the Questions in this set heading sits close above its sentence.',
+    ],
+  },
   {
     version: '2.28', date: '2026-11-01', title: 'Recent sessions line up with the practice box',
     items: [
@@ -28,13 +34,6 @@ export const CHANGELOG = [
     version: '2.25', date: '2026-11-01', title: 'Current question number readable when difficult',
     items: [
       'In the question number strip, the current question keeps its light text when it is also marked as difficult.',
-    ],
-  },
-  {
-    version: '2.24', date: '2026-11-01', title: 'Search and thin rows in past sessions',
-    items: [
-      'The Past sessions window of a set has the History search box and the thin run rows. Recent sessions beside the practice options shows as many sessions as fit, and See all is a plain link-style button.',
-      'The run lists on a set page and a folder page use the thin rows too.',
     ],
   },
 ];

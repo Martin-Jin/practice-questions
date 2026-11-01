@@ -6,6 +6,7 @@ import { capQuestionCount, splitProblem } from '../../shared/modes.js';
 import { createLibRun, deleteLibRun, runStatus, getQuestionProgress, libraryRunSet } from '../lib/practice.js';
 import { useDialogs } from './Dialogs.jsx';
 import { toast, validationError } from './Toasts.jsx';
+import UnderlineSelect from './UnderlineSelect.jsx';
 import { backupNote } from '../lib/backup.js';
 import { useSlide } from './SlideText.jsx';
 import Icon from './Icon.jsx';
@@ -107,17 +108,15 @@ export function LibraryPracticePicker({ set }) {
 
   return (
     <section>
-      <div className="section-title"><h2>Practise</h2>{st.prioritise && <span className="chip accent">Drawing hard questions more often</span>}</div>
+      <div className="section-title tight"><h2>Practise</h2>{st.prioritise && <span className="chip accent">Drawing hard questions more often</span>}</div>
       <div className="row" style={{ marginBottom: 10 }}>
         {names.length > 1 && (
           <button type="button" className="btn icon-only" onClick={() => setCustomising(true)} title="Customise by section: choose the sections, and how many questions from each" aria-label="Customise by section">
             <Icon name="tune" />
           </button>
         )}
-        <label htmlFor="lib-mode">Practice mode</label>
-        <select id="lib-mode" value={mode} onChange={(e) => setMode(e.target.value)}>
-          {MODES.filter((id) => id !== 'sections' || names.length > 1).map((id) => <option key={id} value={id}>{LIB_MODE_LABELS[id]}</option>)}
-        </select>
+        <span>Practice mode</span>
+        <UnderlineSelect options={MODES.filter((id) => id !== 'sections' || names.length > 1).map((id) => ({ value: id, label: LIB_MODE_LABELS[id] }))} value={mode} onChange={setMode} label="Practice mode" />
         <button type="button" className="btn primary" onClick={start}>Start</button>
       </div>
       <div className="modes">{picker(mode)}</div>

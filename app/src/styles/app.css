@@ -135,9 +135,10 @@ b.crumb-item { color: var(--text); font-weight: 600; }
 .page-head { display: grid; gap: 6px; }
 .section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
 .section-title.with-action { align-items: center; }
-.section-title.set-heading { margin-bottom: 0; }
+.section-title.set-heading { margin-bottom: -20px; }   /* the page grid's 28px gap is pulled in to 8px, so the line under it sits close */
 .set-heading h2 { font-size: 14px; }   /* 13px -> 14px (x1.08); the page uses the same px sizes on phones, so the scale carries over */
 .section-pick { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; color: var(--muted); }
+.section-pick .btn { height: 24px; min-height: 0; }
 .section-select { font: inherit; font-weight: 600; color: var(--text); background: transparent; border: 0; border-bottom: 2px solid currentColor; border-radius: 0; padding: 0 2px; cursor: pointer; max-width: 60vw; }
 .section-combo { position: relative; display: inline-block; }
 .section-options { position: absolute; left: 0; top: 100%; z-index: 20; min-width: 100%; width: max-content; max-width: 70vw; max-height: 280px; overflow-y: auto; margin: 4px 0 0; padding: 4px; list-style: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, .15); color: var(--text); font-weight: 400; }
@@ -168,7 +169,8 @@ b.crumb-item { color: var(--text); font-weight: 600; }
 .practice-row { display: flex; flex-wrap: wrap; gap: 28px; align-items: stretch; }
 .practice-main { flex: 1 1 440px; max-width: 640px; min-width: 0; }
 .recent { flex: 1 1 260px; max-width: 400px; min-width: 240px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
-.recent .section-title { margin-bottom: 4px; }
+.section-title.tight, .recent .section-title { margin-bottom: 4px; }
+.recent > .btn { height: 24px; min-height: 0; }   /* centred on the "Leave out completed" line beside it */
 .recent .section-title .muted { font-size: 12px; line-height: 1; }
 .recent-list { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; gap: 6px; flex: 1; align-content: start; }
 .recent-row { display: grid; gap: 1px; padding: 5px 12px; height: 44px; line-height: 1.3; box-sizing: border-box; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); position: relative; overflow: hidden; }
