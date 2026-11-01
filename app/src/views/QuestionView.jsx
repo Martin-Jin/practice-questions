@@ -71,6 +71,16 @@ export default function QuestionView({ setId, uid, run, theme }) {
   const [editMode, setEditMode] = useState(() => loadFlag('editMode', false));   // shows the controls that change the question
   const [formulaOpen, setFormulaOpen] = useState(() => loadFlag('formulaOpen', false));
   const toggleEdit = () => setEditMode((on) => { saveFlag('editMode', !on); if (on) setPanel((p) => (p === 'key' ? null : p)); return !on; });
+  // Edit mode ends when the user clicks or tabs to anything but its own controls (the toggle, the pencils, the answer key editor, a
+  // dialog) or moves between questions (which keeps it on), so a leftover focused toggle never swallows Space meant for the timer.
+  useEffect(() => {
+    if (!editMode) return undefined;
+    const KEEP = '.edit-toggle, .edit-pencil, .edit-row, .edit-zone, dialog, .qstrip, .qlist-backdrop';
+    const away = (e) => { if (!(e.target.closest && e.target.closest(KEEP))) toggleEdit(); };
+    document.addEventListener('pointerdown', away, true);
+    document.addEventListener('focusin', away, true);
+    return () => { document.removeEventListener('pointerdown', away, true); document.removeEventListener('focusin', away, true); };
+  }, [editMode]);
   const openEdit = (what) => open(({ close }) => <EditContent set={set} question={editQuestion} what={what} close={close} />);
   // In edit mode a small pencil sits beside each thing that can be changed.
   const pencil = (label, onClick) => <button type="button" className="btn ghost sm icon-only edit-pencil" onClick={onClick} title={label} aria-label={label}><Icon name="pencil" /></button>;
@@ -241,7 +251,7 @@ export default function QuestionView({ setId, uid, run, theme }) {
             {question.source && <span className="muted">{question.source}</span>}
           </div>
           <h1 className="title-with-icon" style={{ margin: '6px 0 12px' }}><ScrollTitle text={question.title} />
-            <button type="button" className={`btn ghost sm icon-only edit-toggle${editMode ? ' on' : ''}`} aria-pressed={editMode} onClick={toggleEdit}
+            <button type="button" className={`btn ghost sm icon-only edit-toggle${editMode ? ' on' : ''}`} aria-pressed={editMode} onClick={(e) => { toggleEdit(); if (e.detail > 0) e.currentTarget.blur(); }}
               title={editMode ? 'Leave edit mode' : 'Edit this question'} aria-label={editMode ? 'Leave edit mode' : 'Edit this question'}><Icon name="pencil" /></button>
           </h1>
           {progress && progress.attempts > 0 && (
@@ -299,9 +309,11 @@ export default function QuestionView({ setId, uid, run, theme }) {
               </>
             )}
             {editMode && panel === 'key' && (
-              <AnswerKeyEditor key={recordUid} question={editQuestion} edited={edited} tagChoices={knownTags(st, recordSetId)}
-                onSave={(edit) => { saveEdit(recordSetId, recordUid, edit); setResult(null); }}
-                onRevert={() => { clearEdit(recordSetId, recordUid); resetChecks(recordSetId, recordUid); setResult(null); }} />
+              <div className="edit-zone">
+                <AnswerKeyEditor key={recordUid} question={editQuestion} edited={edited} tagChoices={knownTags(st, recordSetId)}
+                  onSave={(edit) => { saveEdit(recordSetId, recordUid, edit); setResult(null); }}
+                  onRevert={() => { clearEdit(recordSetId, recordUid); resetChecks(recordSetId, recordUid); setResult(null); }} />
+              </div>
             )}
           </div>
         </aside>
