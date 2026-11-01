@@ -647,6 +647,7 @@ dialog.quick { padding: 0; margin-top: 12vh; width: min(640px, calc(100vw - 24px
 }
 
 /* ---------- shortcuts dialog ---------- */
+.shortcut-search { width: 100%; box-sizing: border-box; }
 .shortcuts { display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; align-items: center; margin: 0; }
 .shortcuts dt { color: var(--text); }
 .shortcuts dd { margin: 0; text-align: right; display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }

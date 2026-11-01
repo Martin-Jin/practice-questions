@@ -18,6 +18,7 @@ import { DEFAULT_AGENT_URL, normaliseAgentUrl } from '../../shared/solve-agent.j
 import { readAgentUrl, saveAgentUrl } from '../lib/solve-agent.js';
 import { toast } from './Toasts.jsx';
 import { openWelcome } from './Welcome.jsx';
+import { fuzzyFilter } from '../lib/fuzzy.js';
 import useMediaQuery from './useMediaQuery.js';
 
 export const THEME_ICON = { auto: 'auto', light: 'sun', dark: 'moon' };
@@ -102,6 +103,7 @@ export function HelpDialog({ close }) {
   const [editing, setEditing] = useState(null);   // action id waiting for a key press
   const [note, setNote] = useState('');            // why the last key press was refused
   const [pending, setPending] = useState(null);    // { id, combo, text }: a clash to confirm
+  const [query, setQuery] = useState('');
 
   const apply = (id, combo) => {
     setShortcut(id, combo === ACTIONS.find((a) => a.id === id).def ? null : combo);
@@ -128,7 +130,14 @@ export function HelpDialog({ close }) {
   }, [editing, st.shortcuts]);
 
   const changed = Object.keys(st.shortcuts).length > 0;
-  const groups = [...new Set([...ACTIONS, ...FIXED].map((x) => x.group))];
+  // The search box filters by label or key combination (fuzzy, as in the other search palettes); rows keep their order and groups.
+  const rows = [
+    ...ACTIONS.map((a) => ({ key: a.id, group: a.group, label: a.label, keywords: comboFor(a.id, st.shortcuts) })),
+    ...FIXED.map((f) => ({ key: f.label, group: f.group, label: f.label, keywords: f.combo })),
+  ];
+  const shown = new Set(fuzzyFilter(rows, query, rows.length).map((r) => r.item.key));
+  const groups = [...new Set(rows.filter((r) => shown.has(r.key)).map((r) => r.group))];
+  const visible = (key) => shown.has(key);
   return (
     <Modal
       title="Keyboard shortcuts" onClose={() => close()}
@@ -140,11 +149,13 @@ export function HelpDialog({ close }) {
       )}
     >
       <p className="muted">Click a shortcut to change it, then press the new keys. Esc cancels.</p>
+      <input type="search" className="shortcut-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search shortcuts…" aria-label="Search shortcuts" autoComplete="off" spellCheck={false} />
+      {groups.length === 0 && <p className="muted">No shortcut matches.</p>}
       <dl className="shortcuts">
         {groups.map((group) => (
           <Fragment key={group}>
             <h3>{group}</h3>
-            {ACTIONS.filter((x) => x.group === group).map((a) => (
+            {ACTIONS.filter((x) => x.group === group && visible(x.id)).map((a) => (
               <Fragment key={a.id}>
                 <dt>{a.label}</dt>
                 <dd>
@@ -158,7 +169,7 @@ export function HelpDialog({ close }) {
                 </dd>
               </Fragment>
             ))}
-            {FIXED.filter((x) => x.group === group).map((f) => (
+            {FIXED.filter((x) => x.group === group && visible(x.label)).map((f) => (
               <Fragment key={f.label}>
                 <dt>{f.label}</dt>
                 <dd><span className="kbd">{f.combo}</span></dd>
