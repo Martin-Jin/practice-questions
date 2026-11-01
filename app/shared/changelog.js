@@ -9,7 +9,7 @@ export const CHANGELOG = [
   {
     version: '2.63', date: '2026-11-02', title: 'A single question stands alone',
     items: [
-      'A question opened on its own no longer shows its position (1 / 12) or offers the arrow keys to move to the set's other questions.',
+      'A question opened on its own no longer shows its position (1 / 12) or offers the arrow keys to move to the other questions in the set.',
     ],
   },
   {
