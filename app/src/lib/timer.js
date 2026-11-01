@@ -21,5 +21,13 @@ export function onPauseChange(fn) {
   return () => listeners.delete(fn);
 }
 
-// Time only counts while this tab is showing and the window has focus.
-export const pageActive = () => document.visibilityState === 'visible' && document.hasFocus();
+// Time only counts while this tab is showing and the window has focus. document.hasFocus() can stay false after the window
+// is refocused (until the next click), so focus is tracked from events too, and any key or click in the page proves it.
+let focused = true;
+try {
+  focused = document.hasFocus();
+  window.addEventListener('focus', () => { focused = true; });
+  window.addEventListener('blur', () => { focused = false; });
+  for (const type of ['pointerdown', 'keydown']) window.addEventListener(type, () => { focused = true; }, true);
+} catch { /* no window: tests */ }
+export const pageActive = () => document.visibilityState === 'visible' && (focused || document.hasFocus());

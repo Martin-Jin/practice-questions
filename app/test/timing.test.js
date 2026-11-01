@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { newClock, isFinal, isDone, recordPoint, dropPoint, formatDuration, summariseTimes, runTotalMs, MAX_POINTS } from '../shared/timing.js';
+import { newClock, isFinal, isDone, recordPoint, dropPoint, formatDuration, parseDuration, summariseTimes, runTotalMs, MAX_POINTS } from '../shared/timing.js';
 
 test('marking an attempt writes one data point, and marking again only changes its result', () => {
   const rec = {};
@@ -62,9 +62,9 @@ test('summaries: count, total, average, best and worst', () => {
   assert.deepEqual(summariseTimes([{ ms: 10 }, { ms: 30 }, { ms: 20 }]), { count: 3, totalMs: 60, avgMs: 20, bestMs: 10, worstMs: 30 });
 });
 
-test("a session's total is the sum of its clocks, so a reset clock comes off it", () => {
+test("a session's total is the sum of its clocks in whole seconds, so a reset clock comes off it", () => {
   const clocks = { a: { ms: 1000 }, b: { ms: 2500 } };
-  assert.equal(runTotalMs(clocks), 3500);
+  assert.equal(runTotalMs(clocks), 3000);
   clocks.b = newClock('new');
   assert.equal(runTotalMs(clocks), 1000);
   assert.equal(runTotalMs(undefined), 0);
@@ -85,4 +85,12 @@ test('coding: a failed run updates the point and the clock keeps going; a pass m
   clock.ms = 90000;   // time no longer counts, but if it somehow did, a later failing run must not move the final time
   recordPoint(stats, clock, 'wrong', 'T4', 'r', 'right');
   assert.deepEqual(stats.times.map((t) => [t.ms, t.result]), [[40000, 'wrong']]);
+});
+
+test('typed times read as m:ss, h:mm:ss or minutes, and nonsense is refused', () => {
+  assert.equal(parseDuration('4:07'), 247000);
+  assert.equal(parseDuration('1:02:09'), 3729000);
+  assert.equal(parseDuration('12'), 720000);
+  assert.equal(parseDuration(' 0:05 '), 5000);
+  for (const bad of ['', 'abc', '1:75', '1:2:3:4', '-3']) assert.equal(parseDuration(bad), null);
 });

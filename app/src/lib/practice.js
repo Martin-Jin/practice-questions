@@ -280,6 +280,24 @@ export function resetClock(setId, uid, runId = null, ref = uid) {
   recordUndo('Reset the timer for a question', () => put(old), () => put(fresh));
 }
 
+// Sets a question's running time to what the user typed (they paused and forgot to carry on). The session total follows.
+// A marked attempt's clock is final, so it is left alone.
+export function setClockTime(setId, uid, runId, ref, ms) {
+  const rec = ensure(setId, uid);
+  const ctx = ctxOf(runId, ref);
+  const old = clockOf(rec, ctx, true);
+  if (isDone(rec, old)) return false;
+  const next = { ...old, ms };
+  const put = (clock) => {
+    if (ctx.run) ctx.run.clocks = { ...(ctx.run.clocks || {}), [ref]: clock }; else rec.clock = clock;
+    saveClock(rec, ctx, 0);
+    notify();
+  };
+  put(next);
+  recordUndo('Changed the time on a question', () => put(old), () => put(next));
+  return true;
+}
+
 export const runTotal = (run) => runTotalMs(run.clocks);
 
 // Marks questions as done without checking them, for work finished before the app was used. Ones whose last check was

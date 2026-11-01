@@ -486,6 +486,7 @@ body.no-nav .page { padding-top: 80px; }   /* the floating timer ends above the 
 .timer-label { font-size: 10px; letter-spacing: .05em; text-transform: uppercase; opacity: .7; }
 .timer-time { font-size: 16px; font-weight: 650; font-variant-numeric: tabular-nums; line-height: 1.2; }
 .timer.paused .timer-time { opacity: .55; }
+.timer-edit { width: 5.5em; font: inherit; font-size: 16px; font-weight: 650; font-variant-numeric: tabular-nums; color: inherit; background: var(--surface-3); border: 1px solid var(--border); border-radius: 4px; padding: 0 4px; }
 .timer-reset { display: inline-flex; align-items: center; padding: 6px; margin-left: 2px; }
 .timer-reset .icon { width: 14px; height: 14px; }
 @media (prefers-reduced-motion: reduce) {

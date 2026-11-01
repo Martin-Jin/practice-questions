@@ -54,6 +54,16 @@ export function formatDuration(ms) {
   return h ? `${h}:${String(m).padStart(2, '0')}:${sec}` : `${m}:${sec}`;
 }
 
+// Reads a typed time: 4:07, 1:02:09, or a bare number of minutes. Returns milliseconds, or null when it is not a time.
+export function parseDuration(text) {
+  const parts = String(text).trim().split(':');
+  if (parts.length > 3 || parts.some((p) => !/^\d+(\.\d+)?$/.test(p.trim()))) return null;
+  const n = parts.map(Number);
+  if (n.length > 1 && n.slice(1).some((v) => v >= 60)) return null;
+  const seconds = n.length === 1 ? n[0] * 60 : n.reduce((sum, v) => sum * 60 + v, 0);
+  return Math.round(seconds * 1000);
+}
+
 // { count, totalMs, avgMs, bestMs, worstMs } over a list of data points (avgMs and the rest are null with none).
 export function summariseTimes(times) {
   const list = (times || []).filter((t) => Number.isFinite(t.ms));
@@ -64,6 +74,8 @@ export function summariseTimes(times) {
 }
 
 // A session's total: the running time of each of its questions' clocks, so resetting one takes it off the total.
+// Each clock counts in whole seconds (as formatDuration shows it), so the total ticks in step with the question's time
+// instead of at its own moments from the other questions' leftover fractions.
 export function runTotalMs(clocks) {
-  return Object.values(clocks || {}).reduce((a, c) => a + (c && c.ms > 0 ? c.ms : 0), 0);
+  return Object.values(clocks || {}).reduce((a, c) => a + (c && c.ms > 0 ? Math.floor(c.ms / 1000) * 1000 : 0), 0);
 }

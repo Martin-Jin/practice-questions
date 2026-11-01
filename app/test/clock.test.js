@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { state } from '../src/lib/store.js';
-import { check, setSelfMark, openClock, addTime, resetClock, getClock, clockDone, runTotal } from '../src/lib/practice.js';
+import { check, setSelfMark, openClock, addTime, resetClock, setClockTime, getClock, clockDone, runTotal } from '../src/lib/practice.js';
 import { undoLast } from '../src/lib/undo.js';
 import { connect } from '../src/lib/toast.js';
 
@@ -55,4 +55,15 @@ test('outside a session the question keeps one clock on its record', () => {
   state.libProgress['s/n'].answers = { a: '2' };
   check('s', 'n', q, { run: null, ref: 'n' });
   assert.deepEqual(state.libProgress['s/n'].times.map((t) => [t.ms, t.result, t.runId]), [[3000, 'right', null]]);
+});
+
+test('typing a time sets the running clock, the session total follows, and it can be undone', async () => {
+  state.libRuns.r2 = { id: 'r2', clocks: {} };
+  openClock('s', 't', 'r2', 't');
+  addTime('s', 't', 'r2', 't', 2000);
+  assert.equal(setClockTime('s', 't', 'r2', 't', 90000), true);
+  assert.equal(getClock('s', 't', 'r2', 't').ms, 90000);
+  assert.equal(runTotal(state.libRuns.r2), 90000);
+  await undoLast();
+  assert.equal(getClock('s', 't', 'r2', 't').ms, 2000);
 });

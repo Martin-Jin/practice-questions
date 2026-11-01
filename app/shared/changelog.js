@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.33';
+export const VERSION = '2.34';
 
 export const CHANGELOG = [
+  {
+    version: '2.34', date: '2026-11-01', title: 'Set the question time',
+    items: [
+      'Click the time on This question to type a new one (like 4:07), for when you paused and forgot to carry on. Pausing is now on the Total (outside a session, a pause button beside the time). The timer also carries on after you click away and back, which it sometimes failed to do, and the total now ticks in step with the question time.',
+    ],
+  },
   {
     version: '2.33', date: '2026-11-01', title: 'Formula sheet fills the screen',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.28', date: '2026-11-01', title: 'Recent sessions line up with the practice box',
     items: [
       'The last row in Recent sessions ends level with the bottom of the practice mode box beside it.',
-    ],
-  },
-  {
-    version: '2.27', date: '2026-11-01', title: 'Shorter recent session rows',
-    items: [
-      'The rows in Recent sessions are a little shorter, so four of them fit beside the practice options.',
     ],
   },
 ];
