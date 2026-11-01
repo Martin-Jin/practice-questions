@@ -15,7 +15,7 @@ export const CHANGELOG = [
   {
     version: '2.48', date: '2026-11-01', title: 'Cut-off text scrolls by hand',
     items: [
-      'Text cut off at one line (set rows, recent sessions, tiles, question lists and more) now scrolls sideways with a finger, wheel or trackpad instead of ending in dots. On the set page the title, details and location line no longer slide by themselves. On a phone, Start hides while the practice mode drop-down is open instead of dropping to a second line, and the customise-sections button has no border or background. The top bar search finds question sets only, on every page; to search the questions in a set, open the set. Its icon is a globe with a magnifier, to tell it from the search beside a set\'s title.',
+      'Text cut off at one line (set rows, recent sessions, tiles, question lists and more) now scrolls sideways with a finger, wheel or trackpad instead of ending in dots. On the set page the title, details and location line no longer slide by themselves. On a phone, Start hides while the practice mode drop-down is open instead of dropping to a second line, and the customise-sections button has no border or background. The top bar search finds question sets only, on every page; to search the questions in a set, open the set. Its icon is a list with a magnifier, to tell it from the search beside a set\'s title.',
     ],
   },
   {

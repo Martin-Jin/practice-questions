@@ -17,7 +17,7 @@ const PATHS = {
   moon: <path d="M13 9.5A5.5 5.5 0 0 1 6.5 3a5.5 5.5 0 1 0 6.5 6.5z" />,
   auto: <><circle cx="8" cy="8" r="5.5" /><path d="M8 2.5a5.5 5.5 0 0 1 0 11z" fill="currentColor" /></>,
   format: <path d="M2.5 4h11M2.5 8h7M2.5 12h11M12.5 6.5l2 1.5-2 1.5" />,
-  globeSearch: <path d="M7 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM2 7h10M7 2c-2 2-2 8 0 10 2-2 2-8 0-10zM10.6 10.6L14 14" />,
+  listSearch: <path d="M2 3.5h11M2 7h4M2 10.5h2.5M10.5 6.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM12.7 12.7L14.5 14.5" />,
   search: <path d="M7 2.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zM10.4 10.4L14 14" />,
   zoom: <path d="M7 2.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zM10.4 10.4L14 14M7 5v4M5 7h4" />,
   folder: <path d="M2 4.5h4l1.5 1.5H14v6.5H2z" />,

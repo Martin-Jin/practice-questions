@@ -41,7 +41,7 @@ export default function GlobalSearch() {
   return (
     <>
       <button type="button" className="nav-search" onClick={() => setOpen(true)} title={label} aria-label={label}>
-        <Icon name="globeSearch" /><span className="nav-search-text">Search sets</span>
+        <Icon name="listSearch" /><span className="nav-search-text">Search sets</span>
       </button>
       {open && (
         <QuickSearch
