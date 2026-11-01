@@ -6,7 +6,7 @@ export { toast };
 export function validationError(message) { toast(message, 'bad'); }
 
 const MAX = 3;
-const SHOWN = { bad: 5200, action: 1000 };   // how long, in ms, before a toast disappears; others last 3500
+const SHOWN = { bad: 5200, action: 5000 };   // how long, in ms, before a toast disappears; others last 3500
 
 function Toast({ item, remove }) {
   const timer = useRef(null);

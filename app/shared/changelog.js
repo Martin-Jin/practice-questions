@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.34';
+export const VERSION = '2.35';
 
 export const CHANGELOG = [
+  {
+    version: '2.35', date: '2026-11-01', title: 'Longer, darker undo note',
+    items: [
+      'The Undo note stays for five seconds instead of one, and follows the light or dark theme. Opening the list of every question (All 5) dims and blurs the page behind it, like the command palette.',
+    ],
+  },
   {
     version: '2.34', date: '2026-11-01', title: 'Set the question time',
     items: [
@@ -22,18 +28,6 @@ export const CHANGELOG = [
     version: '2.30', date: '2026-11-01', title: 'Recent sessions in a box',
     items: [
       'Recent sessions sit inside a white box as tall as the practice options beside it, so the page looks the same with one session or many. Finished sessions leave the box a day after they were completed (they stay in See all and History), and the box is hidden when none are left, when the practice options take the full width they had before.',
-    ],
-  },
-  {
-    version: '2.29', date: '2026-11-01', title: 'Tidier practice panel',
-    items: [
-      'Practice mode on an imported set is an underlined drop-down like the section picker, and the space under the Practise heading is tighter. See all sessions lines up with the Leave out completed line, and the Questions in this set heading sits close above its sentence.',
-    ],
-  },
-  {
-    version: '2.28', date: '2026-11-01', title: 'Recent sessions line up with the practice box',
-    items: [
-      'The last row in Recent sessions ends level with the bottom of the practice mode box beside it.',
     ],
   },
 ];

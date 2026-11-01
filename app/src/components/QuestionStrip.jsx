@@ -46,7 +46,8 @@ export default function QuestionStrip({ items, current, href }) {
   }, [active, open, query]);
 
   return (
-    <div className="qstrip-wrap" ref={wrap}>
+    <div className={`qstrip-wrap${open ? ' open' : ''}`} ref={wrap}>
+      {open && <div className="qlist-backdrop" onMouseDown={() => setOpen(false)} />}
       <nav className="qstrip" aria-label="Questions in this session">
         <div className="qstrip-row" ref={row} onWheel={(e) => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) row.current.scrollLeft += e.deltaY; }}>
           {items.map((it, i) => (
