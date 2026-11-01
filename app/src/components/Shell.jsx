@@ -19,6 +19,7 @@ import { readAgentUrl, saveAgentUrl } from '../lib/solve-agent.js';
 import { toast } from './Toasts.jsx';
 import { openWelcome } from './Welcome.jsx';
 import { fuzzyFilter } from '../lib/fuzzy.js';
+import { SlideBlock } from './SlideText.jsx';
 import useMediaQuery from './useMediaQuery.js';
 
 export const THEME_ICON = { auto: 'auto', light: 'sun', dark: 'moon' };
@@ -157,7 +158,7 @@ export function HelpDialog({ close }) {
             <h3>{group}</h3>
             {ACTIONS.filter((x) => x.group === group && visible(x.id)).map((a) => (
               <Fragment key={a.id}>
-                <dt>{a.label}</dt>
+                <dt><SlideBlock>{a.label}</SlideBlock></dt>
                 <dd>
                   {st.shortcuts[a.id] && !editing && (
                     <button type="button" className="btn ghost sm" onClick={() => apply(a.id, a.def)} title={`Put ${a.def} back`}>Reset</button>
@@ -171,7 +172,7 @@ export function HelpDialog({ close }) {
             ))}
             {FIXED.filter((x) => x.group === group && visible(x.label)).map((f) => (
               <Fragment key={f.label}>
-                <dt>{f.label}</dt>
+                <dt><SlideBlock>{f.label}</SlideBlock></dt>
                 <dd><span className="kbd">{f.combo}</span></dd>
               </Fragment>
             ))}

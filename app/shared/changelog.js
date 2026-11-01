@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.60';
+export const VERSION = '2.61';
 
 export const CHANGELOG = [
+  {
+    version: '2.61', date: '2026-11-02', title: 'One-line shortcut descriptions',
+    items: [
+      'Each row in the Keyboard shortcuts window now has a short description on one line. One that is still too long slides along when you hover it, and scrolls by hand on a phone.',
+    ],
+  },
   {
     version: '2.60', date: '2026-11-02', title: 'Search the keyboard shortcuts',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.57', date: '2026-11-02', title: 'Copy any question, solution or formula image',
     items: [
       'Hover a question image, a solution page or a formula sheet and press the new copy button beside the magnifying glass to copy just the picture shown (the page on screen for a PDF) to the clipboard. The larger viewer has one too.',
-    ],
-  },
-  {
-    version: '2.56', date: '2026-11-02', title: 'Re-upload a set, new search and palette keys',
-    items: [
-      'The pencil menu on a question set has Re-upload the PDF (or the folder): pick the changed file and the set updates in place, keeping your answers and progress for the questions still there. Search is now Ctrl+O and the command palette Ctrl+P (both can be changed in Settings), and the palette has a Search command. A tick-box line that is too long scrolls sideways by hand.',
     ],
   },
 ];

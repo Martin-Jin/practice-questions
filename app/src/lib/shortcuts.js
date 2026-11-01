@@ -3,10 +3,10 @@
 // can be unit tested; the saved choices live in store.js and service.js.
 
 export const ACTIONS = [
-  { id: 'search', group: 'Anywhere', label: 'Search questions', def: 'Ctrl+Alt+O' },
-  { id: 'palette', group: 'Anywhere', label: 'Command palette: add a question, upload, move a set to a folder, go to a set, and more', def: 'Ctrl+P' },
+  { id: 'search', group: 'Anywhere', label: 'Search sets, or the questions in a set or run', def: 'Ctrl+Alt+O' },
+  { id: 'palette', group: 'Anywhere', label: 'Command palette: add, upload, move or open sets', def: 'Ctrl+P' },
   { id: 'run', group: 'In a run', label: 'Compile and run the tests', def: 'Ctrl+Shift+Enter' },
-  { id: 'exit', group: 'In a run', label: 'Go back to the dashboard', def: 'Escape' },
+  { id: 'exit', group: 'In a run', label: 'Back to the dashboard', def: 'Escape' },
   { id: 'task', group: 'In a run', label: 'Show or hide the task', def: 'Alt+T' },
   { id: 'side', group: 'In a run', label: 'Show or hide the questions', def: 'Alt+Q' },
   { id: 'output', group: 'In a run', label: 'Show or hide the output', def: 'Alt+O' },
@@ -16,10 +16,10 @@ export const ACTIONS = [
 
 // Shortcuts that cannot be changed (shown in the help dialog for completeness).
 export const FIXED = [
-  { group: 'Anywhere', label: 'Search question sets and questions (dashboard)', combo: '/' },
-  { group: 'Anywhere', label: 'Show or hide the formula sheets (practice questions)', combo: 'Alt+T' },
-  { group: 'Anywhere', label: 'Pause or resume the timers (not while typing or on a button)', combo: 'Space' },
-  { group: 'Anywhere', label: 'Undo the last change (the notification at the top right does the same)', combo: 'Ctrl+Z' },
+  { group: 'Anywhere', label: 'Search question sets (dashboard)', combo: '/' },
+  { group: 'Anywhere', label: 'Show or hide the formula sheets', combo: 'Alt+T' },
+  { group: 'Anywhere', label: 'Pause or resume the timers (not while typing)', combo: 'Space' },
+  { group: 'Anywhere', label: 'Undo the last change', combo: 'Ctrl+Z' },
   { group: 'Anywhere', label: 'Redo it', combo: 'Ctrl+Shift+Z' },
 ];
 
