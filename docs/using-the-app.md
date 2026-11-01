@@ -42,7 +42,7 @@ The sun, moon and half-circle button (top right of the dashboard, or **Theme** i
 ## Search
 
 - **In a run:** `Ctrl+P` (or the search box at the top of the question list) opens a fuzzy search over that run's questions. Type a few letters of the title, number or topic (for example `bst rem` finds Binary search tree: Remove()), use the arrow keys, and press Enter to jump to it. The editor keeps its focus afterwards.
-- **On the dashboard, set and stats pages:** `Ctrl+P` or `/` (or the search box in the top bar) searches question sets and every question in them. Choosing a set opens it; choosing a question starts a one-question run.
+- **On the dashboard, set and stats pages:** `Ctrl+P` or `/` (or the search box in the top bar) searches question sets only, on every page; open a set to search its questions (a set of your own has a search button beside its title). Choosing a set opens it.
 
 ## Pages
 

@@ -268,7 +268,10 @@ b.crumb-item { color: var(--text); font-weight: 600; }
 .row.scroll-row::-webkit-scrollbar { display: none; }
 .row.scroll-row > * { flex: none; }
 /* Phones: while the practice mode drop-down is open there is no room for Start beside it, and nobody taps it then. */
-@media (max-width: 820px) { .mode-row:has(.section-combo) .start-btn { display: none; } }
+@media (max-width: 820px) {
+  .mode-row:has(.section-combo) .start-btn { display: none; }
+  .mode-row > .btn.icon-only { border-color: transparent; background: transparent; }   /* the customise button needs no box on a phone */
+}
 .two-col { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px; align-items: start; }
 @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
 /* Practice page: the right column (sessions, topics) is only as tall as the practice picker beside it and scrolls inside. */
