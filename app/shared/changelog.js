@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.61';
+export const VERSION = '2.62';
 
 export const CHANGELOG = [
+  {
+    version: '2.62', date: '2026-11-02', title: 'A single question opens like a session',
+    items: [
+      'Opening one question from a set now looks like a practice session: no top bar, the timer at the top centre, and a back button beside the path that returns to the set. Leaving it drops its time unless you marked it, and I got it and Not quite start unpressed.',
+    ],
+  },
   {
     version: '2.61', date: '2026-11-02', title: 'One-line shortcut descriptions',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.58', date: '2026-11-02', title: 'Search is Ctrl+Alt+O',
     items: [
       'The browser kept Ctrl+O for its own open-file box, so search is now Ctrl+Alt+O (still changeable in Settings). If you changed the search shortcut yourself, nothing changes for you.',
-    ],
-  },
-  {
-    version: '2.57', date: '2026-11-02', title: 'Copy any question, solution or formula image',
-    items: [
-      'Hover a question image, a solution page or a formula sheet and press the new copy button beside the magnifying glass to copy just the picture shown (the page on screen for a PDF) to the clipboard. The larger viewer has one too.',
     ],
   },
 ];

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSlide } from '../components/SlideText.jsx';
 import { useStore } from '../lib/store.js';
 import { plural } from '../lib/format.js';
-import { effectiveQuestions, getProgress, keyOf, visit, setAnswer, setSelfMark, check, resetAnswers, setDifficult, saveEdit, clearEdit, saveNotes, hasCorrections, resetChecks, setLibCurrent, finishLibRun, pendingChecks, runStatus, hasAttemptedSolution, recordSolutionAttempted, libraryRunSet } from '../lib/practice.js';
+import { effectiveQuestions, getProgress, keyOf, visit, setAnswer, setSelfMark, check, resetAnswers, setDifficult, saveEdit, clearEdit, saveNotes, hasCorrections, resetChecks, setLibCurrent, finishLibRun, discardSoloClock, pendingChecks, runStatus, hasAttemptedSolution, recordSolutionAttempted, libraryRunSet } from '../lib/practice.js';
 import Shell from '../components/Shell.jsx';
 import Icon from '../components/Icon.jsx';
 import { Stem, Solution } from '../components/Question.jsx';
@@ -65,6 +65,7 @@ export default function QuestionView({ setId, uid, run, theme }) {
   const progress = getProgress(recordSetId, recordUid);
   const [panel, setPanel] = useState(null);   // 'solution' | 'key' | null
   const solutionPromptOpen = useRef(false);
+  const [touched, setTouched] = useState(false);   // outside a session, I got it / Not quite start unpressed and only show what was pressed here
   const [result, setResult] = useState(null); // the last check's overall result
   const [editMode, setEditMode] = useState(() => loadFlag('editMode', false));   // shows the controls that change the question
   const [formulaOpen, setFormulaOpen] = useState(() => loadFlag('formulaOpen', false));
@@ -76,9 +77,11 @@ export default function QuestionView({ setId, uid, run, theme }) {
   const toggleFormula = () => { setFormulaSeen(true); setFormulaOpen((on) => { saveFlag('formulaOpen', !on); return !on; }); };
 
   useEffect(() => {
-    setPanel(null); setResult(null); window.scrollTo(0, 0);
+    setPanel(null); setResult(null); setTouched(false); window.scrollTo(0, 0);
     if (question) { visit(recordSetId, recordUid); if (run) setLibCurrent(run.id, uid); }
   }, [setId, uid, !!question]);
+  // A question opened alone is a throw-away session: leaving it drops its time unless it was marked.
+  useEffect(() => () => { if (!run) discardSoloClock(recordSetId, recordUid); }, [recordSetId, recordUid, !!run]);
 
   const go = (i) => (run ? `#/practice/${run.id}/${encodeURIComponent(questions[i].uid)}` : `#/q/${encodeURIComponent(setId)}/${encodeURIComponent(questions[i].uid)}`);
   // A session finishes only when every question that can be checked has been; until then Finish is not offered.
@@ -88,6 +91,7 @@ export default function QuestionView({ setId, uid, run, theme }) {
 
   const runCheck = () => setResult(check(recordSetId, recordUid, question, { run: run || null, ref: uid }).overall);
   const onAnswer = (part, value) => {
+    if (part.type === 'self') setTouched(true);
     // A question with only self-marked parts is finished as soon as it is marked; pressing a mark again takes it back.
     if (part.type === 'self' && question.parts.every((p) => p.type === 'self')) {
       const overall = setSelfMark(recordSetId, recordUid, question, part.label, value, run ? run.id : null, uid);
@@ -200,7 +204,7 @@ export default function QuestionView({ setId, uid, run, theme }) {
   // Reset clears typed or chosen answers, so it is only offered when there is one (an I got it / Not quite mark is not).
   const typed = question.parts.some((p) => { const v = answers[p.label]; return p.type !== 'self' && v != null && v !== '' && !(Array.isArray(v) && v.length === 0); });
   // In a session the I got it / Not quite buttons start unpressed, whatever an earlier session marked.
-  const markedHere = !run || (progress && progress.markRun === run.id);
+  const markedHere = run ? progress && progress.markRun === run.id : touched;
   // Self-marked parts keep their wording under the question but put their buttons in the side panel, beside Next.
   const selfParts = question.parts.filter((p) => p.type === 'self');
   const inline = question.parts.filter((p) => p.type !== 'self' || p.prompt);
@@ -214,13 +218,14 @@ export default function QuestionView({ setId, uid, run, theme }) {
     </>
   );
   const difficult = !!(progress && progress.difficult);
-  const timer = <QuestionTimer recordSetId={recordSetId} recordUid={recordUid} uid={uid} run={run || null} top={!!run} />;
+  const timer = <QuestionTimer recordSetId={recordSetId} recordUid={recordUid} uid={uid} run={run || null} top />;
   const banner = result && BANNER[result];
   const edited = hasCorrections(recordSetId, recordUid);
   const notes = (st.libEdits[keyOf(recordSetId, recordUid)] || {}).notes ?? question.notes ?? '';
 
   return (
-    <Shell theme={theme} crumbs={[...folderCrumbs(recordSetId), { label: set.title, href: `#/lib/${encodeURIComponent(recordSetId)}` }, { label: run ? run.name : question.section }]} bare={!!run}>
+    <Shell theme={theme} crumbs={[...folderCrumbs(recordSetId), { label: set.title, href: `#/lib/${encodeURIComponent(recordSetId)}` }, { label: run ? run.name : question.section }]}
+      bare backHref={run ? '#/sets' : `#/lib/${encodeURIComponent(recordSetId)}`} backLabel={run ? 'Exit to the question sets' : `Back to ${set.title}`}>
       {timer}
       {run && (
         <QuestionStrip current={uid} href={go}

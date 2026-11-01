@@ -280,6 +280,15 @@ export function resetClock(setId, uid, runId = null, ref = uid) {
   recordUndo('Reset the timer for a question', () => put(old), () => put(fresh));
 }
 
+// Leaving a single question opened outside a session: its time is dropped unless the question was marked, since nothing else is kept from it.
+export function discardSoloClock(setId, uid) {
+  const rec = getProgress(setId, uid);
+  if (!rec || !rec.clock || isDone(rec, rec.clock)) return;
+  delete rec.clock;
+  saveClock(rec, ctxOf(null, uid), 0);
+  notify();
+}
+
 // Sets a question's running time to what the user typed (they paused and forgot to carry on). The session total follows.
 // A marked attempt's time is changed too: its data point carries the new time, which is what the stats use.
 export function setClockTime(setId, uid, runId, ref, ms) {

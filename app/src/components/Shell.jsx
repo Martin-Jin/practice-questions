@@ -213,7 +213,7 @@ const tabOfHash = () => (/^#\/(sets|set|lib|q)(\/|$)/.test(window.location.hash)
 
 // Top bar for the dashboard, set and stats pages. `hero` is a banner between the bar and the page (the landing page's).
 // With `bare` (a practice session) there is no bar at all: the location line starts with a back button to the question sets instead.
-export default function Shell({ crumbs = [], theme, hero = null, bare = false, manualCrumbs = false, children }) {
+export default function Shell({ crumbs = [], theme, hero = null, bare = false, backHref = '#/sets', backLabel = 'Exit to the question sets', manualCrumbs = false, children }) {
   const crumbBox = useRef(null);
   useAutoSlide(crumbBox, crumbs.map((c) => c.label).join('/') + bare, { manual: bare || manualCrumbs });   // in a practice session (or where a page asks) the path is scrolled by hand
   useEffect(() => {
@@ -240,7 +240,7 @@ export default function Shell({ crumbs = [], theme, hero = null, bare = false, m
       <main className="page">
         {(crumbs.length > 0 || bare) && (
           <div className="crumbs" ref={crumbBox} role="group" aria-label="Current location">
-            {bare && <a className="crumb-back" href="#/sets" title="Exit to the question sets" aria-label="Exit to the question sets"><Icon name="back" /></a>}
+            {bare && <a className="crumb-back" href={backHref} title={backLabel} aria-label={backLabel}><Icon name="back" /></a>}
             {crumbs.map((c, i) => (
               <span key={i} className="crumb-group">
                 <span className="crumb-sep" aria-hidden="true">/</span>
