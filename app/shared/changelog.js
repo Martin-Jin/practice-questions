@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.29';
+export const VERSION = '2.30';
 
 export const CHANGELOG = [
+  {
+    version: '2.30', date: '2026-11-01', title: 'Recent sessions in a box',
+    items: [
+      'Recent sessions sit inside a white box as tall as the practice options beside it, so the page looks the same with one session or many. The box is hidden until there is a session.',
+    ],
+  },
   {
     version: '2.29', date: '2026-11-01', title: 'Tidier practice panel',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.26', date: '2026-11-01', title: 'Remove a recent session from its row',
     items: [
       'Hovering over a row in Recent sessions shows a × at its right that abandons or deletes that session (after a confirmation, and Undo brings it back), so you no longer need to open See all.',
-    ],
-  },
-  {
-    version: '2.25', date: '2026-11-01', title: 'Current question number readable when difficult',
-    items: [
-      'In the question number strip, the current question keeps its light text when it is also marked as difficult.',
     ],
   },
 ];

@@ -149,18 +149,17 @@ export default function LibrarySet({ setId, theme }) {
   const [picked, setPicked] = useState(null);
   const [renaming, setRenaming] = useState(null);   // the title being edited in place, or null
   const practiceRef = useRef(null);
-  const [fit, setFit] = useState({ rows: 3, gap: 6 });   // how many recent sessions fit beside the practice options, and the gap that lines the last one up with the mode box
-  // The recent sessions list ends level with the mode box beside it: as many rows as fit, with the leftover height shared out as gaps.
+  const [fit, setFit] = useState({ rows: 3, height: 0 });   // how many recent sessions fit beside the practice options, and the height of their box
+  // The recent sessions box ends level with the mode box beside it, and shows as many rows as fit inside it.
   useEffect(() => {
     const box = practiceRef.current;
     if (!box || typeof ResizeObserver === 'undefined') return undefined;
     const measure = () => {
       const modes = box.querySelector('.modes');
       const list = box.parentElement.querySelector('.recent-list');
-      if (!modes || !list) { setFit({ rows: Math.max(2, Math.min(10, Math.floor((box.offsetHeight - 58) / 50))), gap: 6 }); return; }
+      if (!modes || !list) { setFit({ rows: Math.max(2, Math.min(10, Math.floor((box.offsetHeight - 58) / 50))), height: 0 }); return; }
       const room = modes.getBoundingClientRect().bottom - list.getBoundingClientRect().top;
-      const rows = Math.max(2, Math.min(10, Math.floor((room + 6) / 50)));
-      setFit({ rows, gap: Math.max(6, Math.min(14, (room - rows * 44) / (rows - 1))) });
+      setFit({ rows: Math.max(2, Math.min(10, Math.floor((room - 8) / 44))), height: Math.round(room) });
     };
     measure();
     const watch = new ResizeObserver(measure);
@@ -268,7 +267,7 @@ export default function LibrarySet({ setId, theme }) {
       {canSync(record) && <PdfBar record={record} />}
       <div className="practice-row">
         <div className="practice-main" ref={practiceRef}><LibraryPracticePicker set={record} /></div>
-        <RecentSessions runs={runs} limit={fit.rows} gap={fit.gap} onAll={showHistory} />
+        <RecentSessions runs={runs} limit={fit.rows} height={fit.height} onAll={showHistory} />
       </div>
 
       {sections.length > 0 && (

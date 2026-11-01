@@ -4,18 +4,16 @@ import { abandonLibRun } from './LibraryPractice.jsx';
 import { useDialogs } from './Dialogs.jsx';
 import { timeAgo, plural } from '../lib/format.js';
 
-// A compact list of the latest practice sessions, for the space beside the practice options. `limit` is how many rows fit
+// A compact list of the latest practice sessions in a box as tall as the practice options beside it (`height`), so it fills the same space with one session or many. With no sessions it is not shown. `limit` is how many rows fit
 // (the page measures the options beside it); when there are more sessions than that, "See all" calls onAll (a window with every one). A × at the right of a row, shown on hover or focus, removes that session.
-export default function RecentSessions({ runs, limit, gap, onAll }) {
+export default function RecentSessions({ runs, limit, height, onAll }) {
   const { confirm } = useDialogs();
+  if (runs.length === 0) return null;   // nothing to show before the first session
   const shown = runs.slice(0, limit);
   return (
     <section className="recent">
       <div className="section-title"><h2>Recent sessions</h2><span className="muted">{runs.length}</span></div>
-      {runs.length === 0 ? (
-        <p className="muted">No sessions yet. Choose a mode and press Start.</p>
-      ) : (
-        <ul className="recent-list" style={gap ? { rowGap: gap } : undefined}>
+      <ul className="recent-list" style={height ? { height } : undefined}>
           {shown.map((run) => {
             const done = run.questions.filter((uid) => runStatus(run, uid)).length;
             const right = run.questions.filter((uid) => runStatus(run, uid) === 'right').length;
@@ -32,8 +30,7 @@ export default function RecentSessions({ runs, limit, gap, onAll }) {
               </li>
             );
           })}
-        </ul>
-      )}
+      </ul>
       {runs.length > shown.length && (
         <button type="button" className="btn ghost sm" onClick={onAll}>See all {plural(runs.length, 'session')}</button>
       )}
