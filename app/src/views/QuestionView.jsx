@@ -266,7 +266,7 @@ export default function QuestionView({ setId, uid, run, theme }) {
 
         <aside className="qside">
           <div className="card pad stack" style={{ gap: 12 }}>
-            <div className="row">
+            <div className="row scroll-row">
               <button type="button" className="btn" aria-pressed={difficult} onClick={toggleDifficult} title="Mark this question as difficult (D). Difficult questions can be drawn more often.">
                 <Icon name="flag" /> {difficult ? 'Marked difficult' : 'Mark as difficult'}
               </button>
@@ -278,7 +278,7 @@ export default function QuestionView({ setId, uid, run, theme }) {
               <textarea rows={3} value={notes} placeholder="What went wrong last time, or what to remember" onChange={(e) => saveNotes(recordSetId, recordUid, e.target.value)} />
             </label>
             {selfParts.map((p) => <SelfMark key={p.label} part={p} value={markedHere ? answers[p.label] : undefined} onChange={(v) => onAnswer(p, v)}>{selfParts.length === 1 && nav}</SelfMark>)}
-            {selfParts.length !== 1 && nav && <div className="row">{nav}</div>}
+            {selfParts.length !== 1 && nav && <div className="row scroll-row">{nav}</div>}
             {!panel && <p className="muted">Shortcuts: <span className="kbd">D</span> difficult, <span className="kbd">S</span> solution, <span className="kbd">Alt</span>+<span className="kbd">T</span> formula sheets, <span className="kbd">←</span> <span className="kbd">→</span> move between questions.</p>}
             {run && pending > 0 && index === questions.length - 1 && (
               <p className="muted">{plural(pending, 'question')} still to check before this session can finish: check each numbered question that is not yet green or red (a question with no answer key cannot be checked, so it does not count).</p>

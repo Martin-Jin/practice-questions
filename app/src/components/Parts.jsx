@@ -21,7 +21,7 @@ const NOTE = {
 // `children` go at the end of the same row (Previous and Next).
 export function SelfMark({ part, value, onChange, children }) {
   return (
-    <div className="row" style={{ gap: 8 }}>
+    <div className="row scroll-row" style={{ gap: 8 }}>
       {part.label && <b>{part.label})</b>}
       <button type="button" className="btn sm" aria-pressed={value === 'right'} onClick={() => onChange('right')}>I got it</button>
       <button type="button" className="btn sm" aria-pressed={value === 'wrong'} onClick={() => onChange('wrong')}>Not quite</button>

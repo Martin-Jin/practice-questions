@@ -260,6 +260,10 @@ b.crumb-item { color: var(--text); font-weight: 600; }
 .topic-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 3px 0; }
 .topic-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 4px 14px; }
 .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+/* A row of buttons that stays on one line, cut off at the padding and scrolled by hand when there is no room. */
+.row.scroll-row { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: 3px; margin: -3px; }   /* room for the focus ring */
+.row.scroll-row::-webkit-scrollbar { display: none; }
+.row.scroll-row > * { flex: none; }
 .two-col { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px; align-items: start; }
 @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
 /* Practice page: the right column (sessions, topics) is only as tall as the practice picker beside it and scrolls inside. */

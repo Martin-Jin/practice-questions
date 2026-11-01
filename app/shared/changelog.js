@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.46';
+export const VERSION = '2.47';
 
 export const CHANGELOG = [
+  {
+    version: '2.47', date: '2026-11-01', title: 'Button rows stay on one line',
+    items: [
+      'The Mark as difficult / Solution / Formulas buttons, I got it / Not quite and Previous / Next stay on one line. When there is no room they are cut off at the padding and you scroll them sideways by hand.',
+    ],
+  },
   {
     version: '2.46', date: '2026-11-01', title: 'Long titles stay inside the screen',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.43', date: '2026-11-01', title: 'Compact question rows',
     items: [
       'In a set, each question row keeps its title and its details on one line each and slides sideways when they are too long. The set title and its details line, and tick-box lines on a phone, do the same. Recent sessions on a phone fit four rows like on a desktop. On a phone the rows are shorter: the marks and answer-type chips are left out and Delete is just its icon.',
-    ],
-  },
-  {
-    version: '2.42', date: '2026-11-01', title: 'Smoother on phones',
-    items: [
-      'The dashboard picture is lighter on phones and touch screens (fewer symbols, about 30 frames a second, and it pauses when scrolled out of view), so it no longer lags. The folder heading on the question sets page stays on one line and slides when too long, with its Practise and Select buttons showing only icons on a phone. The search button has no border on a phone.',
     ],
   },
 ];
