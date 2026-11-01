@@ -281,20 +281,22 @@ export function resetClock(setId, uid, runId = null, ref = uid) {
 }
 
 // Sets a question's running time to what the user typed (they paused and forgot to carry on). The session total follows.
-// A marked attempt's clock is final, so it is left alone.
+// A marked attempt's time is changed too: its data point carries the new time, which is what the stats use.
 export function setClockTime(setId, uid, runId, ref, ms) {
   const rec = ensure(setId, uid);
   const ctx = ctxOf(runId, ref);
   const old = clockOf(rec, ctx, true);
-  if (isDone(rec, old)) return false;
   const next = { ...old, ms };
-  const put = (clock) => {
+  const point = old.point && (rec.times || []).find((t) => t.id === old.point);
+  const oldPoint = point ? point.ms : null;
+  const put = (clock, pointMs) => {
     if (ctx.run) ctx.run.clocks = { ...(ctx.run.clocks || {}), [ref]: clock }; else rec.clock = clock;
+    if (point) { rec.times = rec.times.map((t) => (t.id === clock.point ? { ...t, ms: pointMs } : t)); persist('libProgress', rec, 0); }
     saveClock(rec, ctx, 0);
     notify();
   };
-  put(next);
-  recordUndo('Changed the time on a question', () => put(old), () => put(next));
+  put(next, Math.round(ms));
+  recordUndo('Changed the time on a question', () => put(old, oldPoint), () => put(next, Math.round(ms)));
   return true;
 }
 

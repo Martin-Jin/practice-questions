@@ -77,10 +77,10 @@ export default function Timer({ identity, pauseKey, source, frozen = false, inli
             onBlur={commit} onKeyDown={(e) => { e.stopPropagation(); if (e.key === 'Enter') commit(); else if (e.key === 'Escape') setTyping(null); }} />
         </label>
       ) : canSet ? (
-        <button type="button" className="timer-read" title={done ? 'Marked: this time is saved.' : 'Click to set the time, like 4:07.'} disabled={done} onClick={() => setTyping(formatDuration(ms))}>
+        <button type="button" className="timer-read" title="Click to set the time, like 4:07." onClick={() => setTyping(formatDuration(ms))}>
           <span className="timer-label">This question</span>
           <span className="timer-time" role="timer">{formatDuration(ms)}</span>
-          {!done && <span className="timer-hover" aria-hidden="true"><Icon name="pencil" /></span>}
+          <span className="timer-hover" aria-hidden="true"><Icon name="pencil" /></span>
         </button>
       ) : (
         <button type="button" className="timer-read" aria-pressed={paused} title={hint} onClick={() => togglePause(pauseKey)}>

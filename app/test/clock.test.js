@@ -67,3 +67,17 @@ test('typing a time sets the running clock, the session total follows, and it ca
   await undoLast();
   assert.equal(getClock('s', 't', 'r2', 't').ms, 2000);
 });
+
+test('the time of a marked question can be typed too, and its data point follows', async () => {
+  state.libRuns.r3 = { id: 'r3', clocks: {} };
+  openClock('s', 'u', 'r3', 'u');
+  addTime('s', 'u', 'r3', 'u', 4000);
+  setSelfMark('s', 'u', question, 'a', 'right', 'r3', 'u');
+  assert.equal(setClockTime('s', 'u', 'r3', 'u', 60000), true);
+  assert.equal(getClock('s', 'u', 'r3', 'u').ms, 60000);
+  assert.equal(state.libProgress['s/u'].times[0].ms, 60000);
+  assert.equal(clockDone('s', 'u', 'r3', 'u'), true);
+  await undoLast();
+  assert.equal(state.libProgress['s/u'].times[0].ms, 4000);
+  assert.equal(getClock('s', 'u', 'r3', 'u').ms, 4000);
+});
