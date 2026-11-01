@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.38';
+export const VERSION = '2.39';
 
 export const CHANGELOG = [
+  {
+    version: '2.39', date: '2026-11-01', title: 'Timers show what a click does',
+    items: [
+      'Hovering over a timer overlays an icon on its time: a pen on This question (click to type the time) and pause or play on the Total.',
+    ],
+  },
   {
     version: '2.38', date: '2026-11-01', title: 'Paused-timer reminder',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.35', date: '2026-11-01', title: 'Longer, darker undo note',
     items: [
       'The Undo note stays for five seconds instead of one, and follows the light or dark theme. Opening the list of every question (All 5) dims and blurs the page behind it, like the command palette.',
-    ],
-  },
-  {
-    version: '2.34', date: '2026-11-01', title: 'Set the question time',
-    items: [
-      'Click the time on This question to type a new one (like 4:07), for when you paused and forgot to carry on. Pausing is now on the Total (outside a session, a pause button beside the time). The timer also carries on after you click away and back, which it sometimes failed to do, and the total now ticks in step with the question time.',
     ],
   },
 ];

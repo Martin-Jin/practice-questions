@@ -80,11 +80,13 @@ export default function Timer({ identity, pauseKey, source, frozen = false, inli
         <button type="button" className="timer-read" title={done ? 'Marked: this time is saved.' : 'Click to set the time, like 4:07.'} disabled={done} onClick={() => setTyping(formatDuration(ms))}>
           <span className="timer-label">This question</span>
           <span className="timer-time" role="timer">{formatDuration(ms)}</span>
+          {!done && <span className="timer-hover" aria-hidden="true"><Icon name="pencil" /></span>}
         </button>
       ) : (
         <button type="button" className="timer-read" aria-pressed={paused} title={hint} onClick={() => togglePause(pauseKey)}>
           <span className="timer-label">This question</span>
           <span className="timer-time" role="timer">{formatDuration(ms)}</span>
+          <span className="timer-hover" aria-hidden="true"><Icon name={paused ? 'play' : 'pause'} /></span>
         </button>
       )}
       {total === null && canSet && (
@@ -94,6 +96,7 @@ export default function Timer({ identity, pauseKey, source, frozen = false, inli
         <button type="button" className="timer-read" aria-pressed={paused} title={hint} onClick={() => togglePause(pauseKey)}>
           <span className="timer-label">Total</span>
           <span className="timer-time" role="timer">{formatDuration(total)}</span>
+          <span className="timer-hover" aria-hidden="true"><Icon name={paused ? 'play' : 'pause'} /></span>
         </button>
       )}
       <button type="button" className="timer-reset" disabled={ms === 0 && !done} title="Reset this question's timer (it comes off the total)" aria-label="Reset this question's timer"

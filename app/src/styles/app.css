@@ -484,6 +484,12 @@ body.no-nav .page { padding-top: 80px; }   /* the floating timer ends above the 
 .timer button:disabled { opacity: .35; cursor: default; }
 .timer-read { display: grid; gap: 0; text-align: left; padding: 2px 10px; }
 .timer-read + .timer-read { border-left: 1px solid var(--border); border-radius: 0 6px 6px 0; }
+/* On hover an icon overlays the time to show what a click does: a pen to type the question's time, pause or play for the total. */
+.timer-read { position: relative; }
+.timer-hover { position: absolute; inset: 0; display: grid; place-items: center; border-radius: 6px; background: color-mix(in srgb, var(--surface-3) 70%, transparent); opacity: 0; transition: opacity .12s; pointer-events: none; }
+.timer-hover .icon { width: 18px; height: 18px; }
+.timer-read:hover:not(:disabled) .timer-hover, .timer-read:focus-visible .timer-hover { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .timer-hover { transition: none; } }
 .timer-label { font-size: 10px; letter-spacing: .05em; text-transform: uppercase; opacity: .7; }
 .timer-time { font-size: 16px; font-weight: 650; font-variant-numeric: tabular-nums; line-height: 1.2; }
 .timer.paused .timer-time { opacity: .55; }
