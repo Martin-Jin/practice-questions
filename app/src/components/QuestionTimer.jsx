@@ -19,6 +19,7 @@ export default function Timer({ identity, pauseKey, source, frozen = false, inli
 
   useEffect(() => {
     enterContext(pauseKey);
+    if (isPaused(pauseKey)) togglePause(pauseKey);
     latest.current.open();
     redraw();
     return onPauseChange(redraw);
