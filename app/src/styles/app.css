@@ -662,7 +662,7 @@ label.choice input { margin-top: 4px; }
 .qdot.cur { background: var(--strong); border-color: var(--strong) !important; color: var(--strong-ink); }
 .qdot.right { border-color: var(--ok); color: var(--ok); }
 .qdot.wrong { border-color: var(--bad); color: var(--bad); }
-.qdot.cur.right, .qdot.cur.wrong { color: var(--strong-ink); }
+.qdot.cur.right, .qdot.cur.wrong, .qdot.cur.diff { color: var(--strong-ink); }
 .qdot.diff { border-color: var(--warn); color:var(--warn); }
 .sum-row { display: flex; gap: 12px; align-items: center; padding: 10px 14px; }
 .sum-row .title { flex: 1; min-width: 0; }

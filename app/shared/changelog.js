@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.24';
+export const VERSION = '2.25';
 
 export const CHANGELOG = [
+  {
+    version: '2.25', date: '2026-11-01', title: 'Current question number readable when difficult',
+    items: [
+      'In the question number strip, the current question keeps its light text when it is also marked as difficult.',
+    ],
+  },
   {
     version: '2.24', date: '2026-11-01', title: 'Search and thin rows in past sessions',
     items: [
@@ -29,13 +35,6 @@ export const CHANGELOG = [
     version: '2.18', date: '2026-10-31', title: 'Thin run rows on the dashboard',
     items: [
       'The runs on the dashboard use the same thin rows as History, so more of them fit on screen, with a smaller Resume button. On a phone they take two short lines. When a row is too narrow for its name and set, the text is cut off and slides along while you hover over the row.',
-    ],
-  },
-  {
-    version: '2.17', date: '2026-10-31', title: 'History as a searchable list of runs',
-    items: [
-      'History is now a list with one short row per run (set, run name, progress and when), newest first. It shows as many rows as fit the window, and Show more adds another window of them. Clicking a row opens that run, or its results if it is finished.',
-      'A search box at the top finds runs by set, run name or mode (fuzzy), and suggests set and run names as you type.',
     ],
   },
 ];
