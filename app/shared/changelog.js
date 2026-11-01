@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.58';
+export const VERSION = '2.59';
 
 export const CHANGELOG = [
+  {
+    version: '2.59', date: '2026-11-02', title: 'No keyboard shortcuts entry on a phone',
+    items: [
+      'The three-dot menu no longer lists Keyboard shortcuts on a phone, where there is no keyboard to use them with.',
+    ],
+  },
   {
     version: '2.58', date: '2026-11-02', title: 'Search is Ctrl+Alt+O',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.55', date: '2026-11-02', title: 'Paused timer asks in a pop-up',
     items: [
       'After 5 minutes paused, the timer asks in a pop-up whether you forgot to unpause. Yes, I forgot carries on and adds those 5 minutes to the question; No leaves it paused. Small pop-ups keep their title and buttons on one line and scroll sideways by hand on a narrow screen.',
-    ],
-  },
-  {
-    version: '2.54', date: '2026-11-02', title: 'Smoother dashboard, sliding run names, full-screen dialogs',
-    items: [
-      'The maths symbols behind the dashboard header are lighter on a phone, so they lag less. Run and session names that are cut off now slide along by themselves, in every list. On a phone every large window (the tutorial, Settings, the add and export windows) opens full screen; small yes/no boxes stay small.',
     ],
   },
 ];

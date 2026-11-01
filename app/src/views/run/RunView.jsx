@@ -241,7 +241,7 @@ export default function RunView({ runId, param, theme }) {
     { label: `Suggest as you type: ${st.autoSuggest ? 'on' : 'off'}`, icon: 'code', title: `Name suggestions while typing. ${keyOf('suggest')} also turns this on.`, onClick: () => setAutoSuggest(!st.autoSuggest) },
     { label: 'Settings…', icon: 'gear', onClick: () => dialogs.open(({ close }) => <SettingsDialog close={close} />) },
     { label: `Theme: ${THEME_LABEL[theme.mode]}`, icon: THEME_ICON[theme.mode], title: `Click for ${THEME_LABEL[theme.next]}`, onClick: theme.toggle },
-    { label: 'Keyboard shortcuts', icon: 'help', onClick: () => dialogs.open(({ close }) => <HelpDialog close={close} />) },
+    ...(mobile ? [] : [{ label: 'Keyboard shortcuts', icon: 'help', onClick: () => dialogs.open(({ close }) => <HelpDialog close={close} />) }]),
     'sep',
     { label: 'Rename run', icon: 'pencil', onClick: async () => {
       const name = await dialogs.prompt({ title: 'Rename run', label: 'Run name (leave empty for the default)', initial: run.name });

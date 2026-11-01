@@ -18,6 +18,7 @@ import { DEFAULT_AGENT_URL, normaliseAgentUrl } from '../../shared/solve-agent.j
 import { readAgentUrl, saveAgentUrl } from '../lib/solve-agent.js';
 import { toast } from './Toasts.jsx';
 import { openWelcome } from './Welcome.jsx';
+import useMediaQuery from './useMediaQuery.js';
 
 export const THEME_ICON = { auto: 'auto', light: 'sun', dark: 'moon' };
 export const THEME_LABEL = { auto: 'Auto (follows your system)', light: 'Light', dark: 'Dark' };
@@ -183,11 +184,12 @@ export function HelpDialog({ close }) {
 // Settings, help and the theme switch behind one three-dot button, so the top bar stays short on a phone.
 function NavMenu({ theme }) {
   const { open } = useDialogs();
+  const mobile = useMediaQuery('(max-width: 820px)');   // a phone has no keyboard to rebind
   return (
     <KebabMenu label="Settings, help and theme" items={[
       { label: 'Settings', icon: 'gear', onClick: () => open(({ close }) => <SettingsDialog close={close} />) },
       { label: 'Tutorial and what\'s new', icon: 'questions', onClick: () => openWelcome(open) },
-      { label: 'Help: keyboard shortcuts', icon: 'help', onClick: () => open(({ close }) => <HelpDialog close={close} />) },
+      ...(mobile ? [] : [{ label: 'Help: keyboard shortcuts', icon: 'help', onClick: () => open(({ close }) => <HelpDialog close={close} />) }]),
       { label: `Theme: ${THEME_LABEL[theme.mode]}`, icon: THEME_ICON[theme.mode], onClick: theme.toggle },
     ]} />
   );
