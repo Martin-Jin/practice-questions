@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.51';
+export const VERSION = '2.52';
 
 export const CHANGELOG = [
+  {
+    version: '2.52', date: '2026-11-02', title: 'Focus mode sees F11, and formula sheets take focus',
+    items: [
+      'Focus mode now notices when you leave full screen with F11, not only Esc, and Esc in a coding run only leaves full screen instead of closing the run. The formula sheet panel takes keyboard focus when it opens, so you can scroll it without clicking first.',
+    ],
+  },
   {
     version: '2.51', date: '2026-11-02', title: 'The tutorial fits a phone',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.48', date: '2026-11-01', title: 'Cut-off text scrolls by hand',
     items: [
       'Text cut off at one line (set rows, recent sessions, tiles, question lists and more) now scrolls sideways with a finger, wheel or trackpad instead of ending in dots. On the set page the title, details and location line no longer slide by themselves. On a phone, Start hides while the practice mode drop-down is open instead of dropping to a second line, and the customise-sections button has no border or background. The top bar search finds question sets only, on every page; to search the questions in a set, open the set. Its icon is a list with a magnifier, to tell it from the search beside a set\'s title.',
-    ],
-  },
-  {
-    version: '2.47', date: '2026-11-01', title: 'Button rows stay on one line',
-    items: [
-      'The Mark as difficult / Solution / Formulas buttons, I got it / Not quite and Previous / Next stay on one line. When there is no room they are cut off at the padding and you scroll them sideways by hand.',
     ],
   },
 ];

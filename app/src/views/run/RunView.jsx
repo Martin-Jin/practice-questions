@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { MODE_LABELS } from '../../../shared/modes.js';
 import { APP_NAME } from '../../../shared/brand.js';
 import { useStore, state } from '../../lib/store.js';
+import { escWasForFullscreen } from '../../lib/focus.js';
 import { eventCombo, actionFor, comboFor } from '../../lib/shortcuts.js';
 import { getSet, getQuestion } from '../../lib/catalog.js';
 import {
@@ -153,7 +154,7 @@ export default function RunView({ runId, param, theme }) {
       if (e.defaultPrevented || document.querySelector('dialog[open]')) return;
       const combo = eventCombo(e);
       const action = combo && actionFor(combo, state.shortcuts);
-      if (action && action.id === 'exit') { e.preventDefault(); window.location.hash = '#/'; }
+      if (action && action.id === 'exit' && !escWasForFullscreen()) { e.preventDefault(); window.location.hash = '#/'; }
     };
     window.addEventListener('keydown', onKey, true);
     window.addEventListener('keydown', onKeyLate);

@@ -158,9 +158,13 @@ export default function FormulaSidebar({ setId, onClose, hidden = false }) {
   const sheets = sheetsOf(setId);
   const [path, setPath] = useState(null);
   const input = useRef(null);
+  const panel = useRef(null);
   const [width, setWidth] = useState(loadWidth);
   const [drag, setDrag] = useState(false);
   const current = sheets.find((s) => s.path === path) || sheets[0];
+
+  // Opening the panel focuses it, so the keyboard and wheel work on the sheet without a click first.
+  useEffect(() => { if (!hidden && panel.current) panel.current.focus({ preventScroll: true }); }, [hidden]);
 
   // The panel starts exactly where the top bar ends; the bar's height changes when it wraps on a narrow or zoomed window.
   const [top, setTop] = useState(52);
@@ -196,7 +200,7 @@ export default function FormulaSidebar({ setId, onClose, hidden = false }) {
   };
 
   return (
-    <aside className="formula-side" tabIndex={-1} aria-label="Formula sheets" aria-hidden={hidden || undefined} inert={hidden ? '' : undefined}
+    <aside ref={panel} className="formula-side" tabIndex={-1} aria-label="Formula sheets" aria-hidden={hidden || undefined} inert={hidden ? '' : undefined}
       style={{ width, top, ...(hidden ? { visibility: 'hidden', pointerEvents: 'none' } : {}) }}>
       <div className={`splitter v formula-handle${drag ? ' drag' : ''}`} role="separator" aria-orientation="vertical" title="Drag to resize. Double-click to reset."
         onPointerDown={(e) => { e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId); document.body.classList.add('resizing', 'resizing-x'); setDrag(true); }}
