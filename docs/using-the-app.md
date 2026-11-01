@@ -33,7 +33,7 @@ The other shortcuts can be changed. Click one in that list, then press the new k
 - One already used by another action is refused, and you are told which.
 - One that a browser also uses (`Ctrl+T` opens a tab, `Ctrl+W` closes it, `Ctrl+1` to `Ctrl+9` switch tabs and so on) is allowed only after a warning, because the browser may act on it first or as well.
 - `Ctrl+S` does nothing in the app (it saves by itself), so a VS Code habit never opens the browser's save dialog.
-- Defaults: run `Ctrl+Shift+Enter`, back to the dashboard `Esc`, task `Alt+T`, questions `Alt+Q`, output `Alt+O`, search `Ctrl+O`, name suggestions `Ctrl+Space`, format `Alt+Shift+F`. `Esc` only leaves the run when nothing else wants it: it first closes menus, dialogs, the suggestion list and a text selection.
+- Defaults: run `Ctrl+Shift+Enter`, back to the dashboard `Esc`, task `Alt+T`, questions `Alt+Q`, output `Alt+O`, search `Ctrl+Alt+O`, name suggestions `Ctrl+Space`, format `Alt+Shift+F`. `Esc` only leaves the run when nothing else wants it: it first closes menus, dialogs, the suggestion list and a text selection.
 
 ## Theme
 
@@ -41,8 +41,8 @@ The sun, moon and half-circle button (top right of the dashboard, or **Theme** i
 
 ## Search
 
-- **In a run:** `Ctrl+O` (or the search box at the top of the question list) opens a fuzzy search over that run's questions. Type a few letters of the title, number or topic (for example `bst rem` finds Binary search tree: Remove()), use the arrow keys, and press Enter to jump to it. The editor keeps its focus afterwards.
-- **On the dashboard, set and stats pages:** `Ctrl+O` or `/` (or the search box in the top bar) searches question sets only, on every page; open a set to search its questions (a set of your own has a search button beside its title). Choosing a set opens it.
+- **In a run:** `Ctrl+Alt+O` (or the search box at the top of the question list) opens a fuzzy search over that run's questions. Type a few letters of the title, number or topic (for example `bst rem` finds Binary search tree: Remove()), use the arrow keys, and press Enter to jump to it. The editor keeps its focus afterwards.
+- **On the dashboard, set and stats pages:** `Ctrl+Alt+O` or `/` (or the search box in the top bar) searches question sets only, on every page; open a set to search its questions (a set of your own has a search button beside its title). Choosing a set opens it.
 
 ## Pages
 

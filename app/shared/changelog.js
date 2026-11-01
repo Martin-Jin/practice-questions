@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.57';
+export const VERSION = '2.58';
 
 export const CHANGELOG = [
+  {
+    version: '2.58', date: '2026-11-02', title: 'Search is Ctrl+Alt+O',
+    items: [
+      'The browser kept Ctrl+O for its own open-file box, so search is now Ctrl+Alt+O (still changeable in Settings). If you changed the search shortcut yourself, nothing changes for you.',
+    ],
+  },
   {
     version: '2.57', date: '2026-11-02', title: 'Copy any question, solution or formula image',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.54', date: '2026-11-02', title: 'Smoother dashboard, sliding run names, full-screen dialogs',
     items: [
       'The maths symbols behind the dashboard header are lighter on a phone, so they lag less. Run and session names that are cut off now slide along by themselves, in every list. On a phone every large window (the tutorial, Settings, the add and export windows) opens full screen; small yes/no boxes stay small.',
-    ],
-  },
-  {
-    version: '2.53', date: '2026-11-02', title: 'Settings fills a phone screen',
-    items: [
-      'On a phone, Settings opens full screen like the tutorial. The editor and practice options, which were squashed out of sight in a scrolling dialog, show again.',
     ],
   },
 ];

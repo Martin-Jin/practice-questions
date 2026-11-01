@@ -3,7 +3,7 @@
 // can be unit tested; the saved choices live in store.js and service.js.
 
 export const ACTIONS = [
-  { id: 'search', group: 'Anywhere', label: 'Search questions', def: 'Ctrl+O' },
+  { id: 'search', group: 'Anywhere', label: 'Search questions', def: 'Ctrl+Alt+O' },
   { id: 'palette', group: 'Anywhere', label: 'Command palette: add a question, upload, move a set to a folder, go to a set, and more', def: 'Ctrl+P' },
   { id: 'run', group: 'In a run', label: 'Compile and run the tests', def: 'Ctrl+Shift+Enter' },
   { id: 'exit', group: 'In a run', label: 'Go back to the dashboard', def: 'Escape' },
