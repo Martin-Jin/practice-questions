@@ -14,7 +14,7 @@ function Toast({ item, remove }) {
   const left = useRef(item.ms);
   const started = useRef(0);
   const text = useRef(null);
-  useAutoSlide(text, item.id);   // a note too long for a phone slides along instead of wrapping
+  useAutoSlide(text, item.id, { pace: 14, hold: 700 });   // a note too long for a phone slides along instead of wrapping
   const msg = <span className="toast-msg" ref={text}>{item.message}</span>;
   const start = () => { started.current = Date.now(); timer.current = setTimeout(remove, left.current); };
   const stop = () => { clearTimeout(timer.current); left.current = Math.max(200, left.current - (Date.now() - started.current)); };

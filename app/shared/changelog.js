@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.44';
+export const VERSION = '2.45';
 
 export const CHANGELOG = [
+  {
+    version: '2.45', date: '2026-11-01', title: 'Text that slides on its own on phones',
+    items: [
+      'On a touch screen, one-line text that is too long for its space (titles, rows, the location line) now slides along by itself, slowly, with pauses and not all at once, since there is no hover. Drag it with a finger to read at your own pace: touching it pauses the sliding, which carries on a few seconds after you let go. The question page title does this too.',
+    ],
+  },
   {
     version: '2.44', date: '2026-11-01', title: 'Notes fit phones',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.41', date: '2026-11-01', title: 'Better on phones',
     items: [
       'The location line stays on one line and, when it is too long for the window, slides to its end and back by itself (touch it to stop). The floating timer says Question instead of This question, so it takes two lines, and is a little smaller on phones. The formula sheet covers the whole screen on a phone, closed with its x.',
-    ],
-  },
-  {
-    version: '2.40', date: '2026-11-01', title: 'Edit the time of finished questions',
-    items: [
-      'Click the time on This question to type a new one even after the question is marked; its saved time follows. Notes in a practice session stay at the top right, a little higher, level with the timer.',
     ],
   },
 ];

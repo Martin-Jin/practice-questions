@@ -1,13 +1,15 @@
 import { useEffect, useRef } from 'react';
+import { startAutoSlide } from '../lib/autoslide.js';
 
 // Slides a one-line box along to its end and back while its host (a row, a button) is hovered or focused, so text cut off by
-// a lack of room can be read. `boxRef` is the box that scrolls sideways; `hostRef` the element to watch (by default the
+// a lack of room can be read. On a touch screen, which cannot hover, it slides by itself instead (slowly, with pauses). `boxRef` is the box that scrolls sideways; `hostRef` the element to watch (by default the
 // nearest button or link around the box). A trackpad, wheel or touch can scroll the box by hand too.
 export function useSlide(boxRef, hostRef = null) {
   useEffect(() => {
     const box = boxRef.current;
     const host = hostRef ? hostRef.current : box && (box.closest('button, a') || box.parentElement);
     if (!box || !host) return undefined;
+    if (window.matchMedia('(hover: none)').matches) return startAutoSlide(box);
     let frame = 0;
     const slide = (toEnd) => {
       cancelAnimationFrame(frame);

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useSlide } from '../components/SlideText.jsx';
 import { useStore } from '../lib/store.js';
 import { plural } from '../lib/format.js';
 import { effectiveQuestions, getProgress, keyOf, visit, setAnswer, setSelfMark, check, resetAnswers, setDifficult, saveEdit, clearEdit, saveNotes, hasCorrections, resetChecks, setLibCurrent, finishLibRun, pendingChecks, runStatus, hasAttemptedSolution, recordSolutionAttempted, libraryRunSet } from '../lib/practice.js';
@@ -23,28 +24,11 @@ const loadFlag = (key, fallback) => { try { const v = localStorage.getItem(key);
 const saveFlag = (key, value) => { try { localStorage.setItem(key, String(value)); } catch { /* storage blocked */ } };
 
 // A title kept to one line. When it is longer than the space, hovering or focusing it slides it along to the end and back
-// (a trackpad, wheel or touch can scroll it by hand too).
+// (on a touch screen it slides by itself; a trackpad, wheel or finger can scroll it by hand too).
 function ScrollTitle({ text }) {
   const el = useRef(null);
-  const frame = useRef(0);
-  const slide = (toEnd) => {
-    const box = el.current;
-    cancelAnimationFrame(frame.current);
-    if (!box || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const from = box.scrollLeft;
-    const to = toEnd ? box.scrollWidth - box.clientWidth : 0;
-    if (from === to) return;
-    const ms = Math.max(400, Math.abs(to - from) * 12);
-    const start = performance.now();
-    const step = (now) => {
-      const t = Math.min(1, (now - start) / ms);
-      box.scrollLeft = from + (to - from) * (t < .5 ? 2 * t * t : 1 - 2 * (1 - t) * (1 - t));
-      if (t < 1) frame.current = requestAnimationFrame(step);
-    };
-    frame.current = requestAnimationFrame(step);
-  };
-  useEffect(() => () => cancelAnimationFrame(frame.current), []);
-  return <span ref={el} className="qtitle" tabIndex={0} title={text} onMouseEnter={() => slide(true)} onMouseLeave={() => slide(false)} onFocus={() => slide(true)} onBlur={() => slide(false)}>{text}</span>;
+  useSlide(el, el);
+  return <span ref={el} className="qtitle" tabIndex={0} title={text}>{text}</span>;
 }
 
 const typing =(t) => t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable);
