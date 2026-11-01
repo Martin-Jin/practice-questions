@@ -29,7 +29,7 @@ function allRuns(st) {
 
 // A search box over the history: fuzzy over set, run name and mode, with the matching set and run names offered as you type
 // (arrow keys and Enter or Tab take one). The list below narrows and ranks as you type.
-function HistorySearch({ runs, query, onChange }) {
+export function HistorySearch({ runs, query, onChange }) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const names = useMemo(() => [...new Set(runs.flatMap((r) => [r.title, r.name]))].map((label) => ({ label })), [runs]);

@@ -1,4 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { fuzzyFilter } from '../lib/fuzzy.js';
+import { LIB_MODE_LABELS } from '../../shared/librarymodes.js';
+import { HistorySearch } from './History.jsx';
 import UnderlineSelect from '../components/UnderlineSelect.jsx';
 import RecentSessions from '../components/RecentSessions.jsx';
 import { useStore } from '../lib/store.js';
@@ -115,6 +118,28 @@ function progressChips(p) {
 const PER_SECTION = 5;
 const PART_LABEL ={ numeric: 'number', mcq: 'choice', self: 'self-mark' };
 
+// A window listing every session of a set, newest first, with the history's fuzzy search over session name and mode.
+function SessionsModal({ title, runs, close }) {
+  const [query, setQuery] = useState('');
+  const items = useMemo(() => runs.map((r) => ({ key: r.id, run: r, title: r.name, name: r.name, mode: LIB_MODE_LABELS[r.mode] || '' })), [runs]);
+  const matches = useMemo(() => {
+    if (!query.trim()) return items;
+    const byKey = new Map(items.map((i) => [i.key, i]));
+    return fuzzyFilter(items.map((i) => ({ label: i.title, keywords: i.mode, key: i.key })), query, items.length).map((m) => byKey.get(m.item.key));
+  }, [items, query]);
+  return (
+    <Modal wide title={`Past sessions in ${title}`} onClose={close} footer={<button type="button" className="btn primary" onClick={close}>Close</button>}>
+      {runs.length === 0 ? <div className="empty">No sessions yet. Choose a mode and press Start.</div> : (
+        <>
+          <HistorySearch runs={items} query={query} onChange={setQuery} />
+          {matches.length === 0 ? <div className="empty">No session matches that search.</div>
+            : <div className="hist-list" onClick={() => close()}>{matches.map((i) => <LibRunRow key={i.key} run={i.run} showSet={false} compact />)}</div>}
+        </>
+      )}
+    </Modal>
+  );
+}
+
 // An imported set: its questions grouped by section, in the order the manifest lists them.
 export default function LibrarySet({ setId, theme }) {
   const st = useStore();
@@ -129,7 +154,7 @@ export default function LibrarySet({ setId, theme }) {
   useEffect(() => {
     const box = practiceRef.current;
     if (!box || typeof ResizeObserver === 'undefined') return undefined;
-    const measure = () => setFit(Math.max(2, Math.min(10, Math.floor((box.offsetHeight - 120) / 58))));
+    const measure = () => setFit(Math.max(2, Math.min(10, Math.floor((box.offsetHeight - 64) / 58))));
     measure();
     const watch = new ResizeObserver(measure);
     watch.observe(box);
@@ -161,13 +186,7 @@ export default function LibrarySet({ setId, theme }) {
   };
 
   // A window listing every session of this set, newest first (the page shows the latest beside the practice options).
-  const showHistory = () => open(({ close }) => (
-    <Modal wide title={`Past sessions in ${record.title}`} onClose={close} footer={<button type="button" className="btn primary" onClick={close}>Close</button>}>
-      {runs.length === 0
-        ? <div className="empty">No sessions yet. Choose a mode and press Start.</div>
-        : <div className="run-list" onClick={() => close()}>{runs.map((r) => <LibRunRow key={r.id} run={r} showSet={false} />)}</div>}
-    </Modal>
-  ));
+  const showHistory = () => open(({ close }) => <SessionsModal title={record.title} runs={runs} close={close} />);
   // The search palette (the same one as the quick search) over this set's questions; choosing one opens it.
   const search = () => open(({ close }) => (
     <QuickSearch onClose={close} placeholder={`Search the ${plural(questions.length, 'question')} in ${record.title}`}

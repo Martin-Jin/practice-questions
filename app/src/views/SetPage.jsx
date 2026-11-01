@@ -52,7 +52,7 @@ export default function SetPage({ setId, theme }) {
           <div className="section-title"><h2>Your runs in this set</h2><span className="muted">{runs.length}</span></div>
           {runs.length === 0
             ? <div className="empty">No runs yet. Choose a mode and press Start.</div>
-            : <div className="run-list">{runs.map((r) => <RunRow key={r.id} run={r} showSet={false} />)}</div>}
+            : <div className="run-list">{runs.map((r) => <RunRow key={r.id} run={r} showSet={false} compact />)}</div>}
 
         </section>
       </div>

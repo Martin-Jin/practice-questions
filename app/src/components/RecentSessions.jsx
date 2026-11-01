@@ -31,7 +31,7 @@ export default function RecentSessions({ runs, limit, onAll }) {
         </ul>
       )}
       {runs.length > shown.length && (
-        <button type="button" className="btn sm" onClick={onAll}>See all {plural(runs.length, 'session')}</button>
+        <button type="button" className="btn ghost sm" onClick={onAll}>See all {plural(runs.length, 'session')}</button>
       )}
     </section>
   );
