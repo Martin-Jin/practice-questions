@@ -6,7 +6,8 @@ import UnderlineSelect from '../components/UnderlineSelect.jsx';
 import RecentSessions from '../components/RecentSessions.jsx';
 import { useStore } from '../lib/store.js';
 import { plural } from '../lib/format.js';
-import { removeSet, deleteOwnQuestion, renameSet } from '../lib/library.js';
+import { removeSet, deleteOwnQuestion, renameSet, scanFolder, importSet } from '../lib/library.js';
+import { undoBarrier } from '../lib/undo.js';
 import { deleteMine, deleteMineQuestion, renameMine } from '../lib/mine.js';
 import AddQuestionDialog from '../components/AddQuestion.jsx';
 import { effectiveQuestions, getProgress } from '../lib/practice.js';
@@ -17,7 +18,7 @@ import { useDialogs } from '../components/Dialogs.jsx';
 import { LibraryPracticePicker, LibRunRow } from '../components/LibraryPractice.jsx';
 import { toast } from '../components/Toasts.jsx';
 import { Modal } from '../components/Dialogs.jsx';
-import { canLink, canSync, getLink, linkPdf, unlinkPdf, checkForUpdate, deleteQuestionFromPdf, moveQuestionInPdf } from '../lib/pdfsync.js';
+import { canLink, canSync, refreshFrom, getLink, linkPdf, unlinkPdf, checkForUpdate, deleteQuestionFromPdf, moveQuestionInPdf } from '../lib/pdfsync.js';
 import KebabMenu from '../components/KebabMenu.jsx';
 import { saveEdit, clearEditField, markCorrect } from '../lib/practice.js';
 import { Fab } from '../components/Library.jsx';
@@ -255,6 +256,32 @@ export default function LibrarySet({ setId, theme }) {
     try { await moveSet(setId, dest || null); toast(dest ? `Moved to ${st.libFolders[dest].name}.` : 'Moved out of its folder.'); } catch (e) { toast(e.message, 'bad'); }
   };
 
+  // Picks a changed PDF (an indexed set) or folder (a set from a manifest) and overwrites this set from it, keeping answers
+  // and progress for the questions that are still there.
+  const reupload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    if (canSync(record)) input.accept = '.pdf,application/pdf'; else { input.webkitdirectory = true; input.multiple = true; }
+    input.onchange = async () => {
+      const files = [...input.files];
+      if (!files.length) return;
+      try {
+        if (canSync(record)) {
+          toast(`Reading ${files[0].name}…`);
+          toast(`Updated from the PDF: ${reportText(await refreshFrom(setId, files[0]))}`);
+        } else {
+          const item = (await scanFolder(files)).sets.find((x) => x.set && x.set.id === setId);
+          if (!item) throw new Error('That folder has no question set with this set\'s id.');
+          if (item.missing.length) throw new Error(`Files the set names are missing: ${item.missing.slice(0, 3).join(', ')}.`);
+          await importSet(item);
+          undoBarrier();
+          toast('Updated from the folder.');
+        }
+      } catch (e) { toast(`Could not update it: ${e.message}`, 'bad'); }
+    };
+    input.click();
+  };
+
   return (
     <Shell theme={theme} manualCrumbs crumbs={[...folderCrumbs(setId), { label: record.title }]}>
       <div className="page-head">
@@ -317,6 +344,7 @@ export default function LibrarySet({ setId, theme }) {
       <Fab icon="pencil" label="Edit this set" swap options={[
         ['Add a question', 'plus', () => open(({ close }) => <AddQuestionDialog close={close} setId={setId} />)],
         ['Formula sheets', 'sidebar', () => open(({ close }) => <FormulaSheetsDialog setId={setId} close={close} />)],
+        ...(record.userOwned ? [] : [[canSync(record) ? 'Re-upload the PDF' : 'Re-upload the folder', 'upload', reupload]]),
         ...(foldersSorted().length > 0 ? [['Move to a folder', 'folder', moveToFolder]] : []),
         [record.userOwned ? 'Delete all my questions' : 'Remove from this browser', 'trash', remove],
       ]} />

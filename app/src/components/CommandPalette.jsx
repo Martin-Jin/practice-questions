@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useStore } from '../lib/store.js';
+import { useStore, state } from '../lib/store.js';
+import { actionFor, comboFor, comboEvent, eventCombo } from '../lib/shortcuts.js';
 import { fuzzyFilter } from '../lib/fuzzy.js';
 import { foldersSorted, folderOf, createFolder, moveSet } from '../lib/folders.js';
 import { downloadBackup } from '../lib/backup.js';
@@ -33,6 +34,8 @@ function commands(st, ctx) {
     ];
   };
   return [
+    // Presses the search shortcut once the palette has closed, so it opens the search that fits the page (run, set or all sets).
+    { id: 'search', label: 'Search', hint: 'questions in a run, or question sets', keywords: 'find questions sets', run: () => { setTimeout(() => document.body.dispatchEvent(comboEvent(comboFor('search', state.shortcuts))), 50); } },
     { id: 'add-question', label: 'Add a question', hint: 'make one from a screenshot', keywords: 'new create screenshot', run: () => ctx.open(({ close }) => <AddQuestionDialog close={close} />) },
     {
       id: 'upload', label: 'Upload questions', hint: 'a folder of sets or practice PDFs', keywords: 'import add folder pdf',
@@ -101,7 +104,7 @@ function commands(st, ctx) {
   ];
 }
 
-// Alt+K: a command palette (Ctrl+K is the browser's own). Type to find a command, Enter to run it. A command that needs more (which set, which
+// Ctrl+P (rebindable): a command palette. Type to find a command, Enter to run it. A command that needs more (which set, which
 // folder) asks for each piece in turn and fills in the best match as you type, so it is: command, two words, Enter.
 export default function CommandPalette({ theme }) {
   const st = useStore();
@@ -110,7 +113,8 @@ export default function CommandPalette({ theme }) {
 
   useEffect(() => {
     const onKey = (e) => {
-      if (!e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.code !== 'KeyK') return;
+      const action = actionFor(eventCombo(e), state.shortcuts);
+      if (!action || action.id !== 'palette') return;
       if (document.querySelector('dialog[open]:not(.palette)')) return;
       e.preventDefault();
       e.stopPropagation();

@@ -16,7 +16,7 @@ Both versions look and behave the same. The only difference is the **runner** (w
 A welcome window (about two-thirds of the screen, in the middle) has two tabs: **Tutorial** (how to use the app, how to import sets, how to have an agent format a practice PDF and how coding sets are added, which is by file in the project for now) and **What's new** (the five latest changes, each with its version number).
 
 - It opens by itself the first time you visit, on the tutorial, and again after each update, on **What's new**. It is shown once per version, so closing it keeps it away until the next update.
-- Reopen it any time from the three-dot menu at the top right (**Tutorial and what's new**), from **Settings > Help**, or from the command palette (Alt+K, then **Open the tutorial**).
+- Reopen it any time from the three-dot menu at the top right (**Tutorial and what's new**), from **Settings > Help**, or from the command palette (Ctrl+P, then **Open the tutorial**).
 - The tutorial opens with an index (part of the page), has a search above it (Ctrl+F while it is showing searches the guide, Enter for the next match) and a column of dots at the right edge, one per section. The section you are reading shows its name beside its dot for a moment, then it fades until you reach another section. Clicking an index entry or a dot scrolls smoothly to that section.
 - Four sections have an animated walkthrough (importing a folder, the PDF agent, formula sheets for several sets, exporting chosen sets) with Pause and Replay. The buttons inside them work: clicking one jumps to the step that presses it, and **Copy the prompt** really copies the agent prompt. The **Format a PDF with an agent** section also has the whole prompt behind a **Copy the prompt** button: paste it into an AI agent, which asks you what material you have, builds the PDF in the layout the app reads, records answer keys and walks you through importing it (the text is `docs/practice-pdf-agent-prompt.md`). They run only while on screen and stay still for anyone with reduced motion turned on.
 - Versions count pushes: `1.00` was the first. The list and the number are in `app/shared/changelog.js`; the tutorial text is in `app/src/components/Welcome.jsx`, its pictures in `app/public/tutorial/` and its animations in `app/src/components/Demo.jsx`.
@@ -33,7 +33,7 @@ The other shortcuts can be changed. Click one in that list, then press the new k
 - One already used by another action is refused, and you are told which.
 - One that a browser also uses (`Ctrl+T` opens a tab, `Ctrl+W` closes it, `Ctrl+1` to `Ctrl+9` switch tabs and so on) is allowed only after a warning, because the browser may act on it first or as well.
 - `Ctrl+S` does nothing in the app (it saves by itself), so a VS Code habit never opens the browser's save dialog.
-- Defaults: run `Ctrl+Shift+Enter`, back to the dashboard `Esc`, task `Alt+T`, questions `Alt+Q`, output `Alt+O`, search `Ctrl+P`, name suggestions `Ctrl+Space`, format `Alt+Shift+F`. `Esc` only leaves the run when nothing else wants it: it first closes menus, dialogs, the suggestion list and a text selection.
+- Defaults: run `Ctrl+Shift+Enter`, back to the dashboard `Esc`, task `Alt+T`, questions `Alt+Q`, output `Alt+O`, search `Ctrl+O`, name suggestions `Ctrl+Space`, format `Alt+Shift+F`. `Esc` only leaves the run when nothing else wants it: it first closes menus, dialogs, the suggestion list and a text selection.
 
 ## Theme
 
@@ -41,8 +41,8 @@ The sun, moon and half-circle button (top right of the dashboard, or **Theme** i
 
 ## Search
 
-- **In a run:** `Ctrl+P` (or the search box at the top of the question list) opens a fuzzy search over that run's questions. Type a few letters of the title, number or topic (for example `bst rem` finds Binary search tree: Remove()), use the arrow keys, and press Enter to jump to it. The editor keeps its focus afterwards.
-- **On the dashboard, set and stats pages:** `Ctrl+P` or `/` (or the search box in the top bar) searches question sets only, on every page; open a set to search its questions (a set of your own has a search button beside its title). Choosing a set opens it.
+- **In a run:** `Ctrl+O` (or the search box at the top of the question list) opens a fuzzy search over that run's questions. Type a few letters of the title, number or topic (for example `bst rem` finds Binary search tree: Remove()), use the arrow keys, and press Enter to jump to it. The editor keeps its focus afterwards.
+- **On the dashboard, set and stats pages:** `Ctrl+O` or `/` (or the search box in the top bar) searches question sets only, on every page; open a set to search its questions (a set of your own has a search button beside its title). Choosing a set opens it.
 
 ## Pages
 
@@ -103,7 +103,7 @@ The location of a page (for example `/ Question sets / Folder / This set`) is sh
 
 The **Question sets** tab shows the coding sets, then **Your library**: question sets that come from your own folders (practice PDFs, quiz screenshots), not from the repo. They must follow [question-set-format.md](question-set-format.md): a `.questions.json` file per set, with its images and PDF beside it. Each set is a tile; click it to open it, where **Browse**, **Stats**, **Add a question**, **Formula sheets** and **Remove** are.
 
-**Sample content.** A new browser starts with a **Sample practice quiz** in its library (answer keys with units, a multiple-answer choice, self-marked parts, diagrams, notes and a formula sheet) so every feature can be tried on made-up questions, and the app ships one small **Sample coding quiz**. The quiz is imported once per browser (never into one that already has sets, and not again after you delete it). Delete any set with Alt+K, **Delete question set**, then type its name; it asks first.
+**Sample content.** A new browser starts with a **Sample practice quiz** in its library (answer keys with units, a multiple-answer choice, self-marked parts, diagrams, notes and a formula sheet) so every feature can be tried on made-up questions, and the app ships one small **Sample coding quiz**. The quiz is imported once per browser (never into one that already has sets, and not again after you delete it). Delete any set with Ctrl+P, **Delete question set**, then type its name; it asks first.
 
 Press **How to add questions** under **Your library** for a short guide to everything below (and [adding-questions.md](adding-questions.md) for the full one).
 
@@ -111,13 +111,14 @@ Press **How to add questions** under **Your library** for a short guide to every
 2. The app lists the sets it found, with how many questions, the size and whether each is new, changed or up to date. Sets with problems say why. A PDF with no manifest beside it is read straight away, one at a time (about half a minute for a 250-page PDF), and listed as a set with a warning if the question count does not match the cover.
 3. Tick the sets and press **Import**. They are copied into this browser, so the folder is not needed again until it changes. Your folder is never modified.
 4. Click a set's tile to open it and **Browse** its questions by section; the page shows one section at a time, and the picker switches sections. **Mark all correct** records work you finished before using the app. Click a title to open a question. **Remove from this browser** deletes the copy in this browser (not your folder).
+   **Re-upload** (pencil menu on a set's page): after changing a set's PDF, choose **Re-upload the PDF** and pick the file; the set is re-indexed in place and keeps answers, marks and progress for the questions still in it (a set from a folder asks for the folder instead). It cannot be undone, as it changes the stored files.
 5. After you change files in the folder, choose it again: only changed sets and files are copied.
 5b. **Choosing several sets.** On **Question sets**, press **Select**, then press and drag over tiles to tick them all, or click one and shift-click another to tick the whole range; **Move** then moves them together. The formula-sheet and export dialogs work the same way on their lists, which stay empty until you type in the search box (the sets you choose stay visible below as chips you can remove).
 6. The **+** button also has **Add a formula sheet to several sets** (choose the file, search and tick the sets; each gets its own copy) and **Export chosen sets** (search and tick sets, then download one zip with their PDFs, images and formula sheets, and no progress). On a set's page, **Edit this set > Formula sheets** lists its sheets so you can remove any. Details: [question-set-format.md](question-set-format.md#formula-sheets).
 
 ### Making your own questions
 
-The **+** button's **Add a question from a screenshot** (also **Add a question** on a set's page, or Alt+K) makes a question from a screenshot, with no folder involved.
+The **+** button's **Add a question from a screenshot** (also **Add a question** on a set's page, or Ctrl+P) makes a question from a screenshot, with no folder involved.
 
 1. Paste a screenshot with `Ctrl+V` (or drop an image, or press **Choose an image**). Drag a box over the part to keep, then **Keep the selection** (or **Keep the whole image**). Images are scaled to at most 1400 px wide.
 2. Give it a title in the form `Topic - what is asked` (search finds questions by it), a section, a source and optionally marks, tags and typed wording (maths between `$` signs).
@@ -169,7 +170,7 @@ In your browser's "clear browsing data" window, **cached images and files** is s
 
 - **Back up now** downloads one file, `code-practice-backup-YYYY-MM-DD.json`. It holds every run, draft and stat from every question set, plus this app's own settings (theme, runner, shortcuts, pane sizes). Nothing else in the browser's storage is included, so other pages on the same site (a GitHub Pages address is shared by all your projects) are not part of it.
 - **Include my imported sets with their PDFs and images** (a checkbox above those buttons, shown once you have imported sets) makes the backup, or the export below, a `.zip` instead of a small JSON file: the same JSON as `backup.json`, plus every stored PDF, image and formula sheet under `files/`. Restoring it on a computer without those sets recreates them, so the folders need not be added again. A set the computer already has keeps its own copy (and its progress), and only gains questions you added to it. The library is often around 100 MB, so it is off by default. Restore accepts either kind of file.
-- **Export my questions to share** downloads `code-practice-questions-YYYY-MM-DD.json` with only the questions you made in the app (and the answer keys on them): no progress, runs, stats, folders or settings. Give it to someone; they open it with **Restore from a backup…**, which only adds the questions to theirs and never replaces anything. Sets imported from a PDF are not in it unless you tick the checkbox above, which adds them and their PDFs (still no progress). To share only some sets, use **Export chosen sets** instead: on the **+** button, or Alt+K then **Export chosen sets** (the palette's **Back up now** exports everything). Course PDFs may not be yours to pass on, so tick it only for material you may share. Question sets themselves are not in it, because they come with the app.
+- **Export my questions to share** downloads `code-practice-questions-YYYY-MM-DD.json` with only the questions you made in the app (and the answer keys on them): no progress, runs, stats, folders or settings. Give it to someone; they open it with **Restore from a backup…**, which only adds the questions to theirs and never replaces anything. Sets imported from a PDF are not in it unless you tick the checkbox above, which adds them and their PDFs (still no progress). To share only some sets, use **Export chosen sets** instead: on the **+** button, or Ctrl+P then **Export chosen sets** (the palette's **Back up now** exports everything). Course PDFs may not be yours to pass on, so tick it only for material you may share. Question sets themselves are not in it, because they come with the app.
 - **Restore from a backup…** reads such a file and shows what is in it before changing anything. Choose how:
   - **Merge** (the default) keeps what is in this browser and adds what the file has. Where both have the same run or question, the newer one wins, and counters are never added together, so restoring the same file twice changes nothing.
   - **Replace everything** erases the runs, stats and settings here first. Use it on a clean machine.
@@ -188,9 +189,9 @@ In your browser's "clear browsing data" window, **cached images and files** is s
 
 **Your library** on **Question sets** works like a file explorer: folders and sets sit side by side. **New folder** makes one. Click a folder to open it (an empty one just says so). Drag a set's tile onto a folder tile to file it there; inside a folder, drag a set onto the strip at the top to move it back out. A set's page also has a **Folder** menu, for doing the same without dragging. A set is in one folder at a time. Deleting a folder only deletes the folder: its sets go back to your library with all their questions and stats. Folders are part of a backup.
 
-## Command palette (Alt+K)
+## Command palette (Ctrl+P)
 
-Alt+K opens a palette from anywhere (the page behind it dims and blurs). Type to find a command and press Enter. A command that needs more asks for each piece in turn and fills in the best match as you type, so **move a set to a folder** is: `Alt+K`, `move`, Enter, the set's name, Enter, the folder's name, Enter. Typing a folder name that does not exist offers to create it. Enter or Tab picks the highlighted choice, Backspace on an empty box goes back a step, Esc closes.
+Ctrl+P opens a palette from anywhere (the page behind it dims and blurs). Type to find a command and press Enter. A command that needs more asks for each piece in turn and fills in the best match as you type, so **move a set to a folder** is: `Ctrl+P`, `move`, Enter, the set's name, Enter, the folder's name, Enter. Typing a folder name that does not exist offers to create it. Enter or Tab picks the highlighted choice, Backspace on an empty box goes back a step, Esc closes. The **Search** command does what the search shortcut does.
 
 | Command | What it does |
 | --- | --- |
@@ -202,4 +203,4 @@ Alt+K opens a palette from anywhere (the page behind it dims and blurs). Type to
 | Go to the dashboard / question sets | Navigates. |
 | Switch theme, Open settings, Keyboard shortcuts, Back up now | As named. |
 
-It is Alt+K rather than Ctrl+K because browsers keep Ctrl+K for their own search box.
+It is rebindable in Settings, like the search shortcut.

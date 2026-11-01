@@ -873,12 +873,10 @@ dialog.modal.agent-choice { width: min(560px, calc(100vw - 32px)); }
 .title-with-icon .renamable { flex: 0 1 auto; min-width: 0; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
 .title-with-icon .renamable::-webkit-scrollbar, .one-line::-webkit-scrollbar { display: none; }
 .one-line { white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
-/* Phones: a tick-box line stays on one line and scrolls sideways when long; the box stays put. */
-@media (max-width: 820px) {
-  label.check { max-width: 100%; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
-  label.check::-webkit-scrollbar { display: none; }
-  label.check > input { position: sticky; left: 0; flex: none; }
-}
+/* A tick-box line stays on one line and scrolls sideways when long; the box stays put. */
+label.check { max-width: 100%; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+label.check::-webkit-scrollbar { display: none; }
+label.check > input { position: sticky; left: 0; flex: none; }
 .title-with-icon .btn { flex: none; }
 .qtitle { flex: 1; min-width: 0; font-size: 19px; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
 .qtitle::-webkit-scrollbar { display: none; }

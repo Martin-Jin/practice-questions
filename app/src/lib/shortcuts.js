@@ -3,7 +3,8 @@
 // can be unit tested; the saved choices live in store.js and service.js.
 
 export const ACTIONS = [
-  { id: 'search', group: 'Anywhere', label: 'Search questions', def: 'Ctrl+P' },
+  { id: 'search', group: 'Anywhere', label: 'Search questions', def: 'Ctrl+O' },
+  { id: 'palette', group: 'Anywhere', label: 'Command palette: add a question, upload, move a set to a folder, go to a set, and more', def: 'Ctrl+P' },
   { id: 'run', group: 'In a run', label: 'Compile and run the tests', def: 'Ctrl+Shift+Enter' },
   { id: 'exit', group: 'In a run', label: 'Go back to the dashboard', def: 'Escape' },
   { id: 'task', group: 'In a run', label: 'Show or hide the task', def: 'Alt+T' },
@@ -15,7 +16,6 @@ export const ACTIONS = [
 
 // Shortcuts that cannot be changed (shown in the help dialog for completeness).
 export const FIXED = [
-  { group: 'Anywhere', label: 'Command palette: add a question, upload, move a set to a folder, go to a set, and more', combo: 'Alt+K' },
   { group: 'Anywhere', label: 'Search question sets and questions (dashboard)', combo: '/' },
   { group: 'Anywhere', label: 'Show or hide the formula sheets (practice questions)', combo: 'Alt+T' },
   { group: 'Anywhere', label: 'Pause or resume the timers (not while typing or on a button)', combo: 'Space' },
@@ -47,6 +47,17 @@ export function eventCombo(e) {
   if (e.shiftKey) parts.push('Shift');
   parts.push(key);
   return parts.join('+');
+}
+
+// The keydown event a combination would produce, so a command can press a shortcut for the user.
+export function comboEvent(combo) {
+  const parts = combo.split('+');
+  const key = parts.pop();
+  const code = /^[A-Z]$/.test(key) ? `Key${key}` : /^\d$/.test(key) ? `Digit${key}` : '';
+  return new KeyboardEvent('keydown', {
+    key: key === 'Space' ? ' ' : key, code, bubbles: true, cancelable: true,
+    ctrlKey: parts.includes('Ctrl'), altKey: parts.includes('Alt'), shiftKey: parts.includes('Shift'),
+  });
 }
 
 // What common browser (and editor) shortcuts do, so a clash can be explained.

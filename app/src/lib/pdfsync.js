@@ -44,7 +44,7 @@ export async function unlinkPdf(setId) {
 
 // Reads `file` as the set's PDF: indexes it, merges with the set and stores it. Throws, leaving the set as it was, if the
 // file is not a usable practice PDF. Returns the merge report ({ kept, added, renamed, droppedTitles }).
-async function refreshFrom(setId, file) {
+export async function refreshFrom(setId, file) {
   const record = state.library.sets[setId];
   const item = await indexPdf({ path: record.indexedFrom || record.manifest.pdf, file });
   if (item.set.id !== setId) throw new Error('That PDF would make a different set, not update this one.');
