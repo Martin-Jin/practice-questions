@@ -154,7 +154,7 @@ export default function LibrarySet({ setId, theme }) {
   useEffect(() => {
     const box = practiceRef.current;
     if (!box || typeof ResizeObserver === 'undefined') return undefined;
-    const measure = () => setFit(Math.max(2, Math.min(10, Math.floor((box.offsetHeight - 64) / 58))));
+    const measure = () => setFit(Math.max(2, Math.min(10, Math.floor((box.offsetHeight - 58) / 50))));
     measure();
     const watch = new ResizeObserver(measure);
     watch.observe(box);

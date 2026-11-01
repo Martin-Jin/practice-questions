@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.26';
+export const VERSION = '2.27';
 
 export const CHANGELOG = [
+  {
+    version: '2.27', date: '2026-11-01', title: 'Shorter recent session rows',
+    items: [
+      'The rows in Recent sessions are a little shorter, so four of them fit beside the practice options.',
+    ],
+  },
   {
     version: '2.26', date: '2026-11-01', title: 'Remove a recent session from its row',
     items: [
@@ -29,12 +35,6 @@ export const CHANGELOG = [
     version: '2.20', date: '2026-10-31', title: 'Click a run row to open it',
     items: [
       'On the dashboard and in History the whole run row is a link into the run (or its results when finished), so the Resume button is gone. The progress is one slim bar with done / total across it, so the rows are shorter.',
-    ],
-  },
-  {
-    version: '2.19', date: '2026-10-31', title: 'Smaller Resume button in run rows',
-    items: [
-      'In the thin run rows (dashboard and History) the Resume and Results buttons are small outlined pills instead of solid red blocks.',
     ],
   },
 ];
