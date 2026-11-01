@@ -197,6 +197,7 @@ export default function QuestionView({ setId, uid, run, theme }) {
     const onKey = (e) => {
       if (e.altKey && !e.ctrlKey && !e.metaKey && e.code === 'KeyT') { e.preventDefault(); toggleFormula(); return; }
       if (e.ctrlKey || e.metaKey || e.altKey || typing(e.target) || document.querySelector('dialog[open]')) return;
+      if (e.target.closest && e.target.closest('.formula-side')) return;   // focus in the formula sheet: its keys, not the question's
       if (e.key === 'd') { e.preventDefault(); toggleDifficult(); }
       else if (e.key === 's') { e.preventDefault(); void toggleSolution(); }
       else if (e.key === 'ArrowRight' && index < questions.length - 1) window.location.hash = go(index + 1);

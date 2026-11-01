@@ -87,6 +87,19 @@ function PdfViewer({ setId, sheet }) {
     };
   }, [pdf, pageNumber, width]);
 
+  // With focus inside the panel, the arrow keys flip its pages (the question view ignores them there).
+  const lastPage = pdf ? pdf.numPages : 1;
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;
+      if (!e.target.closest || !e.target.closest('.formula-side') || e.target.closest('input, textarea')) return;
+      e.preventDefault();
+      setPageNumber((n) => Math.min(lastPage, Math.max(1, n + (e.key === 'ArrowRight' ? 1 : -1))));
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [lastPage]);
+
   return (
     <>
       {error && <div className="notice bad" role="alert">{error}</div>}
@@ -150,7 +163,7 @@ export default function FormulaSidebar({ setId, onClose, hidden = false }) {
   const [top, setTop] = useState(52);
   useEffect(() => {
     const nav = document.querySelector('.shell-nav');
-    if (!nav) return undefined;
+    if (!nav) { setTop(0); return undefined; }   // a practice session has no bar
     const measure = () => setTop(Math.round(nav.getBoundingClientRect().height));
     measure();
     const ro = new ResizeObserver(measure);
@@ -180,7 +193,7 @@ export default function FormulaSidebar({ setId, onClose, hidden = false }) {
   };
 
   return (
-    <aside className="formula-side" aria-label="Formula sheets" aria-hidden={hidden || undefined} inert={hidden ? '' : undefined}
+    <aside className="formula-side" tabIndex={-1} aria-label="Formula sheets" aria-hidden={hidden || undefined} inert={hidden ? '' : undefined}
       style={{ width, top, ...(hidden ? { visibility: 'hidden', pointerEvents: 'none' } : {}) }}>
       <div className={`splitter v formula-handle${drag ? ' drag' : ''}`} role="separator" aria-orientation="vertical" title="Drag to resize. Double-click to reset."
         onPointerDown={(e) => { e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId); document.body.classList.add('resizing', 'resizing-x'); setDrag(true); }}
