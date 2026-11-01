@@ -344,6 +344,28 @@ export function resetCodingClock(runId, n) {
   recordUndo(`Reset the timer for Q${n}`, () => put(old), () => put(fresh));
 }
 
+// Sets the question's running time to what the user typed (they paused and forgot to carry on). The run's total follows, and
+// so does the attempt's data point in the stats when the question has one.
+export function setCodingClockTime(runId, n, ms) {
+  const run = state.runs[runId];
+  if (!run || !run.state[n]) return false;
+  const old = clockOf(run, n, true);
+  const next = { ...old, ms };
+  const stats = statsFor(run.setId);
+  const qs = stats.questions[n];
+  const point = old.point && qs && (qs.times || []).find((t) => t.id === old.point);
+  const oldPoint = point ? point.ms : null;
+  const put = (clock, pointMs) => {
+    run.state[n].clock = clock;
+    if (point) { point.ms = pointMs; saveStats(run.setId); }
+    saveRun(run, 0);
+    notify();
+  };
+  put(next, Math.round(ms));
+  recordUndo(`Changed the time on Q${n}`, () => put(old, oldPoint), () => put(next, Math.round(ms)));
+  return true;
+}
+
 export const codingRunTotal = (run) => runTotalMs(Object.fromEntries(run.questions.map((n) => [n, run.state[n].clock])));
 
 // The "difficult" mark on a question, kept with its stats so the Marked difficult mode can find it.

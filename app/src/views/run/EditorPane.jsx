@@ -74,7 +74,7 @@ const EditorPane = forwardRef(function EditorPane({ run, n, dark, autoSuggest, o
       // dirty: questions edited since their last autosave
       live.current = { editor, monaco, mod, models: new Map(), views: new Map(), dirty: new Set() };
       setReady(true);
-    });
+    }).catch(() => toast('The editor could not load, probably because the app was updated while this page was open. Reload the page.', 'bad'));
     return () => {
       disposed = true;
       const { editor, models } = live.current;

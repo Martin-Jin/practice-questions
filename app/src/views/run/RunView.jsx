@@ -7,7 +7,7 @@ import { eventCombo, actionFor, comboFor } from '../../lib/shortcuts.js';
 import { getSet, getQuestion } from '../../lib/catalog.js';
 import {
   runQuestion, setAutoSuggest, resetCode, resetRun, reselect, renameRun, deleteRun, runSummary, flushSaves,
-  openCodingClock, readCodingClock, addCodingTime, resetCodingClock, codingRunTotal,
+  openCodingClock, readCodingClock, addCodingTime, resetCodingClock, setCodingClockTime, codingRunTotal,
 } from '../../lib/service.js';
 import Timer from '../../components/QuestionTimer.jsx';
 import Icon from '../../components/Icon.jsx';
@@ -342,6 +342,7 @@ export default function RunView({ runId, param, theme }) {
             open: () => openCodingClock(run.id, n),
             read: () => readCodingClock(run.id, n),
             add: (ms) => addCodingTime(run.id, n, ms),
+            set: (ms) => setCodingClockTime(run.id, n, ms),
             reset: () => resetCodingClock(run.id, n),
             total: () => codingRunTotal(run),
           }} />

@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.63';
+export const VERSION = '2.64';
 
 export const CHANGELOG = [
+  {
+    version: '2.64', date: '2026-11-02', title: 'Type the time in coding questions',
+    items: [
+      'In a coding run, clicking the question time now lets you type a new one (4:07, or minutes), like in the other quizzes, and the total follows. If the editor cannot load because the app was updated while the page was open, a message now says to reload.',
+    ],
+  },
   {
     version: '2.63', date: '2026-11-02', title: 'A single question stands alone',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.60', date: '2026-11-02', title: 'Search the keyboard shortcuts',
     items: [
       'The Keyboard shortcuts window has a search box that filters by what a shortcut does or its keys, so typing ctrl z finds Undo.',
-    ],
-  },
-  {
-    version: '2.59', date: '2026-11-02', title: 'No keyboard shortcuts entry on a phone',
-    items: [
-      'The three-dot menu no longer lists Keyboard shortcuts on a phone, where there is no keyboard to use them with.',
     ],
   },
 ];
