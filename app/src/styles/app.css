@@ -134,7 +134,9 @@ label.check { display: inline-flex; align-items: center; gap: 8px; cursor: point
 a.crumb-item:hover { color: var(--text); }
 b.crumb-item { color: var(--text); font-weight: 600; }
 .page { max-width: 1120px; margin: 0 auto; padding: 28px 24px 64px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
-.page-head { display: grid; gap: 6px; }
+/* One-line text must not stretch a grid wider than the screen: every single-column grid may shrink below its content. */
+.run-list, .set-card, .hist-list, .modes, .mode > .m-head, .mode .m-opts, .stat-block { grid-template-columns: minmax(0, 1fr); }
+.page-head { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }   /* the column may be narrower than a long one-line title, which then slides */
 .section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
 .section-title.with-action { align-items: center; }
 .section-title.set-heading { margin-bottom: -20px; }   /* the page grid's 28px gap is pulled in to 8px, so the line under it sits close */
@@ -142,6 +144,11 @@ b.crumb-item { color: var(--text); font-weight: 600; }
 .section-pick { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; color: var(--muted); }
 .section-pick .btn { height: 24px; min-height: 0; }
 .section-select { font: inherit; font-weight: 600; color: var(--text); background: transparent; border: 0; border-bottom: 2px solid currentColor; border-radius: 0; padding: 0 2px; cursor: pointer; max-width: 60vw; }
+.section-select.closed { display: inline-flex; gap: 4px; min-width: 0; max-width: 100%; flex: 0 1 auto; }
+.us-label { min-width: 0; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+.us-label::-webkit-scrollbar { display: none; }
+.section-pick { min-width: 0; }
+.section-pick > span:first-child, .section-pick > .btn { flex: none; white-space: nowrap; }   /* only the section name gives way, so "Questions in" never drops to a second line */
 .section-combo { position: relative; display: inline-block; }
 .section-options { position: absolute; left: 0; top: 100%; z-index: 20; min-width: 100%; width: max-content; max-width: 70vw; max-height: 280px; overflow-y: auto; margin: 4px 0 0; padding: 4px; list-style: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, .15); color: var(--text); font-weight: 400; }
 .section-options li { padding: 6px 10px; border-radius: 6px; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; }

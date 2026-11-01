@@ -40,10 +40,11 @@ export function startAutoSlide(box, { pace = 26, hold: hold_ = 2000 } = {}) {
 }
 
 // A one-line box (the location line, a heading) that slides to its end and back on its own when it is longer than its room.
+// With { manual: true } it never moves by itself.
 export function useAutoSlide(ref, key, options) {
   useEffect(() => {
     const box = ref.current;
-    if (!box) return undefined;
+    if (!box || (options && options.manual)) return undefined;   // manual: the user scrolls it by hand
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       if (box.scrollWidth > box.clientWidth + 1) box.scrollLeft = box.scrollWidth;
       return undefined;

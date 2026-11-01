@@ -1,4 +1,6 @@
-import { useId, useMemo, useState } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
+import { useAutoSlide } from '../lib/autoslide.js';
+import SlideText from './SlideText.jsx';
 import { fuzzyFilter } from '../lib/fuzzy.js';
 
 // A drop-down that reads as underlined text in a sentence. Clicking it turns it into a search box (fuzzy) with the matching
@@ -9,6 +11,8 @@ export default function UnderlineSelect({ options, value, onChange, label }) {
   const [active, setActive] = useState(0);
   const listId = useId();
   const current = options.find((o) => o.value === value) || options[0];
+  const labelBox = useRef(null);
+  useAutoSlide(labelBox, `${current.label}/${open}`);   // a long name stays on one line and slides
   const items = useMemo(() => options.map((o) => ({ label: o.label, option: o })), [options]);
   const shown = useMemo(() => fuzzyFilter(items, query, items.length).map((r) => r.item.option), [items, query]);
   const close = () => { setOpen(false); setQuery(''); };
@@ -20,7 +24,7 @@ export default function UnderlineSelect({ options, value, onChange, label }) {
     else if (e.key === 'Escape') close();
   };
   if (!open) {
-    return <button type="button" className="section-select" aria-haspopup="listbox" aria-label={label ? `${label}: ${current.label}` : undefined} onClick={() => { setOpen(true); setActive(Math.max(0, options.indexOf(current))); }}>{current.label} <span aria-hidden="true">▾</span></button>;
+    return <button type="button" className="section-select closed" aria-haspopup="listbox" aria-label={label ? `${label}: ${current.label}` : undefined} onClick={() => { setOpen(true); setActive(Math.max(0, options.indexOf(current))); }}><span className="us-label" ref={labelBox}>{current.label}</span> <span aria-hidden="true">▾</span></button>;
   }
   return (
     <span className="section-combo">
@@ -31,7 +35,7 @@ export default function UnderlineSelect({ options, value, onChange, label }) {
         {shown.map((o, i) => (
           <li key={o.value} role="option" aria-selected={i === active} className={i === active ? 'active' : ''}
             onMouseDown={(e) => { e.preventDefault(); choose(o); }} onMouseEnter={() => setActive(i)}>
-            {o.label} {o.count !== undefined && <span className="muted">{o.count}</span>}
+            <SlideText>{o.label}</SlideText> {o.count !== undefined && <span className="muted">{o.count}</span>}
           </li>
         ))}
       </ul>

@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.45';
+export const VERSION = '2.46';
 
 export const CHANGELOG = [
+  {
+    version: '2.46', date: '2026-11-01', title: 'Long titles stay inside the screen',
+    items: [
+      'A long set title or details line no longer pushes past the edge of a phone screen: it is cut off at the page margin and slides along by itself. The same goes for the section name beside Questions in, which is cut off and slides instead of pushing Questions in onto a second line. In a practice session the location line no longer slides by itself: you scroll it by hand.',
+    ],
+  },
   {
     version: '2.45', date: '2026-11-01', title: 'Text that slides on its own on phones',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.42', date: '2026-11-01', title: 'Smoother on phones',
     items: [
       'The dashboard picture is lighter on phones and touch screens (fewer symbols, about 30 frames a second, and it pauses when scrolled out of view), so it no longer lags. The folder heading on the question sets page stays on one line and slides when too long, with its Practise and Select buttons showing only icons on a phone. The search button has no border on a phone.',
-    ],
-  },
-  {
-    version: '2.41', date: '2026-11-01', title: 'Better on phones',
-    items: [
-      'The location line stays on one line and, when it is too long for the window, slides to its end and back by itself (touch it to stop). The floating timer says Question instead of This question, so it takes two lines, and is a little smaller on phones. The formula sheet covers the whole screen on a phone, closed with its x.',
     ],
   },
 ];
