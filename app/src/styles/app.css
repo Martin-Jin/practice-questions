@@ -168,6 +168,7 @@ b.crumb-item { color: var(--text); font-weight: 600; }
 .run-row .prog { display: grid; gap: 6px; align-self: center; font-size: 12px; line-height: 1.2; color: var(--muted); }
 .practice-row { display: flex; flex-wrap: wrap; gap: 28px; align-items: stretch; }
 .practice-main { flex: 1 1 440px; max-width: 640px; min-width: 0; }
+.practice-row:not(:has(.recent)) .practice-main { max-width: 820px; }   /* the width it had before Recent sessions; it shrinks when they show */
 .recent { flex: 1 1 260px; max-width: 400px; min-width: 240px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 .section-title.tight, .recent .section-title { margin-bottom: 4px; }
 .recent > .btn { height: 24px; min-height: 0; }   /* centred on the "Leave out completed" line beside it */
