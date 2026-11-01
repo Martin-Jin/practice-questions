@@ -3,14 +3,14 @@ import { openClock, getClock, clockDone, addTime, resetClock, setClockTime, runT
 import { isPaused, togglePause, enterContext, onPauseChange, pageActive } from '../lib/timer.js';
 import { formatDuration, parseDuration } from '../../shared/timing.js';
 import Icon from './Icon.jsx';
-import { toast } from '../lib/toast.js';
+import { useDialogs } from './Dialogs.jsx';
 
 // The timer note: time on this question and, in a practice session, the session's total. It counts while the question is open
 // and the window is showing and focused, stops when the question is marked (the time is saved with that attempt), and clicking
 // the total pauses every timer, and where the source can `set` the time, clicking this question's time types a new one (4:07, or minutes). Imported sets show it as a standing note at the bottom right (at the top centre during a practice session, which has no top bar), where the
 // formula sheets cover it; the coding run shows it inline in its top bar (`inline`).
 //
-// While the timers stay paused, a note every 5 minutes asks whether the user forgot to carry on (it waits for the tab to be showing).
+// While the timers stay paused, a pop-up every 5 minutes asks whether the user forgot to carry on (it waits for the tab to be showing). "Yes, I forgot" carries on and adds those 5 minutes to this question, "No" leaves everything as it was.
 //
 // `identity` names the question (the clocks restart when it changes) and `pauseKey` the session or context the pause belongs
 // to. `source` supplies the data: open(), read() -> { ms, done }, add(ms) -> whether the time counted, set(ms) (optional) -> whether it was changed, reset(), and
@@ -22,6 +22,10 @@ export default function Timer({ identity, pauseKey, source, frozen = false, inli
   const latest = useRef(source);
   latest.current = source;
   const [typing, setTyping] = useState(null);
+  const { confirm } = useDialogs();
+  const here = useRef(null);   // the question and pause context now showing, to drop an answer that arrives after leaving
+  here.current = `${identity}|${pauseKey}`;
+  const asking = useRef(false);
   useEffect(() => setTyping(null), [identity]);
 
   useEffect(() => {
@@ -47,9 +51,16 @@ export default function Timer({ identity, pauseKey, source, frozen = false, inli
   const pausedNow = isPaused(pauseKey);
   useEffect(() => {
     if (!pausedNow || frozen) return undefined;
-    const id = setInterval(() => {
-      if (document.visibilityState !== 'visible' || !isPaused(pauseKey)) return;
-      toast('The timer is paused. Did you forget to unpause it, or are you still there?', 'info', { action: 'Resume', ms: 12000, onClick: () => { if (isPaused(pauseKey)) togglePause(pauseKey); } });
+    const id = setInterval(async () => {
+      if (document.visibilityState !== 'visible' || !isPaused(pauseKey) || asking.current) return;
+      const asked = here.current;
+      asking.current = true;
+      const forgot = await confirm({ title: 'Timer paused', body: 'The timer has been paused for 5 minutes. Did you forget to unpause it?', confirmText: 'Yes, I forgot', cancelText: 'No' });
+      asking.current = false;
+      if (!forgot || here.current !== asked || !isPaused(pauseKey)) return;
+      togglePause(pauseKey);
+      latest.current.add(REMIND_MS);
+      redraw();
     }, REMIND_MS);
     return () => clearInterval(id);
   }, [pausedNow, pauseKey, frozen]);

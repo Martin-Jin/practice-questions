@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.54';
+export const VERSION = '2.55';
 
 export const CHANGELOG = [
+  {
+    version: '2.55', date: '2026-11-02', title: 'Paused timer asks in a pop-up',
+    items: [
+      'After 5 minutes paused, the timer asks in a pop-up whether you forgot to unpause. Yes, I forgot carries on and adds those 5 minutes to the question; No leaves it paused. Small pop-ups keep their title and buttons on one line and scroll sideways by hand on a narrow screen.',
+    ],
+  },
   {
     version: '2.54', date: '2026-11-02', title: 'Smoother dashboard, sliding run names, full-screen dialogs',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.51', date: '2026-11-02', title: 'The tutorial fits a phone',
     items: [
       'On a phone the tutorial opens full screen. Its contents list is one column with one line per item (a long item slides along by itself), and nothing is cut off at the edge any more.',
-    ],
-  },
-  {
-    version: '2.50', date: '2026-11-02', title: 'Space pauses the timer, and a focus mode',
-    items: [
-      'Press Space to pause or resume the timers (not while typing, in the editor or on a focused button). Settings > Practice > Focus mode asks for full screen when a session starts, and shows a reminder to get back to the question if you leave full screen before the session ends.',
     ],
   },
 ];

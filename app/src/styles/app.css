@@ -1066,3 +1066,8 @@ dialog.modal.welcome { overflow-x: hidden; }
 }
 /* A dialog body that scrolls must not squash its rows: one-line controls (label.check scrolls sideways on a phone) have no minimum height of their own in a grid. */
 .modal .m-body { grid-auto-rows: max-content; align-content: start; }
+/* Small question boxes on a narrow screen: the title and buttons stay on one line and scroll sideways by hand if they do not fit. */
+.modal.compact .m-head h2 { white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+.modal.compact .m-head h2::-webkit-scrollbar, .modal.compact .m-foot::-webkit-scrollbar { display: none; }
+.modal.compact .m-foot { justify-content: safe center; overflow-x: auto; scrollbar-width: none; }
+.modal.compact .m-foot .btn { flex: none; white-space: nowrap; }
