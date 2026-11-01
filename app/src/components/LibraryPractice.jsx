@@ -140,6 +140,16 @@ export function LibraryPracticePicker({ set }) {
   );
 }
 
+// Asks before removing a session (abandoning an unfinished one); the answers and results on its questions stay.
+export async function abandonLibRun(run, confirm) {
+  const ok = await confirm({
+    title: run.completedAt ? 'Delete this session?' : 'Abandon this session?',
+    body: `Its list of questions is removed. Your answers and results on the questions are kept.${run.completedAt ? '' : backupNote()}`,
+    confirmText: run.completedAt ? 'Delete' : 'Abandon', danger: true,
+  });
+  if (ok) deleteLibRun(run.id);
+}
+
 // One saved session over an imported set: progress, and Resume / Abandon.
 export function LibRunRow({ run, showSet = true, compact = false }) {
   const st = useStore();
@@ -154,14 +164,7 @@ export function LibRunRow({ run, showSet = true, compact = false }) {
   const href = set ? `#/practice/${run.id}${run.completedAt ? '/summary' : ''}` : undefined;
   const progress = `${done} / ${run.questions.length} checked · ${right} right`;
 
-  const abandon = async () => {
-    const ok = await confirm({
-      title: run.completedAt ? 'Delete this session?' : 'Abandon this session?',
-      body: `Its list of questions is removed. Your answers and results on the questions are kept.${run.completedAt ? '' : backupNote()}`,
-      confirmText: run.completedAt ? 'Delete' : 'Abandon', danger: true,
-    });
-    if (ok) deleteLibRun(run.id);
-  };
+  const abandon = () => abandonLibRun(run, confirm);
 
   return (
     <div className={`card run-row${compact ? ' compact' : ''}`} ref={row}>
