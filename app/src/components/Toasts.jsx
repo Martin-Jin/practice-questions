@@ -28,8 +28,8 @@ export default function ToastHost() {
   const [items, setItems] = useState([]);
   useEffect(() => {
     let id = 0;
-    return connect((message, kind, { action, onClick } = {}) => {
-      const item = { id: ++id, message, kind, action, onClick, ms: action ? SHOWN.action : SHOWN[kind] || 3500 };
+    return connect((message, kind, { action, onClick, ms } = {}) => {
+      const item = { id: ++id, message, kind, action, onClick, ms: ms || (action ? SHOWN.action : SHOWN[kind] || 3500) };
       setItems((l) => [...l, item].slice(-MAX));
     });
   }, []);

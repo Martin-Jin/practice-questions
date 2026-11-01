@@ -1,4 +1,4 @@
-// toast('Saved'), toast('Something broke', 'bad') or toast('Moved it', 'info', { action: 'Undo', onClick }).
+// toast('Saved'), toast('Something broke', 'bad') or toast('Moved it', 'info', { action: 'Undo', onClick }). `ms` sets how long it stays.
 // A toast with an action is a button: clicking it runs onClick. The notifications are drawn by components/Toasts.jsx.
 let push = () => {};
 
