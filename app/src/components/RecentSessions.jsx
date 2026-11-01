@@ -6,7 +6,7 @@ import { timeAgo, plural } from '../lib/format.js';
 
 // A compact list of the latest practice sessions, for the space beside the practice options. `limit` is how many rows fit
 // (the page measures the options beside it); when there are more sessions than that, "See all" calls onAll (a window with every one). A × at the right of a row, shown on hover or focus, removes that session.
-export default function RecentSessions({ runs, limit, onAll }) {
+export default function RecentSessions({ runs, limit, gap, onAll }) {
   const { confirm } = useDialogs();
   const shown = runs.slice(0, limit);
   return (
@@ -15,7 +15,7 @@ export default function RecentSessions({ runs, limit, onAll }) {
       {runs.length === 0 ? (
         <p className="muted">No sessions yet. Choose a mode and press Start.</p>
       ) : (
-        <ul className="recent-list">
+        <ul className="recent-list" style={gap ? { rowGap: gap } : undefined}>
           {shown.map((run) => {
             const done = run.questions.filter((uid) => runStatus(run, uid)).length;
             const right = run.questions.filter((uid) => runStatus(run, uid) === 'right').length;
