@@ -109,7 +109,7 @@ export function LibraryPracticePicker({ set }) {
   return (
     <section>
       <div className="section-title tight"><h2>Practise</h2>{st.prioritise && <span className="chip accent">Drawing hard questions more often</span>}</div>
-      <div className="row" style={{ marginBottom: 10 }}>
+      <div className="row mode-row" style={{ marginBottom: 10 }}>
         {names.length > 1 && (
           <button type="button" className="btn icon-only" onClick={() => setCustomising(true)} title="Customise by section: choose the sections, and how many questions from each" aria-label="Customise by section">
             <Icon name="tune" />
@@ -117,7 +117,7 @@ export function LibraryPracticePicker({ set }) {
         )}
         <span>Practice mode</span>
         <UnderlineSelect options={MODES.filter((id) => id !== 'sections' || names.length > 1).map((id) => ({ value: id, label: LIB_MODE_LABELS[id] }))} value={mode} onChange={setMode} label="Practice mode" />
-        <button type="button" className="btn primary" onClick={start}>Start</button>
+        <button type="button" className="btn primary start-btn" onClick={start}>Start</button>
       </div>
       <div className="modes">{picker(mode)}</div>
       <label className="check" style={{ marginTop: 10 }}>

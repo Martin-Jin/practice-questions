@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import Icon from '../../components/Icon.jsx';
 import SlideText from '../../components/SlideText.jsx';
+import { useKeepInView } from '../../lib/keepinview.js';
 
 // The settings and run options menu (a cog). items: [{ label, icon, onClick, disabled, title, danger }] or 'sep'.
 // `side` opens it beside the button (for the icon strip) instead of below it.
 export default function RunMenu({ items, side = false, className = '' }) {
   const [open, setOpen] = useState(false);
   const wrap = useRef(null);
+  const menu = useRef(null);
+  useKeepInView(menu, open);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -24,7 +27,7 @@ export default function RunMenu({ items, side = false, className = '' }) {
         <Icon name="gear" />
       </button>
       {open && (
-        <div className={`menu${side ? ' side' : ''}`} role="menu">
+        <div className={`menu${side ? ' side' : ''}`} ref={menu} role="menu">
           {items.map((it, i) => (it === 'sep'
             ? <hr key={i} />
             : (

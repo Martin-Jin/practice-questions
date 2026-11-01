@@ -1,5 +1,6 @@
 import { useId, useMemo, useRef, useState } from 'react';
 import { useAutoSlide } from '../lib/autoslide.js';
+import { useKeepInView } from '../lib/keepinview.js';
 import SlideText from './SlideText.jsx';
 import { fuzzyFilter } from '../lib/fuzzy.js';
 
@@ -12,6 +13,8 @@ export default function UnderlineSelect({ options, value, onChange, label }) {
   const listId = useId();
   const current = options.find((o) => o.value === value) || options[0];
   const labelBox = useRef(null);
+  const listBox = useRef(null);
+  useKeepInView(listBox, open);
   useAutoSlide(labelBox, `${current.label}/${open}`);   // a long name stays on one line and slides
   const items = useMemo(() => options.map((o) => ({ label: o.label, option: o })), [options]);
   const shown = useMemo(() => fuzzyFilter(items, query, items.length).map((r) => r.item.option), [items, query]);
@@ -30,7 +33,7 @@ export default function UnderlineSelect({ options, value, onChange, label }) {
     <span className="section-combo">
       <input className="section-select" autoFocus value={query} placeholder={current.label} role="combobox" aria-expanded="true" aria-controls={listId} aria-label={label ? `Search: ${label}` : 'Search'}
         onChange={(e) => { setQuery(e.target.value); setActive(0); }} onKeyDown={onKey} onBlur={close} />
-      <ul id={listId} className="section-options" role="listbox">
+      <ul id={listId} ref={listBox} className="section-options" role="listbox">
         {shown.length === 0 && <li className="muted empty-opt">Nothing matches</li>}
         {shown.map((o, i) => (
           <li key={o.value} role="option" aria-selected={i === active} className={i === active ? 'active' : ''}

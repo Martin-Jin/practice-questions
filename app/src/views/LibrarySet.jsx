@@ -12,7 +12,6 @@ import AddQuestionDialog from '../components/AddQuestion.jsx';
 import { effectiveQuestions, getProgress } from '../lib/practice.js';
 import Icon from '../components/Icon.jsx';
 import { SlideBlock } from '../components/SlideText.jsx';
-import { useAutoSlide } from '../lib/autoslide.js';
 import Shell from '../components/Shell.jsx';
 import { useDialogs } from '../components/Dialogs.jsx';
 import { LibraryPracticePicker, LibRunRow } from '../components/LibraryPractice.jsx';
@@ -151,10 +150,6 @@ export default function LibrarySet({ setId, theme }) {
   const [picked, setPicked] = useState(null);
   const [renaming, setRenaming] = useState(null);   // the title being edited in place, or null
   const practiceRef = useRef(null);
-  const titleBox = useRef(null);
-  const subBox = useRef(null);
-  useAutoSlide(titleBox, `${record ? record.title : ''}/${renaming === null}`);
-  useAutoSlide(subBox, record ? record.title : '');
   const [fit, setFit] = useState({ rows: 3, height: 0 });   // how many recent sessions fit beside the practice options, and the height of their box
   // The recent sessions box ends level with the mode box beside it, and shows as many rows as fit inside it.
   useEffect(() => {
@@ -261,13 +256,13 @@ export default function LibrarySet({ setId, theme }) {
   };
 
   return (
-    <Shell theme={theme} crumbs={[...folderCrumbs(setId), { label: record.title }]}>
+    <Shell theme={theme} manualCrumbs crumbs={[...folderCrumbs(setId), { label: record.title }]}>
       <div className="page-head">
         <h1 className="title-with-icon">{renaming === null
-          ? <span className="renamable" ref={titleBox} role="button" tabIndex={0} title="Click to rename this set" onClick={() => setRenaming(record.title)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setRenaming(record.title); } }}>{record.title}</span>
+          ? <span className="renamable" role="button" tabIndex={0} title="Click to rename this set" onClick={() => setRenaming(record.title)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setRenaming(record.title); } }}>{record.title}</span>
           : <input className="rename-input" autoFocus aria-label="Set name" value={renaming} maxLength={80} size={Math.max(8, renaming.length)} onChange={(e) => setRenaming(e.target.value)} onFocus={(e) => e.target.select()} onBlur={() => finishRename(true)}
             onKeyDown={(e) => { if (e.key === 'Enter') finishRename(true); else if (e.key === 'Escape') finishRename(false); }} />} <a className="btn ghost icon-only reveal" href={`#/lib/${encodeURIComponent(setId)}/stats`} title="View stats" aria-label="View stats"><Icon name="stats" /><span className="label">Stats</span></a> <button type="button" className="btn ghost icon-only reveal" onClick={search} title="Search this set's questions" aria-label="Search this set's questions"><Icon name="search" /><span className="label">Search</span></button></h1>
-        <p className="muted one-line" ref={subBox}>
+        <p className="muted one-line">
           {[record.course, plural(questions.length, 'question'), plural(sections.length, 'section'), `from ${record.folder || 'the top of the folder you chose'}`].filter(Boolean).join(' · ')}
         </p>
       </div>

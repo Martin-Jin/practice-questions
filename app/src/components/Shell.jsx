@@ -193,9 +193,9 @@ const tabOfHash = () => (/^#\/(sets|set|lib|q)(\/|$)/.test(window.location.hash)
 
 // Top bar for the dashboard, set and stats pages. `hero` is a banner between the bar and the page (the landing page's).
 // With `bare` (a practice session) there is no bar at all: the location line starts with a back button to the question sets instead.
-export default function Shell({ crumbs = [], theme, hero = null, bare = false, children }) {
+export default function Shell({ crumbs = [], theme, hero = null, bare = false, manualCrumbs = false, children }) {
   const crumbBox = useRef(null);
-  useAutoSlide(crumbBox, crumbs.map((c) => c.label).join('/') + bare, { manual: bare });   // in a practice session the path is scrolled by hand
+  useAutoSlide(crumbBox, crumbs.map((c) => c.label).join('/') + bare, { manual: bare || manualCrumbs });   // in a practice session (or where a page asks) the path is scrolled by hand
   useEffect(() => {
     if (!bare) return undefined;
     document.body.classList.add('no-nav');

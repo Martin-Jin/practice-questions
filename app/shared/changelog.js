@@ -3,9 +3,21 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.47';
+export const VERSION = '2.49';
 
 export const CHANGELOG = [
+  {
+    version: '2.49', date: '2026-11-01', title: 'Drop-downs stay inside the page',
+    items: [
+      'Drop-down lists and menus that would run past the edge of a phone screen are shifted sideways to keep the page margin, instead of being cut off.',
+    ],
+  },
+  {
+    version: '2.48', date: '2026-11-01', title: 'Cut-off text scrolls by hand',
+    items: [
+      'Text cut off at one line (set rows, recent sessions, tiles, question lists and more) now scrolls sideways with a finger, wheel or trackpad instead of ending in dots. On the set page the title, details and location line no longer slide by themselves. On a phone, Start hides while the practice mode drop-down is open instead of dropping to a second line.',
+    ],
+  },
   {
     version: '2.47', date: '2026-11-01', title: 'Button rows stay on one line',
     items: [
@@ -22,18 +34,6 @@ export const CHANGELOG = [
     version: '2.45', date: '2026-11-01', title: 'Text that slides on its own on phones',
     items: [
       'On a touch screen, one-line text that is too long for its space (titles, rows, the location line) now slides along by itself, slowly, with pauses and not all at once, since there is no hover. Drag it with a finger to read at your own pace: touching it pauses the sliding, which carries on a few seconds after you let go. The question page title does this too.',
-    ],
-  },
-  {
-    version: '2.44', date: '2026-11-01', title: 'Notes fit phones',
-    items: [
-      'On a phone, notes are centred, stay within the window and keep to one line that slides along when it is too long. Only three show at once, and the oldest fades out quickly when a newer one arrives.',
-    ],
-  },
-  {
-    version: '2.43', date: '2026-11-01', title: 'Compact question rows',
-    items: [
-      'In a set, each question row keeps its title and its details on one line each and slides sideways when they are too long. The set title and its details line, and tick-box lines on a phone, do the same. Recent sessions on a phone fit four rows like on a desktop. On a phone the rows are shorter: the marks and answer-type chips are left out and Delete is just its icon.',
     ],
   },
 ];
