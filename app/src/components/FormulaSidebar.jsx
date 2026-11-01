@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../lib/store.js';
 import { sheetsOf, addFormulaSheets, removeFormulaSheet, formulaBlob } from '../lib/formulas.js';
-import { ZoomPan } from './Lightbox.jsx';
+import { ZoomPan, CopyButton } from './Lightbox.jsx';
 import Icon from './Icon.jsx';
 import { toast } from './Toasts.jsx';
 import { useDialogs } from './Dialogs.jsx';
@@ -17,6 +17,7 @@ function PdfViewer({ setId, sheet }) {
   const [zoom, setZoom] = useState(1);   // redraw sharper once zoomed in
   const frame = useRef(null);
   const canvas = useRef(null);
+  const wrap = useRef(null);
 
   useEffect(() => {
     let live = true;
@@ -116,7 +117,10 @@ function PdfViewer({ setId, sheet }) {
           </div>
           {renderError && <div className="notice bad" role="alert">{renderError}</div>}
           <div className="formula-pdf-frame" ref={frame}>
-            <ZoomPan resetTarget={resetTarget} onSettle={setZoom}><canvas ref={canvas} role="img" aria-label={`${sheet.name}, page ${pageNumber}`} /></ZoomPan>
+            <div className="enlarge" ref={wrap}>
+              <ZoomPan resetTarget={resetTarget} onSettle={setZoom}><canvas ref={canvas} role="img" aria-label={`${sheet.name}, page ${pageNumber}`} /></ZoomPan>
+              <CopyButton root={wrap} />
+            </div>
           </div>
         </>
       )}
@@ -127,6 +131,7 @@ function PdfViewer({ setId, sheet }) {
 // One sheet: PDFs render in the app so keyboard shortcuts remain available; images can be zoomed and moved.
 function ImageSheet({ setId, sheet }) {
   const [url, setUrl] = useState(null);
+  const wrap = useRef(null);
   useEffect(() => {
     let live = true;
     let made = null;
@@ -139,7 +144,7 @@ function ImageSheet({ setId, sheet }) {
     return () => { live = false; if (made) URL.revokeObjectURL(made); };
   }, [setId, sheet.path]);
   if (!url) return <div className="pdf-wait"><span className="spinner" /></div>;
-  return <ZoomPan><img className="lib-image" src={url} alt={sheet.name} /></ZoomPan>;
+  return <div className="enlarge" ref={wrap}><ZoomPan><img className="lib-image" src={url} alt={sheet.name} /></ZoomPan><CopyButton root={wrap} /></div>;
 }
 
 function Sheet({ setId, sheet }) {

@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.56';
+export const VERSION = '2.57';
 
 export const CHANGELOG = [
+  {
+    version: '2.57', date: '2026-11-02', title: 'Copy any question, solution or formula image',
+    items: [
+      'Hover a question image, a solution page or a formula sheet and press the new copy button beside the magnifying glass to copy just the picture shown (the page on screen for a PDF) to the clipboard. The larger viewer has one too.',
+    ],
+  },
   {
     version: '2.56', date: '2026-11-02', title: 'Re-upload a set, new search and palette keys',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.53', date: '2026-11-02', title: 'Settings fills a phone screen',
     items: [
       'On a phone, Settings opens full screen like the tutorial. The editor and practice options, which were squashed out of sight in a scrolling dialog, show again.',
-    ],
-  },
-  {
-    version: '2.52', date: '2026-11-02', title: 'Focus mode sees F11, and formula sheets take focus',
-    items: [
-      'Focus mode now notices when you leave full screen with F11, not only Esc, and Esc in a coding run only leaves full screen instead of closing the run. The formula sheet panel takes keyboard focus when it opens, so you can scroll it without clicking first.',
     ],
   },
 ];

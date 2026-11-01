@@ -743,6 +743,7 @@ ol.steps { margin: 0 0 6px; padding-left: 20px; display: grid; gap: 4px; }
 /* ---------- enlarge a figure ---------- */
 .enlarge { position: relative; }
 .enlarge-btn { position: absolute; top: 8px; right: 8px; z-index: 2; opacity: 0; box-shadow: 0 1px 6px rgb(0 0 0 / 20%); }
+.enlarge-btn.copy-btn { right: 46px; }
 .enlarge:hover .enlarge-btn, .enlarge-btn:focus-visible { opacity: 1; }
 .zoompan { position: relative; overflow: hidden; border-radius: 8px; touch-action: pan-y; }
 .zoompan.zoomed { cursor: grab; touch-action: none; }

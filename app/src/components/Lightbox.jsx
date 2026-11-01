@@ -1,6 +1,7 @@
 import { createPortal } from 'react-dom';
 import { createContext, useEffect, useRef, useState } from 'react';
 import Icon from './Icon.jsx';
+import { toast } from './Toasts.jsx';
 
 const LEVELS = [0.5, 0.75, 1, 1.5, 2, 3, 4];
 const FIT = 1;   // index of 75%, where the viewer opens (100% fills the window's width, which is too big)
@@ -77,6 +78,7 @@ export function Lightbox({ title, render, onClose, pages, initialPage = 0 }) {
             <button type="button" className="btn ghost sm" onClick={() => changePage(1)} disabled={page === pages.length - 1} aria-label="Next page" title="Next page (→)">›</button>
           </>
         )}
+        <button type="button" className="btn ghost sm icon-only" onClick={() => copyFigure(stage.current)} aria-label="Copy image" title="Copy image"><Icon name="copy" /></button>
         <button type="button" className="btn ghost sm" onClick={() => zoom(-1)} disabled={level === 0} aria-label="Zoom out" title="Zoom out (-)">−</button>
         <button type="button" className="btn ghost sm lb-level" onClick={() => setLevel(FIT)} title="Back to 75% (0)">{Math.round(LEVELS[level] * 100)}%</button>
         <button type="button" className="btn ghost sm" onClick={() => zoom(1)} disabled={level === LEVELS.length - 1} aria-label="Zoom in" title="Zoom in (+)">+</button>
@@ -155,13 +157,46 @@ export function ZoomPan({ children, resetTarget = null, onSettle = null }) {
   );
 }
 
+// Copies the picture shown inside `root` (a canvas, else an image) to the clipboard as a PNG: only what is displayed,
+// so a PDF page is the page on screen.
+export async function copyFigure(root) {
+  const source = [...root.querySelectorAll('canvas, img')].find((el) => (el.tagName === 'CANVAS' ? el.width > 0 && !el.hidden : el.naturalWidth > 0));
+  if (!source) { toast('There is no picture to copy yet.', 'bad'); return; }
+  try {
+    if (!navigator.clipboard || !window.ClipboardItem) throw new Error('This browser cannot copy images.');
+    const blob = new Promise((resolve, reject) => {
+      let canvas = source;
+      if (source.tagName === 'IMG') {
+        canvas = document.createElement('canvas');
+        canvas.width = source.naturalWidth;
+        canvas.height = source.naturalHeight;
+        canvas.getContext('2d').drawImage(source, 0, 0);
+      }
+      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Could not make an image to copy.'))), 'image/png');
+    });
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+    toast('Image copied.');
+  } catch (e) { toast(`Could not copy the image: ${e.message}`, 'bad'); }
+}
+
+// The copy button that sits beside the magnifying glass, shown on hover like it. `root` is a ref to the element holding the picture.
+export function CopyButton({ root, className = '' }) {
+  return (
+    <button type="button" className={`btn sm icon-only enlarge-btn copy-btn ${className}`} onClick={() => root.current && copyFigure(root.current)} aria-label="Copy image" title="Copy image">
+      <Icon name="copy" />
+    </button>
+  );
+}
+
 // Wraps a figure so it can be zoomed and moved in place, with a magnifying-glass button in its corner (shown on
-// hover, or when focused with the keyboard) that opens it in a Lightbox. Clicking the figure itself does nothing.
+// hover, or when focused with the keyboard) that opens it in a Lightbox, and a copy button beside it. Clicking the figure itself does nothing.
 export function Enlargeable({ title, render, children, pages, initialPage = 0 }) {
   const [open, setOpen] = useState(false);
+  const root = useRef(null);
   return (
-    <div className="enlarge">
+    <div className="enlarge" ref={root}>
       <ZoomPan>{children}</ZoomPan>
+      <CopyButton root={root} />
       <button type="button" className="btn sm icon-only enlarge-btn" onClick={() => setOpen(true)} aria-label={`Enlarge: ${title}`} title="Open larger">
         <Icon name="zoom" />
       </button>
