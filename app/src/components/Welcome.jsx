@@ -4,6 +4,7 @@ import { Modal, useDialogs } from './Dialogs.jsx';
 import Icon from './Icon.jsx';
 import Logo from './Logo.jsx';
 import Demo from './Demo.jsx';
+import SlideText from './SlideText.jsx';
 import agentPrompt from '../lib/agentprompt.js';
 import { VERSION, CHANGELOG, startTab } from '../../shared/changelog.js';
 import { APP_NAME } from '../../shared/brand.js';
@@ -262,7 +263,7 @@ function Tutorial({ findRef, slot, section }) {
           <h3>In this guide</h3>
           <ol>
             {SECTIONS.map((s, i) => (
-              <li key={s.id}><a href={`#tut-${s.id}`} onClick={(e) => { e.preventDefault(); goTo(i); }}>{s.title}</a></li>
+              <li key={s.id}><a href={`#tut-${s.id}`} onClick={(e) => { e.preventDefault(); goTo(i); }}><SlideText>{s.title}</SlideText></a></li>
             ))}
           </ol>
         </nav>

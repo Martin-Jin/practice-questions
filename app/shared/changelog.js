@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.50';
+export const VERSION = '2.51';
 
 export const CHANGELOG = [
+  {
+    version: '2.51', date: '2026-11-02', title: 'The tutorial fits a phone',
+    items: [
+      'On a phone the tutorial opens full screen. Its contents list is one column with one line per item (a long item slides along by itself), and nothing is cut off at the edge any more.',
+    ],
+  },
   {
     version: '2.50', date: '2026-11-02', title: 'Space pauses the timer, and a focus mode',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.47', date: '2026-11-01', title: 'Button rows stay on one line',
     items: [
       'The Mark as difficult / Solution / Formulas buttons, I got it / Not quite and Previous / Next stay on one line. When there is no room they are cut off at the padding and you scroll them sideways by hand.',
-    ],
-  },
-  {
-    version: '2.46', date: '2026-11-01', title: 'Long titles stay inside the screen',
-    items: [
-      'A long set title or details line no longer pushes past the edge of a phone screen: it is cut off at the page margin and slides along by itself. The same goes for the section name beside Questions in, which is cut off and slides instead of pushing Questions in onto a second line. In a practice session the location line no longer slides by itself: you scroll it by hand.',
     ],
   },
 ];
