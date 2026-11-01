@@ -43,7 +43,7 @@ export function SettingsDialog({ close }) {
     }
   };
   return (
-    <Modal title="Settings" onClose={() => close()} footer={<button type="button" className="btn primary" onClick={() => close()}>Done</button>}>
+    <Modal title="Settings" className="settings" onClose={() => close()} footer={<button type="button" className="btn primary" onClick={() => close()}>Done</button>}>
       <div className="modes">
         {options.map((id) => {
           const disabled = id === 'local' && !st.local;

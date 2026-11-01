@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.52';
+export const VERSION = '2.53';
 
 export const CHANGELOG = [
+  {
+    version: '2.53', date: '2026-11-02', title: 'Settings fills a phone screen',
+    items: [
+      'On a phone, Settings opens full screen like the tutorial. The editor and practice options, which were squashed out of sight in a scrolling dialog, show again.',
+    ],
+  },
   {
     version: '2.52', date: '2026-11-02', title: 'Focus mode sees F11, and formula sheets take focus',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.49', date: '2026-11-01', title: 'Drop-downs stay inside the page',
     items: [
       'Drop-down lists and menus that would run past the edge of a phone screen are shifted sideways to keep the page margin, instead of being cut off.',
-    ],
-  },
-  {
-    version: '2.48', date: '2026-11-01', title: 'Cut-off text scrolls by hand',
-    items: [
-      'Text cut off at one line (set rows, recent sessions, tiles, question lists and more) now scrolls sideways with a finger, wheel or trackpad instead of ending in dots. On the set page the title, details and location line no longer slide by themselves. On a phone, Start hides while the practice mode drop-down is open instead of dropping to a second line, and the customise-sections button has no border or background. The top bar search finds question sets only, on every page; to search the questions in a set, open the set. Its icon is a list with a magnifier, to tell it from the search beside a set\'s title.',
     ],
   },
 ];
