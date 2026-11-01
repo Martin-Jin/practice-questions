@@ -55,7 +55,8 @@ export default function QuestionView({ setId, uid, run, theme }) {
   const { open, confirm } = useDialogs();
   const runSet = run ? libraryRunSet(run) : st.library.sets[setId];
   const all = runSet ? effectiveQuestions(runSet) : [];
-  const questions = run ? run.questions.map((id) => all.find((q) => q.uid === id)).filter(Boolean) : all;
+  // Opened alone, the question is the whole session: no other questions to move to.
+  const questions = run ? run.questions.map((id) => all.find((q) => q.uid === id)).filter(Boolean) : all.filter((q) => q.uid === uid);
   const index = questions.findIndex((q) => q.uid === uid);
   const question = questions[index];
   const recordSetId = question ? question.sourceSetId || setId : setId;
@@ -234,7 +235,7 @@ export default function QuestionView({ setId, uid, run, theme }) {
       <div className="qview">
         <article className="card pad qmain">
           <div className="sub" style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-            <span className="chip accent">{index + 1} / {questions.length}</span>
+            {run && <span className="chip accent">{index + 1} / {questions.length}</span>}
             {question.marks !== null && <span className="chip">{plural(question.marks, 'mark')}</span>}
             {difficult && <span className="chip warn">Difficult</span>}
             {question.source && <span className="muted">{question.source}</span>}
@@ -284,7 +285,7 @@ export default function QuestionView({ setId, uid, run, theme }) {
             </label>
             {selfParts.map((p) => <SelfMark key={p.label} part={p} value={markedHere ? answers[p.label] : undefined} onChange={(v) => onAnswer(p, v)}>{selfParts.length === 1 && nav}</SelfMark>)}
             {selfParts.length !== 1 && nav && <div className="row scroll-row">{nav}</div>}
-            {!panel && <p className="muted">Shortcuts: <span className="kbd">D</span> difficult, <span className="kbd">S</span> solution, <span className="kbd">Alt</span>+<span className="kbd">T</span> formula sheets, <span className="kbd">←</span> <span className="kbd">→</span> move between questions.</p>}
+            {!panel && <p className="muted">Shortcuts: <span className="kbd">D</span> difficult, <span className="kbd">S</span> solution, <span className="kbd">Alt</span>+<span className="kbd">T</span> formula sheets, {run && <><span className="kbd">←</span> <span className="kbd">→</span> move between questions.</>}</p>}
             {run && pending > 0 && index === questions.length - 1 && (
               <p className="muted">{plural(pending, 'question')} still to check before this session can finish: check each numbered question that is not yet green or red (a question with no answer key cannot be checked, so it does not count).</p>
             )}

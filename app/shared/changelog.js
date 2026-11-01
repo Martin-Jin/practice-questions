@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.62';
+export const VERSION = '2.63';
 
 export const CHANGELOG = [
+  {
+    version: '2.63', date: '2026-11-02', title: 'A single question stands alone',
+    items: [
+      'A question opened on its own no longer shows its position (1 / 12) or offers the arrow keys to move to the set's other questions.',
+    ],
+  },
   {
     version: '2.62', date: '2026-11-02', title: 'A single question opens like a session',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.59', date: '2026-11-02', title: 'No keyboard shortcuts entry on a phone',
     items: [
       'The three-dot menu no longer lists Keyboard shortcuts on a phone, where there is no keyboard to use them with.',
-    ],
-  },
-  {
-    version: '2.58', date: '2026-11-02', title: 'Search is Ctrl+Alt+O',
-    items: [
-      'The browser kept Ctrl+O for its own open-file box, so search is now Ctrl+Alt+O (still changeable in Settings). If you changed the search shortcut yourself, nothing changes for you.',
     ],
   },
 ];
