@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.53';
+export const VERSION = '2.54';
 
 export const CHANGELOG = [
+  {
+    version: '2.54', date: '2026-11-02', title: 'Smoother dashboard, sliding run names, full-screen dialogs',
+    items: [
+      'The maths symbols behind the dashboard header are lighter on a phone, so they lag less. Run and session names that are cut off now slide along by themselves, in every list. On a phone every large window (the tutorial, Settings, the add and export windows) opens full screen; small yes/no boxes stay small.',
+    ],
+  },
   {
     version: '2.53', date: '2026-11-02', title: 'Settings fills a phone screen',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.50', date: '2026-11-02', title: 'Space pauses the timer, and a focus mode',
     items: [
       'Press Space to pause or resume the timers (not while typing, in the editor or on a focused button). Settings > Practice > Focus mode asks for full screen when a session starts, and shows a reminder to get back to the question if you leave full screen before the session ends.',
-    ],
-  },
-  {
-    version: '2.49', date: '2026-11-01', title: 'Drop-downs stay inside the page',
-    items: [
-      'Drop-down lists and menus that would run past the edge of a phone screen are shifted sideways to keep the page margin, instead of being cut off.',
     ],
   },
 ];

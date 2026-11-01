@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../lib/store.js';
 import { plural, timeAgo } from '../lib/format.js';
 import { LIB_MODE_LABELS } from '../../shared/librarymodes.js';
@@ -8,7 +8,7 @@ import { useDialogs } from './Dialogs.jsx';
 import { toast, validationError } from './Toasts.jsx';
 import UnderlineSelect from './UnderlineSelect.jsx';
 import { backupNote } from '../lib/backup.js';
-import { useSlide } from './SlideText.jsx';
+import { startAutoSlide } from '../lib/autoslide.js';
 import Icon from './Icon.jsx';
 import TopicDialog from './TopicDialog.jsx';
 
@@ -155,7 +155,8 @@ export function LibRunRow({ run, showSet = true, compact = false }) {
   const { confirm } = useDialogs();
   const row = useRef(null);
   const main = useRef(null);
-  useSlide(main, row);   // a thin row cuts its text off and slides it on hover
+  // the name (a thin row: the name and chips) slides along on its own when it is cut off
+  useEffect(() => startAutoSlide(compact ? main.current : main.current.querySelector('.title')), [compact, run.name]);
   const set = libraryRunSet(run);
   const done = run.questions.filter((uid) => runStatus(run, uid)).length;
   const right = run.questions.filter((uid) => runStatus(run, uid) === 'right').length;

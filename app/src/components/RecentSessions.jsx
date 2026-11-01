@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+import { useAutoSlide } from '../lib/autoslide.js';
 import { runStatus, libraryRunSet } from '../lib/practice.js';
 import { LIB_MODE_LABELS } from '../../shared/librarymodes.js';
 import { abandonLibRun } from './LibraryPractice.jsx';
@@ -26,7 +28,7 @@ export default function RecentSessions({ runs: all, limit, height, onAll }) {
             return (
               <li key={run.id}>
                 <a className="recent-row" href={open ? `#/practice/${run.id}${run.completedAt ? '/summary' : ''}` : undefined} title={`${run.name} (${LIB_MODE_LABELS[run.mode]})`}>
-                  <span className="recent-name">{run.name}</span>
+                  <RecentName name={run.name} />
                   <span className="recent-meta">{done} / {run.questions.length} checked · {right} right · {timeAgo(run.updatedAt)}</span>
                   <span className={`bar${run.completedAt ? ' ok' : ''}`}><i style={{ width: `${pct}%` }} /></span>
                 </a>
@@ -40,4 +42,11 @@ export default function RecentSessions({ runs: all, limit, height, onAll }) {
       )}
     </section>
   );
+}
+
+// The session's name, sliding along on its own when it is cut off.
+function RecentName({ name }) {
+  const box = useRef(null);
+  useAutoSlide(box, name);
+  return <span className="recent-name" ref={box}>{name}</span>;
 }

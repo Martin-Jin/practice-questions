@@ -11,7 +11,8 @@ const SPEED = 0.3; // depth covered per second: a symbol takes about three secon
 const BASE = 96;           // sprites are drawn at this font size and scaled down
 // A phone or other touch screen draws a lighter picture (fewer symbols, one pixel per CSS pixel, about 30 frames a second) so it does not lag.
 const lite = () => !!window.matchMedia?.('(max-width: 820px), (pointer: coarse)').matches;
-const LITE_SHOWN = 36;
+const LITE_SHOWN = 22;
+const LITE_MAX_PX = 90;   // a symbol flying past the viewer is not drawn bigger than this on a phone: huge faded images are what makes it lag
 const sprites = new Map(); // "text|italic|colour" -> { c, w, h }
 
 function sprite(text, italic, colour) {
@@ -50,7 +51,7 @@ const spawn = (z = 1) => ({
 // A symbol is faint far away, strongest in the middle of its flight, and fades as it passes the viewer.
 const alphaOf = (z) => Math.min(1, (1 - z) * 5) * Math.min(1, (z - NEAR) * 9) * 0.55;
 
-function draw(ctx, w, h, symbols, colour, light) {
+function draw(ctx, w, h, symbols, colour, light, dpr) {
   ctx.clearRect(0, 0, w, h);
   const focal = Math.max(w, h) * 0.5;
   // a narrow picture gets fewer, smaller symbols so it isn't crowded behind the text
@@ -61,17 +62,17 @@ function draw(ctx, w, h, symbols, colour, light) {
     const a = alphaOf(s.z);
     if (a <= 0.01) continue;
     const scale = 1 / s.z;
-    const px = s.size * scale * (0.6 + 0.4 * k);
+    const px = Math.min(light ? LITE_MAX_PX : Infinity, s.size * scale * (0.6 + 0.4 * k));
     const sp = sprite(s.text, s.italic, colour);
     const f = px / BASE;
     ctx.globalAlpha = a;
-    ctx.save();
-    ctx.translate(w / 2 + s.x * focal * scale, h / 2 + s.y * focal * scale);
-    ctx.rotate(s.tilt);
+    const cos = Math.cos(s.tilt) * dpr;
+    const sin = Math.sin(s.tilt) * dpr;
+    ctx.setTransform(cos, sin, -sin, cos, (w / 2 + s.x * focal * scale) * dpr, (h / 2 + s.y * focal * scale) * dpr);
     ctx.drawImage(sp.c, (-sp.w * f) / 2, (-sp.h * f) / 2, sp.w * f, sp.h * f);
-    ctx.restore();
   }
   ctx.globalAlpha = 1;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
 // Maths symbols flying towards the viewer, as if zooming through a tunnel of them. Drawn on a canvas in the
@@ -89,15 +90,16 @@ function MathZoom() {
     let frame = 0;
     let last = 0;
     let light = lite();
+    let dpr = 1;
     let onScreen = true;
 
-    const paint = () => { if (still) draw(ctx, w, h, symbols, colour, light); };
+    const paint = () => { if (still) draw(ctx, w, h, symbols, colour, light, dpr); };
     const recolour = () => { colour = getComputedStyle(canvas).color; sprites.clear(); paint(); };
     const resize = () => {
       w = canvas.clientWidth;
       h = canvas.clientHeight;
       light = lite();
-      const dpr = light ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+      dpr = light ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -106,7 +108,7 @@ function MathZoom() {
     };
     const tick = (now) => {
       frame = requestAnimationFrame(tick);
-      if (!onScreen || now - last < (light ? 33 : 12)) return;
+      if (!onScreen || now - last < (light ? 42 : 12)) return;
       const dt = Math.min(0.05, (now - last) / 1000 || 0);
       last = now;
       for (let i = 0; i < symbols.length; i++) {
@@ -115,7 +117,7 @@ function MathZoom() {
         // gone past the viewer, or flown off the edge of the picture
         if (s.z < NEAR || (Math.abs(s.x / s.z) > 2.2 && Math.abs(s.y / s.z) > 2.2)) symbols[i] = spawn();
       }
-      draw(ctx, w, h, symbols, colour, light);
+      draw(ctx, w, h, symbols, colour, light, dpr);
     };
 
     resize();
