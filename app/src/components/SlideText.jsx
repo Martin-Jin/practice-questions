@@ -46,3 +46,10 @@ export default function SlideText({ children }) {
   useSlide(el);
   return <span ref={el} className="slide-text">{children}</span>;
 }
+
+// A block (a row's title, a line of chips) that stays on one line and slides along while its parent is hovered; on a touch screen it scrolls by hand.
+export function SlideBlock({ className, title, children }) {
+  const el = useRef(null);
+  useSlide(el);
+  return <div ref={el} className={`slide-block ${className || ''}`} title={title}>{children}</div>;
+}

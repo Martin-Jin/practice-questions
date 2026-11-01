@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useAutoSlide } from '../lib/autoslide.js';
 import { useStore } from '../lib/store.js';
 import { plural } from '../lib/format.js';
 import { foldersSorted, foldersIn, folderOf, folderPath, descendantIds, setsInFolder, createFolder, renameFolder, deleteFolder, moveSet, moveFolder, startDrag, hasDrag, readDrag } from '../lib/folders.js';
@@ -55,6 +56,7 @@ export default function SetsPage({ folderId, theme }) {
   const { prompt, confirm, open } = useDialogs();
   const [over, setOver] = useState(null);
   const [selecting, setSelecting] = useState(false);
+  const nameBox = useRef(null);
   const [picked, setPicked] = useState(new Set());
   useEffect(() => { setSelecting(false); setPicked(new Set()); }, [folderId]);
   const folder = folderId ? st.libFolders[folderId] || null : null;
@@ -63,6 +65,7 @@ export default function SetsPage({ folderId, theme }) {
   const practiceQuestionCount = practiceSets.reduce((count, set) => count + effectiveQuestions(set).length, 0);
   const sets = Object.values(st.library.sets).sort((a, b) => a.title.localeCompare(b.title));
   const here =folder ? sets.filter((x) => folder.items.some((i) => i.setId === x.id)) : sets.filter((x) => !folderOf(x.id));
+  useAutoSlide(nameBox, `${folder ? folder.name : ''}/${here.length}/${sets.length}`);
   // Selecting: press and drag over tiles to tick several, or shift-click a range, in the order the tiles are shown.
   const bind = useRangePick([...folders.map((f) => `f:${f.id}`), ...here.map((x) => `s:${x.id}`)], picked, setPicked);
 
@@ -144,12 +147,14 @@ export default function SetsPage({ folderId, theme }) {
 
       <section>
         <div className="section-title">
-          <h2>{folder ? folder.name : 'Your library'}</h2><span className="muted">{folder ? plural(here.length, 'set') : sets.length}</span>
+          <span className="section-name" ref={nameBox}>
+            <h2>{folder ? folder.name : 'Your library'}</h2><span className="muted">{folder ? plural(here.length, 'set') : sets.length}</span>
+          </span>
           <span className="spacer" />
           {practiceQuestionCount > 0 && (
-            <a className="btn ghost sm" href={`#/folder-practice/${folderId || 'root'}`}
+            <a className="btn ghost sm" aria-label="Practise" href={`#/folder-practice/${folderId || 'root'}`}
               title={`Practise all ${plural(practiceQuestionCount, 'question')} in ${folder ? `this folder and its subfolders` : 'your library'}`}>
-              <Icon name="play" /> Practise
+              <Icon name="play" /><span className="btn-label"> Practise</span>
             </a>
           )}
           {selecting && (
@@ -161,8 +166,8 @@ export default function SetsPage({ folderId, theme }) {
               ]} />
           )}
           {(here.length > 0 || folders.length > 0) && (
-            <button type="button" className={`btn sm${selecting ? ' primary' : ' ghost'}`} aria-pressed={selecting} onClick={() => { setSelecting(!selecting); setPicked(new Set()); }}>
-              <Icon name="check" /> {selecting ? 'Done' : 'Select'}
+            <button type="button" className={`btn sm${selecting ? ' primary' : ' ghost'}`} aria-label={selecting ? 'Done' : 'Select'} aria-pressed={selecting} onClick={() => { setSelecting(!selecting); setPicked(new Set()); }}>
+              <Icon name="check" /><span className="btn-label"> {selecting ? 'Done' : 'Select'}</span>
             </button>
           )}
           <button type="button" className="btn ghost sm" onClick={make}><Icon name="plus" /> New folder</button>

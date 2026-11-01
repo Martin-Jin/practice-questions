@@ -3,37 +3,37 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.40';
+export const VERSION = '2.44';
 
 export const CHANGELOG = [
+  {
+    version: '2.44', date: '2026-11-01', title: 'Notes fit phones',
+    items: [
+      'On a phone, notes are centred, stay within the window and keep to one line that slides along when it is too long. Only three show at once, and the oldest fades out quickly when a newer one arrives.',
+    ],
+  },
+  {
+    version: '2.43', date: '2026-11-01', title: 'Compact question rows',
+    items: [
+      'In a set, each question row keeps its title and its details on one line each and slides sideways when they are too long. The set title and its details line, and tick-box lines on a phone, do the same. Recent sessions on a phone fit four rows like on a desktop. On a phone the rows are shorter: the marks and answer-type chips are left out and Delete is just its icon.',
+    ],
+  },
+  {
+    version: '2.42', date: '2026-11-01', title: 'Smoother on phones',
+    items: [
+      'The dashboard picture is lighter on phones and touch screens (fewer symbols, about 30 frames a second, and it pauses when scrolled out of view), so it no longer lags. The folder heading on the question sets page stays on one line and slides when too long, with its Practise and Select buttons showing only icons on a phone. The search button has no border on a phone.',
+    ],
+  },
+  {
+    version: '2.41', date: '2026-11-01', title: 'Better on phones',
+    items: [
+      'The location line stays on one line and, when it is too long for the window, slides to its end and back by itself (touch it to stop). The floating timer says Question instead of This question, so it takes two lines, and is a little smaller on phones. The formula sheet covers the whole screen on a phone, closed with its x.',
+    ],
+  },
   {
     version: '2.40', date: '2026-11-01', title: 'Edit the time of finished questions',
     items: [
       'Click the time on This question to type a new one even after the question is marked; its saved time follows. Notes in a practice session stay at the top right, a little higher, level with the timer.',
-    ],
-  },
-  {
-    version: '2.39', date: '2026-11-01', title: 'Timers show what a click does',
-    items: [
-      'Hovering over a timer overlays an icon on its time: a pen on This question (click to type the time) and pause or play on the Total.',
-    ],
-  },
-  {
-    version: '2.38', date: '2026-11-01', title: 'Paused-timer reminder',
-    items: [
-      'While the timers are paused, a note every 5 minutes asks whether you forgot to unpause or are still there. Its Resume button carries on. In a practice session, notes sit a little higher, level with the timer.',
-    ],
-  },
-  {
-    version: '2.37', date: '2026-11-01', title: 'Enlarged figures open at 75%',
-    items: [
-      'Opening a question, solution or other figure in the large viewer starts at 75% instead of 100%, which was too big. + and the wheel still zoom in, and 0 or the percentage button returns to 75%.',
-    ],
-  },
-  {
-    version: '2.36', date: '2026-11-01', title: 'Sharp when zoomed in',
-    items: [
-      'Zooming into a question, a solution or a formula sheet PDF redraws it at the new size a moment after you stop, so it stays sharp instead of going blurry.',
     ],
   },
 ];

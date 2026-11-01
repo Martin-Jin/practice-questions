@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useStore } from '../lib/store.js';
+import { useAutoSlide } from '../lib/autoslide.js';
 import { setRunner, setAutoSuggest, setPrioritise, setShortcut, resetShortcuts } from '../lib/service.js';
 import { ACTIONS, FIXED, comboFor, eventCombo, checkCombo } from '../lib/shortcuts.js';
 import { RUNNERS } from '../lib/runners.js';
@@ -193,6 +194,8 @@ const tabOfHash = () => (/^#\/(sets|set|lib|q)(\/|$)/.test(window.location.hash)
 // Top bar for the dashboard, set and stats pages. `hero` is a banner between the bar and the page (the landing page's).
 // With `bare` (a practice session) there is no bar at all: the location line starts with a back button to the question sets instead.
 export default function Shell({ crumbs = [], theme, hero = null, bare = false, children }) {
+  const crumbBox = useRef(null);
+  useAutoSlide(crumbBox, crumbs.map((c) => c.label).join('/'));
   useEffect(() => {
     if (!bare) return undefined;
     document.body.classList.add('no-nav');
@@ -216,7 +219,7 @@ export default function Shell({ crumbs = [], theme, hero = null, bare = false, c
       {hero}
       <main className="page">
         {(crumbs.length > 0 || bare) && (
-          <div className="crumbs" role="group" aria-label="Current location">
+          <div className="crumbs" ref={crumbBox} role="group" aria-label="Current location">
             {bare && <a className="crumb-back" href="#/sets" title="Exit to the question sets" aria-label="Exit to the question sets"><Icon name="back" /></a>}
             {crumbs.map((c, i) => (
               <span key={i} className="crumb-group">

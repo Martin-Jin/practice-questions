@@ -9,6 +9,9 @@ const COUNT = 150;
 const NEAR = 0.07; // a symbol is replaced once it is this close to the viewer
 const SPEED = 0.3; // depth covered per second: a symbol takes about three seconds to fly past
 const BASE = 96;           // sprites are drawn at this font size and scaled down
+// A phone or other touch screen draws a lighter picture (fewer symbols, one pixel per CSS pixel, about 30 frames a second) so it does not lag.
+const lite = () => !!window.matchMedia?.('(max-width: 820px), (pointer: coarse)').matches;
+const LITE_SHOWN = 36;
 const sprites = new Map(); // "text|italic|colour" -> { c, w, h }
 
 function sprite(text, italic, colour) {
@@ -47,12 +50,12 @@ const spawn = (z = 1) => ({
 // A symbol is faint far away, strongest in the middle of its flight, and fades as it passes the viewer.
 const alphaOf = (z) => Math.min(1, (1 - z) * 5) * Math.min(1, (z - NEAR) * 9) * 0.55;
 
-function draw(ctx, w, h, symbols, colour) {
+function draw(ctx, w, h, symbols, colour, light) {
   ctx.clearRect(0, 0, w, h);
   const focal = Math.max(w, h) * 0.5;
   // a narrow picture gets fewer, smaller symbols so it isn't crowded behind the text
   const k = Math.min(1, w / 900);
-  const shown = Math.max(30, Math.round(symbols.length * k));
+  const shown = light ? LITE_SHOWN : Math.max(30, Math.round(symbols.length * k));
   for (let i = 0; i < shown; i++) {
     const s = symbols[i];
     const a = alphaOf(s.z);
@@ -85,13 +88,16 @@ function MathZoom() {
     let colour = '#888';
     let frame = 0;
     let last = 0;
+    let light = lite();
+    let onScreen = true;
 
-    const paint = () => { if (still) draw(ctx, w, h, symbols, colour); };
+    const paint = () => { if (still) draw(ctx, w, h, symbols, colour, light); };
     const recolour = () => { colour = getComputedStyle(canvas).color; sprites.clear(); paint(); };
     const resize = () => {
       w = canvas.clientWidth;
       h = canvas.clientHeight;
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      light = lite();
+      const dpr = light ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -100,7 +106,7 @@ function MathZoom() {
     };
     const tick = (now) => {
       frame = requestAnimationFrame(tick);
-      if (now - last < 12) return;
+      if (!onScreen || now - last < (light ? 33 : 12)) return;
       const dt = Math.min(0.05, (now - last) / 1000 || 0);
       last = now;
       for (let i = 0; i < symbols.length; i++) {
@@ -109,12 +115,15 @@ function MathZoom() {
         // gone past the viewer, or flown off the edge of the picture
         if (s.z < NEAR || (Math.abs(s.x / s.z) > 2.2 && Math.abs(s.y / s.z) > 2.2)) symbols[i] = spawn();
       }
-      draw(ctx, w, h, symbols, colour);
+      draw(ctx, w, h, symbols, colour, light);
     };
 
     resize();
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
+    // nothing is drawn while the picture is scrolled out of view
+    const seen = new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; if (onScreen) last = performance.now(); });
+    seen.observe(canvas);
     // the colour changes with the theme (the setting, or the system's light/dark), so read it again then
     const theme = new MutationObserver(recolour);
     theme.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
@@ -124,6 +133,7 @@ function MathZoom() {
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
+      seen.disconnect();
       theme.disconnect();
       scheme?.removeEventListener?.('change', recolour);
     };

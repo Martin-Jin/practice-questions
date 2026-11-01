@@ -72,19 +72,19 @@ export default function Timer({ identity, pauseKey, source, frozen = false, inli
       {state && <span className="timer-state" title={done ? 'Marked' : 'Paused'}><Icon name={state} /></span>}
       {typing !== null ? (
         <label className="timer-read">
-          <span className="timer-label">This question</span>
+          <span className="timer-label">Question</span>
           <input className="timer-edit" autoFocus value={typing} aria-label="Time on this question, like 4:07" onChange={(e) => setTyping(e.target.value)} onFocus={(e) => e.target.select()}
             onBlur={commit} onKeyDown={(e) => { e.stopPropagation(); if (e.key === 'Enter') commit(); else if (e.key === 'Escape') setTyping(null); }} />
         </label>
       ) : canSet ? (
         <button type="button" className="timer-read" title="Click to set the time, like 4:07." onClick={() => setTyping(formatDuration(ms))}>
-          <span className="timer-label">This question</span>
+          <span className="timer-label">Question</span>
           <span className="timer-time" role="timer">{formatDuration(ms)}</span>
           <span className="timer-hover" aria-hidden="true"><Icon name="pencil" /></span>
         </button>
       ) : (
         <button type="button" className="timer-read" aria-pressed={paused} title={hint} onClick={() => togglePause(pauseKey)}>
-          <span className="timer-label">This question</span>
+          <span className="timer-label">Question</span>
           <span className="timer-time" role="timer">{formatDuration(ms)}</span>
           <span className="timer-hover" aria-hidden="true"><Icon name={paused ? 'play' : 'pause'} /></span>
         </button>
