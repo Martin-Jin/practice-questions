@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.49';
+export const VERSION = '2.50';
 
 export const CHANGELOG = [
+  {
+    version: '2.50', date: '2026-11-02', title: 'Space pauses the timer, and a focus mode',
+    items: [
+      'Press Space to pause or resume the timers (not while typing, in the editor or on a focused button). Settings > Practice > Focus mode asks for full screen when a session starts, and shows a reminder to get back to the question if you leave full screen before the session ends.',
+    ],
+  },
   {
     version: '2.49', date: '2026-11-01', title: 'Drop-downs stay inside the page',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.46', date: '2026-11-01', title: 'Long titles stay inside the screen',
     items: [
       'A long set title or details line no longer pushes past the edge of a phone screen: it is cut off at the page margin and slides along by itself. The same goes for the section name beside Questions in, which is cut off and slides instead of pushing Questions in onto a second line. In a practice session the location line no longer slides by itself: you scroll it by hand.',
-    ],
-  },
-  {
-    version: '2.45', date: '2026-11-01', title: 'Text that slides on its own on phones',
-    items: [
-      'On a touch screen, one-line text that is too long for its space (titles, rows, the location line) now slides along by itself, slowly, with pauses and not all at once, since there is no hover. Drag it with a finger to read at your own pace: touching it pauses the sliding, which carries on a few seconds after you let go. The question page title does this too.',
     ],
   },
 ];

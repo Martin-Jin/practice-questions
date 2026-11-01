@@ -18,6 +18,7 @@ export const FIXED = [
   { group: 'Anywhere', label: 'Command palette: add a question, upload, move a set to a folder, go to a set, and more', combo: 'Alt+K' },
   { group: 'Anywhere', label: 'Search question sets and questions (dashboard)', combo: '/' },
   { group: 'Anywhere', label: 'Show or hide the formula sheets (practice questions)', combo: 'Alt+T' },
+  { group: 'Anywhere', label: 'Pause or resume the timers (not while typing or on a button)', combo: 'Space' },
   { group: 'Anywhere', label: 'Undo the last change (the notification at the top right does the same)', combo: 'Ctrl+Z' },
   { group: 'Anywhere', label: 'Redo it', combo: 'Ctrl+Shift+Z' },
 ];

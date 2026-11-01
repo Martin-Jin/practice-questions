@@ -4,6 +4,7 @@ import { useAutoSlide } from '../lib/autoslide.js';
 import { setRunner, setAutoSuggest, setPrioritise, setShortcut, resetShortcuts } from '../lib/service.js';
 import { ACTIONS, FIXED, comboFor, eventCombo, checkCombo } from '../lib/shortcuts.js';
 import { RUNNERS } from '../lib/runners.js';
+import { useFocusMode, setFocusMode } from '../lib/focus.js';
 import { persistent } from '../lib/db.js';
 import Icon from './Icon.jsx';
 import Logo from './Logo.jsx';
@@ -23,6 +24,7 @@ export const THEME_LABEL = { auto: 'Auto (follows your system)', light: 'Light',
 
 export function SettingsDialog({ close }) {
   const st = useStore();
+  const focusMode = useFocusMode();
   const { open } = useDialogs();
   const [agentUrl, setAgentUrl] = useState(readAgentUrl);
   const [agentUrlError, setAgentUrlError] = useState('');
@@ -73,6 +75,10 @@ export function SettingsDialog({ close }) {
       <p className="muted">
         Applies to random picks: the practice test, Random mode, and random sessions in your library. C++ questions you fail often come up more; library questions you marked difficult or got wrong come up more. Every question can still appear.
       </p>
+      <label className="check">
+        <input type="checkbox" checked={focusMode} onChange={(e) => setFocusMode(e.target.checked)} />
+        <span>Focus mode: ask for full screen when a session starts, and remind me if I leave it</span>
+      </label>
       <h3>AI agent</h3>
       <label className="field">AI chat website
         <input type="text" value={agentUrl} placeholder={DEFAULT_AGENT_URL} autoComplete="url" onChange={(e) => { setAgentUrl(e.target.value); setAgentUrlError(''); }} />

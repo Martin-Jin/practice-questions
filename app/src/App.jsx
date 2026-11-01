@@ -9,6 +9,7 @@ import { undoLast, redoLast } from './lib/undo.js';
 import { inputValidationMessage } from '../shared/validation.js';
 import CommandPalette from './components/CommandPalette.jsx';
 import { WelcomeOnStart } from './components/Welcome.jsx';
+import FocusMode from './components/FocusMode.jsx';
 import Dashboard from './views/Dashboard.jsx';
 import SetsPage from './views/SetsPage.jsx';
 import FolderPractice from './views/FolderPractice.jsx';
@@ -122,6 +123,7 @@ export default function App() {
       {body}
       {st.ready && !st.error && <CommandPalette theme={theme} />}
       {st.ready && !st.error && <WelcomeOnStart />}
+      {st.ready && !st.error && <FocusMode />}
       <ToastHost />
     </DialogProvider>
   );

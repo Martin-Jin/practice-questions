@@ -54,6 +54,21 @@ export default function Timer({ identity, pauseKey, source, frozen = false, inli
     return () => clearInterval(id);
   }, [pausedNow, pauseKey, frozen]);
 
+  // Space pauses or resumes, unless it is typing, pressing a focused control or answering a dialog.
+  useEffect(() => {
+    if (frozen) return undefined;
+    const onKey = (e) => {
+      if (e.code !== 'Space' || e.repeat || e.defaultPrevented || e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) return;
+      const t = e.target;
+      if (t && t.closest && t.closest('input, textarea, select, button, a, summary, [contenteditable="true"], [role="button"], .monaco-editor')) return;
+      if (document.querySelector('dialog[open]')) return;
+      e.preventDefault();
+      togglePause(pauseKey);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [pauseKey, frozen]);
+
   const { ms, done } = source.read();
   const total = source.total();
   const paused = isPaused(pauseKey);
