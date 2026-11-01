@@ -3,10 +3,10 @@ import { createContext, useEffect, useRef, useState } from 'react';
 import Icon from './Icon.jsx';
 
 const LEVELS = [0.5, 0.75, 1, 1.5, 2, 3, 4];
-const FIT = 2;   // index of 1x, where the viewer opens
+const FIT = 1;   // index of 75%, where the viewer opens (100% fills the window's width, which is too big)
 
 // A full-window viewer for a figure. `render(width)` draws the figure `width` CSS pixels wide, so a PDF crop can be
-// drawn sharply at each zoom level. 1x fits the window's width, and it can zoom out to half of that; the page scrolls, or drag to move around when zoomed.
+// drawn sharply at each zoom level. 100% fills the window's width, the viewer opens at 75% and can zoom out to half of that; the page scrolls, or drag to move around when zoomed.
 export function Lightbox({ title, render, onClose, pages, initialPage = 0 }) {
   const dialog = useRef(null);
   const stage = useRef(null);
@@ -57,7 +57,7 @@ export function Lightbox({ title, render, onClose, pages, initialPage = 0 }) {
     if (Math.abs(dx) + Math.abs(dy) > 4) d.moved = true;
     if (d.moved) { stage.current.scrollLeft = d.left - dx; stage.current.scrollTop = d.top - dy; }
   };
-  // A click on the figure toggles between fit and 2x; a click on the empty space around it closes the viewer.
+  // A click on the figure toggles between 75% and 150%; a click on the empty space around it closes the viewer.
   const onClick = (e) => {
     const moved = drag.current && drag.current.moved;
     drag.current = null;
@@ -78,7 +78,7 @@ export function Lightbox({ title, render, onClose, pages, initialPage = 0 }) {
           </>
         )}
         <button type="button" className="btn ghost sm" onClick={() => zoom(-1)} disabled={level === 0} aria-label="Zoom out" title="Zoom out (-)">−</button>
-        <button type="button" className="btn ghost sm lb-level" onClick={() => setLevel(FIT)} title="Fit to window (0)">{Math.round(LEVELS[level] * 100)}%</button>
+        <button type="button" className="btn ghost sm lb-level" onClick={() => setLevel(FIT)} title="Back to 75% (0)">{Math.round(LEVELS[level] * 100)}%</button>
         <button type="button" className="btn ghost sm" onClick={() => zoom(1)} disabled={level === LEVELS.length - 1} aria-label="Zoom in" title="Zoom in (+)">+</button>
         <button type="button" className="btn sm" onClick={onClose} autoFocus><Icon name="x" /> Close</button>
       </div>

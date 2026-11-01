@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.36';
+export const VERSION = '2.37';
 
 export const CHANGELOG = [
+  {
+    version: '2.37', date: '2026-11-01', title: 'Enlarged figures open at 75%',
+    items: [
+      'Opening a question, solution or other figure in the large viewer starts at 75% instead of 100%, which was too big. + and the wheel still zoom in, and 0 or the percentage button returns to 75%.',
+    ],
+  },
   {
     version: '2.36', date: '2026-11-01', title: 'Sharp when zoomed in',
     items: [
