@@ -14,6 +14,7 @@ function PdfViewer({ setId, sheet }) {
   const [pageNumber, setPageNumber] = useState(1);
   const [width, setWidth] = useState(0);
   const [resetTarget, setResetTarget] = useState(null);
+  const [zoom, setZoom] = useState(1);   // redraw sharper once zoomed in
   const frame = useRef(null);
   const canvas = useRef(null);
 
@@ -64,7 +65,9 @@ function PdfViewer({ setId, sheet }) {
         const baseViewport = page.getViewport({ scale: 1 });
         const scale = width / baseViewport.width;
         const pixelRatio = Math.max(window.devicePixelRatio || 1, 2);
-        const viewport = page.getViewport({ scale: scale * pixelRatio });
+        // a canvas has a size limit, so a deep zoom stops short of it
+        const sharp = Math.max(1, Math.min(zoom, 8000 / (baseViewport.width * scale * pixelRatio), 8000 / (baseViewport.height * scale * pixelRatio)));
+        const viewport = page.getViewport({ scale: scale * pixelRatio * sharp });
         const target = canvas.current;
         const context = target.getContext('2d');
         if (!context) throw new Error('This browser could not create a canvas for the PDF.');
@@ -85,7 +88,7 @@ function PdfViewer({ setId, sheet }) {
       live = false;
       if (renderTask) renderTask.cancel();
     };
-  }, [pdf, pageNumber, width]);
+  }, [pdf, pageNumber, width, zoom]);
 
   // With focus inside the panel, the arrow keys flip its pages (the question view ignores them there).
   const lastPage = pdf ? pdf.numPages : 1;
@@ -113,7 +116,7 @@ function PdfViewer({ setId, sheet }) {
           </div>
           {renderError && <div className="notice bad" role="alert">{renderError}</div>}
           <div className="formula-pdf-frame" ref={frame}>
-            <ZoomPan resetTarget={resetTarget}><canvas ref={canvas} role="img" aria-label={`${sheet.name}, page ${pageNumber}`} /></ZoomPan>
+            <ZoomPan resetTarget={resetTarget} onSettle={setZoom}><canvas ref={canvas} role="img" aria-label={`${sheet.name}, page ${pageNumber}`} /></ZoomPan>
           </div>
         </>
       )}

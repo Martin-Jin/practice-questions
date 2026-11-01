@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import 'katex/dist/katex.min.css';
 import { renderMarkup } from '../../shared/markup.js';
 import { getFile } from '../lib/library.js';
 import { openPdf, drawCrop, trimmedBox } from '../lib/pdf.js';
-import { Enlargeable } from './Lightbox.jsx';
+import { Enlargeable, ZoomContext } from './Lightbox.jsx';
 
 export function Markup({ text, className = '' }) {
   return <div className={`markup ${className}`} dangerouslySetInnerHTML={{ __html: renderMarkup(text) }} />;
@@ -42,6 +42,7 @@ function PdfCanvas({ setId, pdf, crop, trim = false, label, fixedWidth = 0 }) {
   const canvas = useRef(null);
   const [width, setWidth] = useState(0);
   const [state, setState] = useState({ phase: 'loading', error: '' });
+  const zoom = useContext(ZoomContext);
 
   useEffect(() => {
     if (fixedWidth) { setWidth(fixedWidth); return undefined; }
@@ -64,14 +65,14 @@ function PdfCanvas({ setId, pdf, crop, trim = false, label, fixedWidth = 0 }) {
         const natural = shown.box[2] - shown.box[0];
         // a canvas has a size limit, so the enlarged view stops short of it
         const cap = fixedWidth ? Math.floor(8000 / (window.devicePixelRatio || 1)) : Math.round(natural * 1.7);
-        await drawCrop(doc, shown, canvas.current, Math.min(width, cap), (t) => { task = t; });
+        await drawCrop(doc, shown, canvas.current, Math.min(width, cap), (t) => { task = t; }, Math.max(1, zoom));
         if (live) setState({ phase: 'done', error: '' });
       } catch (e) {
         if (live && !(e && e.name === 'RenderingCancelledException')) setState({ phase: 'failed', error: e.message || String(e) });
       }
     }, 60);   // wait out a window resize before redrawing
     return () => { live = false; clearTimeout(timer); if (task) task.cancel(); };
-  }, [setId, pdf, crop, trim, width]);
+  }, [setId, pdf, crop, trim, width, zoom]);
 
   return (
     <div ref={box} className={`pdf-crop${fixedWidth ? ' fixed' : ''}`} role="img" aria-label={label}>

@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import Icon from './Icon.jsx';
 
 const LEVELS = [0.5, 0.75, 1, 1.5, 2, 3, 4];
@@ -94,16 +94,20 @@ export function Lightbox({ title, render, onClose, pages, initialPage = 0 }) {
 
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 8;
+// The zoom a ZoomPan has settled on (it follows the wheel after a short pause), so a PDF drawn inside can redraw sharply at that size.
+export const ZoomContext = createContext(1);
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 // Where the figure's corner may sit: it can slide until its far edge meets the frame's (zoomed in), or stay inside the frame (zoomed out).
 const bound = (v, size, k) => clamp(v, Math.min(0, size * (1 - k)), Math.max(0, size * (1 - k)));
 
 // Lets a figure be zoomed in place: Ctrl + scroll zooms around the pointer, and with the left button held, dragging
 // moves the figure around inside its frame. Double-click puts it back. Plain scrolling is left to the page.
-export function ZoomPan({ children, resetTarget = null }) {
+export function ZoomPan({ children, resetTarget = null, onSettle = null }) {
   const box = useRef(null);
   const drag = useRef(null);
   const [view, setView] = useState({ k: 1, x: 0, y: 0 });   // scale, and where the figure's top-left corner sits in the frame
+  const [settled, setSettled] = useState(1);
+  useEffect(() => { const t = setTimeout(() => { setSettled(view.k); if (onSettle) onSettle(view.k); }, 200); return () => clearTimeout(t); }, [view.k]);
 
   useEffect(() => {
     const el = box.current;
@@ -145,7 +149,7 @@ export function ZoomPan({ children, resetTarget = null }) {
       onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={() => { drag.current = null; }} onPointerCancel={() => { drag.current = null; }}
       onDoubleClick={reset}
     >
-      <div className="zoompan-inner" style={{ transform: `translate(${view.x}px, ${view.y}px) scale(${view.k})` }}>{children}</div>
+      <div className="zoompan-inner" style={{ transform: `translate(${view.x}px, ${view.y}px) scale(${view.k})` }}><ZoomContext.Provider value={settled}>{children}</ZoomContext.Provider></div>
       {resetTarget ? resetButton && createPortal(resetButton, resetTarget) : resetButton}
     </div>
   );

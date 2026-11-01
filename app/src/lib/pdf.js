@@ -31,16 +31,21 @@ export function openPdf(setId, rel) {
   return promise;
 }
 
+const MAX_CANVAS = 8000;   // pixels along a side
+const MAX_AREA = 36e6;     // pixels in all
+
 // Draws the rectangle crop.box (PDF points from the top-left of the page) of crop.page into the
 // canvas, `cssWidth` pixels wide. Resolves to the displayed height. A newer call for the same
-// canvas should cancel the older one: pass the returned task's cancel via `onTask`.
-export async function drawCrop(doc, crop, canvas, cssWidth, onTask) {
+// canvas should cancel the older one: pass the returned task's cancel via `onTask`. `quality` draws more pixels than
+// the canvas shows (a zoomed-in view), down to what a canvas can hold.
+export async function drawCrop(doc, crop, canvas, cssWidth, onTask, quality = 1) {
   const page = await doc.getPage(crop.page);
   const [x0, y0, x1, y1] = crop.box;
   const boxWidth = x1 - x0;
   const boxHeight = y1 - y0;
   const dpr = window.devicePixelRatio || 1;
-  const scale = (cssWidth / boxWidth) * dpr;
+  let scale = (cssWidth / boxWidth) * dpr;
+  scale *= Math.min(quality, MAX_CANVAS / Math.max(boxWidth * scale, boxHeight * scale), Math.sqrt(MAX_AREA / (boxWidth * boxHeight * scale * scale))) || 1;
   const viewport = page.getViewport({ scale });
   canvas.width = Math.max(1, Math.round(boxWidth * scale));
   canvas.height = Math.max(1, Math.round(boxHeight * scale));

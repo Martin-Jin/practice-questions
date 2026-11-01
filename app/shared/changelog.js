@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.35';
+export const VERSION = '2.36';
 
 export const CHANGELOG = [
+  {
+    version: '2.36', date: '2026-11-01', title: 'Sharp when zoomed in',
+    items: [
+      'Zooming into a question, a solution or a formula sheet PDF redraws it at the new size a moment after you stop, so it stays sharp instead of going blurry.',
+    ],
+  },
   {
     version: '2.35', date: '2026-11-01', title: 'Longer, darker undo note',
     items: [
@@ -22,12 +28,6 @@ export const CHANGELOG = [
     version: '2.33', date: '2026-11-01', title: 'Formula sheet fills the screen',
     items: [
       'In a practice session the formula sheet runs the full height of the window, with no gap above it. Click on it and the left and right arrow keys turn its pages without switching question; click outside it and they switch question again.',
-    ],
-  },
-  {
-    version: '2.30', date: '2026-11-01', title: 'Recent sessions in a box',
-    items: [
-      'Recent sessions sit inside a white box as tall as the practice options beside it, so the page looks the same with one session or many. Finished sessions leave the box a day after they were completed (they stay in See all and History), and the box is hidden when none are left, when the practice options take the full width they had before.',
     ],
   },
 ];
