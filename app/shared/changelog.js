@@ -9,7 +9,7 @@ export const CHANGELOG = [
   {
     version: '2.30', date: '2026-11-01', title: 'Recent sessions in a box',
     items: [
-      'Recent sessions sit inside a white box as tall as the practice options beside it, so the page looks the same with one session or many. The box is hidden until there is a session.',
+      'Recent sessions sit inside a white box as tall as the practice options beside it, so the page looks the same with one session or many. Finished sessions leave the box a day after they were completed (they stay in See all and History), and the box is hidden when none are left.',
     ],
   },
   {
