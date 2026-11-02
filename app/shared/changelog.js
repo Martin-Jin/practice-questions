@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.66';
+export const VERSION = '2.67';
 
 export const CHANGELOG = [
+  {
+    version: '2.67', date: '2026-11-02', title: 'Shorter set tiles',
+    items: [
+      'On the Question sets tab, the course and counts of a set now share one line instead of two, and the line slides along when the tile is too narrow to show all of it.',
+    ],
+  },
   {
     version: '2.66', date: '2026-11-02', title: 'The pause reminder asks once',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.63', date: '2026-11-02', title: 'A single question stands alone',
     items: [
       'A question opened on its own no longer shows its position (1 / 12) or offers the arrow keys to move to the other questions in the set.',
-    ],
-  },
-  {
-    version: '2.62', date: '2026-11-02', title: 'A single question opens like a session',
-    items: [
-      'Opening one question from a set now looks like a practice session: no top bar, the timer at the top centre, and a back button beside the path that returns to the set. Leaving it drops its time unless you marked it, and I got it and Not quite start unpressed.',
     ],
   },
 ];

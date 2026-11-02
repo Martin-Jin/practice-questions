@@ -4,6 +4,7 @@ import { useStore } from '../lib/store.js';
 import { plural } from '../lib/format.js';
 import { foldersSorted, foldersIn, folderOf, folderPath, descendantIds, setsInFolder, createFolder, renameFolder, deleteFolder, moveSet, moveFolder, startDrag, hasDrag, readDrag } from '../lib/folders.js';
 import { effectiveQuestions } from '../lib/practice.js';
+import { SlideBlock } from '../components/SlideText.jsx';
 import Shell from '../components/Shell.jsx';
 import Icon from '../components/Icon.jsx';
 import KebabMenu from '../components/KebabMenu.jsx';
@@ -38,13 +39,15 @@ export function MoveDialog({ picked, close, initial = '' }) {
   );
 }
 
-// A set is just a tile: click it to open it, where Browse, Stats and the rest are. `drag` makes a library set movable.
+// A set is just a tile: click it to open it, where Browse, Stats and the rest are. `drag` makes a library set movable. The course and the chips share one line, which slides when the tile is too narrow for it.
 function Tile({ href, title, sub, chips, drag, onDragStart, pick }) {
   return (
     <a className={`card tile${pick ? pick.className : ''}`} href={href} draggable={drag && !pick ? 'true' : undefined} onDragStart={onDragStart} {...(pick ? { onClick: pick.onClick, onPointerDown: pick.onPointerDown, onPointerEnter: pick.onPointerEnter } : {})}>
       <h2>{pick && <Tick on={pick.className !== ''} />}{title}</h2>
-      {sub && <span className="muted">{sub}</span>}
-      <div className="meta">{chips.map((c, i) => <span key={i} className={`chip${c[1] ? ` ${c[1]}` : ''}`}>{c[0]}</span>)}</div>
+      <SlideBlock className="tile-line">
+        {sub && <span className="muted">{sub}</span>}
+        {chips.map((c, i) => <span key={i} className={`chip${c[1] ? ` ${c[1]}` : ''}`}>{c[0]}</span>)}
+      </SlideBlock>
     </a>
   );
 }

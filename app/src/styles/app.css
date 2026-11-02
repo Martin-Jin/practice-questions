@@ -795,6 +795,10 @@ a.tile:hover { text-decoration: none; border-color: var(--accent); }
 @media (max-width: 600px) { .explorer-grid { grid-template-columns: minmax(0, 1fr); } }
 .tile { padding: 12px 14px; gap: 6px; }
 .tile h2 { overflow-x: auto; scrollbar-width: none; text-overflow: clip; white-space: nowrap; }
+.tile .tile-line { display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+.tile .tile-line::-webkit-scrollbar { display: none; }
+.tile .tile-line > * { flex: none; }
+.tile .tile-line > .muted { margin-right: 4px; }
 .tile > .muted { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 13px; }
 .tile.selected { border-color: var(--accent); background: var(--surface-2); outline: 2px solid var(--accent); }
 .tile h2 .tile-tick { margin-right: 8px; vertical-align: -2px; }
