@@ -146,7 +146,7 @@ export default function RunView({ runId, param, theme }) {
       if (!fn) return;
       e.preventDefault();
       e.stopPropagation();
-      fn();
+      if (!e.repeat) fn();   // a held key does not re-trigger; press again
     };
     // Leaving the run waits for the bubble phase: if the editor (closing a suggestion list, clearing
     // a selection) or a menu already used the key, it has called preventDefault and we stay.

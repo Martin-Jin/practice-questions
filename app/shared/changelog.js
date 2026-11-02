@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.70';
+export const VERSION = '2.71';
 
 export const CHANGELOG = [
+  {
+    version: '2.71', date: '2026-11-02', title: 'Held keys toggle once, F for full screen',
+    items: [
+      'Holding down a shortcut key such as D (difficult), S (solution) or Alt+T (formula sheet) no longer flips it on and off over and over. It changes once, and you release and press the key again to change it back. The same goes for the shortcuts in a practice run. Pressing F on a question now goes full screen, and again to leave it. In full screen (Chrome and Edge), Esc closes an enlarged question first instead of leaving full screen; press Esc again to leave it.',
+    ],
+  },
   {
     version: '2.70', date: '2026-11-02', title: 'Set tiles show a name and tags',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.67', date: '2026-11-02', title: 'Shorter set tiles',
     items: [
       'On the Question sets tab, the course and counts of a set now share one line instead of two, and the line slides along when the tile is too narrow to show all of it.',
-    ],
-  },
-  {
-    version: '2.66', date: '2026-11-02', title: 'The pause reminder asks once',
-    items: [
-      'After you answer No to "Did you forget to unpause it?", the pop-up stays away until you carry on and pause again. Before, it came back every 5 minutes for as long as the timer stayed paused.',
     ],
   },
 ];

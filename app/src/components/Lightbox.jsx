@@ -2,6 +2,7 @@ import { createPortal } from 'react-dom';
 import { createContext, useEffect, useRef, useState } from 'react';
 import Icon from './Icon.jsx';
 import { toast } from './Toasts.jsx';
+import { keepEscForPage } from '../lib/focus.js';
 
 const LEVELS = [0.5, 0.75, 1, 1.5, 2, 3, 4];
 const FIT = 1;   // index of 75%, where the viewer opens (100% fills the window's width, which is too big)
@@ -30,13 +31,14 @@ export function Lightbox({ title, render, onClose, pages, initialPage = 0 }) {
     if (d && !d.open) d.showModal();
     const measure = () => setFit(Math.max(200, stage.current.clientWidth - 32));
     measure();
+    const giveEscBack = keepEscForPage();
     const observer = new ResizeObserver(measure);
     observer.observe(stage.current);
     // Ctrl + wheel (or a pinch on a trackpad) zooms the figure instead of the browser page. Needs a non-passive listener.
     const onWheel = (e) => { if (e.ctrlKey) { e.preventDefault(); zoom(e.deltaY < 0 ? 1 : -1); } };
     stage.current.addEventListener('wheel', onWheel, { passive: false });
     const el = stage.current;
-    return () => { observer.disconnect(); el.removeEventListener('wheel', onWheel); if (d && d.open) d.close(); };
+    return () => { giveEscBack(); observer.disconnect(); el.removeEventListener('wheel', onWheel); if (d && d.open) d.close(); };
   }, []);
 
   const onKeyDown = (e) => {
