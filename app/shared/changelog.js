@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.65';
+export const VERSION = '2.66';
 
 export const CHANGELOG = [
+  {
+    version: '2.66', date: '2026-11-02', title: 'The pause reminder asks once',
+    items: [
+      'After you answer No to "Did you forget to unpause it?", the pop-up stays away until you carry on and pause again. Before, it came back every 5 minutes for as long as the timer stayed paused.',
+    ],
+  },
   {
     version: '2.65', date: '2026-11-02', title: 'Edit mode switches itself off',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.62', date: '2026-11-02', title: 'A single question opens like a session',
     items: [
       'Opening one question from a set now looks like a practice session: no top bar, the timer at the top centre, and a back button beside the path that returns to the set. Leaving it drops its time unless you marked it, and I got it and Not quite start unpressed.',
-    ],
-  },
-  {
-    version: '2.61', date: '2026-11-02', title: 'One-line shortcut descriptions',
-    items: [
-      'Each row in the Keyboard shortcuts window now has a short description on one line. One that is still too long slides along when you hover it, and scrolls by hand on a phone.',
     ],
   },
 ];

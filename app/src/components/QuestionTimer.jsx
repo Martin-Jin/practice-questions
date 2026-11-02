@@ -10,7 +10,7 @@ import { useDialogs } from './Dialogs.jsx';
 // the total pauses every timer, and where the source can `set` the time, clicking this question's time types a new one (4:07, or minutes). Imported sets show it as a standing note at the bottom right (at the top centre during a practice session, which has no top bar), where the
 // formula sheets cover it; the coding run shows it inline in its top bar (`inline`).
 //
-// While the timers stay paused, a pop-up every 5 minutes asks whether the user forgot to carry on (it waits for the tab to be showing). "Yes, I forgot" carries on and adds those 5 minutes to this question, "No" leaves everything as it was.
+// While the timers stay paused, a pop-up every 5 minutes asks whether the user forgot to carry on (it waits for the tab to be showing). "Yes, I forgot" carries on and adds those 5 minutes to this question, "No" leaves everything as it was and the pop-up does not return until the user carries on and pauses again.
 //
 // `identity` names the question (the clocks restart when it changes) and `pauseKey` the session or context the pause belongs
 // to. `source` supplies the data: open(), read() -> { ms, done }, add(ms) -> whether the time counted, set(ms) (optional) -> whether it was changed, reset(), and
@@ -51,12 +51,14 @@ export default function Timer({ identity, pauseKey, source, frozen = false, inli
   const pausedNow = isPaused(pauseKey);
   useEffect(() => {
     if (!pausedNow || frozen) return undefined;
+    let declined = false;   // "No" ends the asking for this pause; carrying on and pausing again re-runs the effect
     const id = setInterval(async () => {
-      if (document.visibilityState !== 'visible' || !isPaused(pauseKey) || asking.current) return;
+      if (declined || document.visibilityState !== 'visible' || !isPaused(pauseKey) || asking.current) return;
       const asked = here.current;
       asking.current = true;
       const forgot = await confirm({ title: 'Timer paused', body: 'The timer has been paused for 5 minutes. Did you forget to unpause it?', confirmText: 'Yes, I forgot', cancelText: 'No' });
       asking.current = false;
+      if (!forgot) declined = true;
       if (!forgot || here.current !== asked || !isPaused(pauseKey)) return;
       togglePause(pauseKey);
       latest.current.add(REMIND_MS);
