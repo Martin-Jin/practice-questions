@@ -189,12 +189,12 @@ export default function SetsPage({ folderId, theme }) {
                 const inside = sets.filter((x) => f.items.some((i) => i.setId === x.id));
                 const subs = foldersIn(f.id).length;
                 const pick = selectable(selecting, `f:${f.id}`, picked, bind);
-                const info = [subs ? plural(subs, 'folder') : '', inside.length ? `${plural(inside.length, 'set')}: ${inside.slice(0, 3).map((x) => x.title).join(', ')}${inside.length > 3 ? ', …' : ''}` : ''].filter(Boolean).join(', ');
+                const chips = [subs ? plural(subs, 'folder') : '', inside.length ? plural(inside.length, 'set') : ''].filter(Boolean);
                 return (
                   <div key={f.id} className="folder-wrap">
                     <a href={`#/sets/${f.id}`} className={`card tile folder${over === f.id ? ' over' : ''}${pick.className}`} {...(selecting ? { onClick: pick.onClick, onPointerDown: pick.onPointerDown, onPointerEnter: pick.onPointerEnter } : target(f.id, f.id))}>
                       <h2>{selecting && <Tick on={pick.className !== ''} />}<Icon name="folder" /> {f.name}</h2>
-                      <span className="muted folder-info">{info || 'Empty'}</span>
+                      <SlideBlock className="tile-line">{(chips.length ? chips : ['Empty']).map((c) => <span key={c} className="chip">{c}</span>)}</SlideBlock>
                     </a>
                     {!selecting && <KebabMenu label={`Options for ${f.name}`} items={[{ label: 'Rename', icon: 'pencil', onClick: () => rename(f) }, { label: 'Delete folder', icon: 'trash', danger: true, onClick: () => remove(f) }]} />}
                   </div>

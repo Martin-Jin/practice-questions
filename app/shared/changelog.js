@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.67';
+export const VERSION = '2.68';
 
 export const CHANGELOG = [
+  {
+    version: '2.68', date: '2026-11-02', title: 'Folders show counts',
+    items: [
+      'A folder on the Question sets tab now shows tags such as "3 sets" and "1 folder", like a set does, instead of listing the names of the sets inside it.',
+    ],
+  },
   {
     version: '2.67', date: '2026-11-02', title: 'Shorter set tiles',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.64', date: '2026-11-02', title: 'Type the time in coding questions',
     items: [
       'In a coding run, clicking the question time now lets you type a new one (4:07, or minutes), like in the other quizzes, and the total follows. If the editor cannot load because the app was updated while the page was open, a message now says to reload.',
-    ],
-  },
-  {
-    version: '2.63', date: '2026-11-02', title: 'A single question stands alone',
-    items: [
-      'A question opened on its own no longer shows its position (1 / 12) or offers the arrow keys to move to the other questions in the set.',
     ],
   },
 ];
