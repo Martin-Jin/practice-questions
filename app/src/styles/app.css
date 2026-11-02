@@ -799,6 +799,11 @@ a.tile:hover { text-decoration: none; border-color: var(--accent); }
 .tile .tile-line::-webkit-scrollbar { display: none; }
 .tile .tile-line > * { flex: none; }
 .tile .tile-line > .muted { margin-right: 4px; }
+.tile-prog { position: relative; font-size: 11px; }
+.tile-prog .bar { height: 18px; }
+.tile-prog .bar > i { background: color-mix(in srgb, var(--accent) 55%, var(--surface-3)); }
+.tile-prog .bar.ok > i { background: color-mix(in srgb, var(--ok) 60%, var(--surface-3)); }
+.tile-prog span { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 650; color: var(--text); text-shadow: 0 0 3px var(--surface), 0 0 3px var(--surface); }
 .tile > .muted { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 13px; }
 .tile.selected { border-color: var(--accent); background: var(--surface-2); outline: 2px solid var(--accent); }
 .tile h2 .tile-tick { margin-right: 8px; vertical-align: -2px; }

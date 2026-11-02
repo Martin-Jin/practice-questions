@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.68';
+export const VERSION = '2.69';
 
 export const CHANGELOG = [
+  {
+    version: '2.69', date: '2026-11-02', title: 'Folders name their sets again',
+    items: [
+      'A folder on the Question sets tab shows the names of all its sets on one line, which slides along when it is cut off, with the tags ("3 sets", "1 folder") underneath. The description of a coding set also stays on one line that slides, with its tags underneath, instead of wrapping onto two lines. Your own question sets show a bar under their tags with how many questions you have answered correctly (3 / 9), turning green when all are done.',
+    ],
+  },
   {
     version: '2.68', date: '2026-11-02', title: 'Folders show counts',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.65', date: '2026-11-02', title: 'Edit mode switches itself off',
     items: [
       'Edit mode now turns off when you click or tab to anything other than its own buttons, so Space pauses the timer again instead of toggling it. It stays on when you move to another question.',
-    ],
-  },
-  {
-    version: '2.64', date: '2026-11-02', title: 'Type the time in coding questions',
-    items: [
-      'In a coding run, clicking the question time now lets you type a new one (4:07, or minutes), like in the other quizzes, and the total follows. If the editor cannot load because the app was updated while the page was open, a message now says to reload.',
     ],
   },
 ];
