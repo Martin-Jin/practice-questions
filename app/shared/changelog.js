@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.69';
+export const VERSION = '2.70';
 
 export const CHANGELOG = [
+  {
+    version: '2.70', date: '2026-11-02', title: 'Set tiles show a name and tags',
+    items: [
+      'Set and folder tiles on the Question sets tab show only the name and the tags. The description (or, for a folder, the names of its sets) appears in a small pop-up above the pointer when you hover over the tile, and fades away when you move off it. A folder also has a tag with how many questions are in it, counting its sub-folders. The progress bar on your own sets is gone.',
+    ],
+  },
   {
     version: '2.69', date: '2026-11-02', title: 'Folders name their sets again',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.66', date: '2026-11-02', title: 'The pause reminder asks once',
     items: [
       'After you answer No to "Did you forget to unpause it?", the pop-up stays away until you carry on and pause again. Before, it came back every 5 minutes for as long as the timer stayed paused.',
-    ],
-  },
-  {
-    version: '2.65', date: '2026-11-02', title: 'Edit mode switches itself off',
-    items: [
-      'Edit mode now turns off when you click or tab to anything other than its own buttons, so Space pauses the timer again instead of toggling it. It stays on when you move to another question.',
     ],
   },
 ];

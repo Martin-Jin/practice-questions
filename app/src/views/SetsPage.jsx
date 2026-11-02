@@ -3,7 +3,7 @@ import { useAutoSlide } from '../lib/autoslide.js';
 import { useStore } from '../lib/store.js';
 import { plural } from '../lib/format.js';
 import { foldersSorted, foldersIn, folderOf, folderPath, descendantIds, setsInFolder, createFolder, renameFolder, deleteFolder, moveSet, moveFolder, startDrag, hasDrag, readDrag } from '../lib/folders.js';
-import { effectiveQuestions, getProgress } from '../lib/practice.js';
+import { effectiveQuestions } from '../lib/practice.js';
 import { SlideBlock } from '../components/SlideText.jsx';
 import Shell from '../components/Shell.jsx';
 import Icon from '../components/Icon.jsx';
@@ -15,10 +15,6 @@ import useRangePick from '../lib/rangepick.js';
 import { removeSet } from '../lib/library.js';
 import { deleteMine } from '../lib/mine.js';
 
-const correctIn = (set) => {
-  const questions = effectiveQuestions(set);
-  return { done: questions.filter((q) => getProgress(set.id, q.uid)?.lastOverall === 'right').length, total: questions.length };
-};
 const questionCount = (set) => set.categories.reduce((n, c) => n + c.questions.length, 0);
 
 // While selecting, a click on a tile ticks it instead of opening it.
@@ -43,22 +39,37 @@ export function MoveDialog({ picked, close, initial = '' }) {
   );
 }
 
-// A set is just a tile: click it to open it, where Browse, Stats and the rest are. `drag` makes a library set movable. The course and the chips share one line, or with `stacked` (a description, which is long) the description has a line of its own above the chips. `progress` ({ done, total }) adds a bar of the questions answered correctly. Each line slides when the tile is too narrow for it.
-function Tile({ href, title, sub, stacked, progress, chips, drag, onDragStart, pick }) {
+// A small pop-up above the pointer with the title and a description, which fades in on hover and out on leaving. Mouse only:
+// a touch screen cannot hover, and the description is not needed to open the tile.
+function useTip(title, text) {
+  const [tip, setTip] = useState({ on: false, x: 0, y: 0 });
+  const move = (e) => { if (text && !window.matchMedia('(hover: none)').matches) setTip({ on: true, x: Math.min(Math.max(e.clientX, 170), window.innerWidth - 170), y: e.clientY }); };
+  const handlers = { onMouseEnter: move, onMouseMove: move, onMouseLeave: () => setTip((t) => ({ ...t, on: false })) };
+  const node = text ? <div className={`tile-tip${tip.on ? ' on' : ''}`} style={{ left: tip.x, top: tip.y }} aria-hidden="true"><b>{title}</b><span>{text}</span></div> : null;
+  return [handlers, node];
+}
+
+// A set is just a tile: its name and tags, nothing else. Click it to open it, where Browse, Stats and the rest are. `drag` makes a library set movable.
+// `sub` (the description or course) shows only in the hover pop-up. The tags stay on one line, which slides when the tile is too narrow for it.
+function Tile({ href, title, sub, chips, drag, onDragStart, pick }) {
+  const [tipEvents, tip] = useTip(title, sub);
   return (
-    <a className={`card tile${pick ? pick.className : ''}`} href={href} draggable={drag && !pick ? 'true' : undefined} onDragStart={onDragStart} {...(pick ? { onClick: pick.onClick, onPointerDown: pick.onPointerDown, onPointerEnter: pick.onPointerEnter } : {})}>
+    <a className={`card tile${pick ? pick.className : ''}`} href={href} draggable={drag && !pick ? 'true' : undefined} onDragStart={onDragStart} {...tipEvents} {...(pick ? { onClick: pick.onClick, onPointerDown: pick.onPointerDown, onPointerEnter: pick.onPointerEnter } : {})}>
       <h2>{pick && <Tick on={pick.className !== ''} />}{title}</h2>
-      {stacked && sub && <SlideBlock className="tile-line"><span className="muted">{sub}</span></SlideBlock>}
-      <SlideBlock className="tile-line">
-        {!stacked && sub && <span className="muted">{sub}</span>}
-        {chips.map((c, i) => <span key={i} className={`chip${c[1] ? ` ${c[1]}` : ''}`}>{c[0]}</span>)}
-      </SlideBlock>
-      {progress && (
-        <div className="tile-prog" title={`${progress.done} of ${plural(progress.total, 'question')} answered correctly`}>
-          <div className={`bar${progress.total > 0 && progress.done === progress.total ? ' ok' : ''}`} role="progressbar" aria-label="Answered correctly" aria-valuemin={0} aria-valuemax={progress.total} aria-valuenow={progress.done}><i style={{ width: `${progress.total ? (100 * progress.done) / progress.total : 0}%` }} /></div>
-          <span aria-hidden="true">{progress.done} / {progress.total}</span>
-        </div>
-      )}
+      <SlideBlock className="tile-line">{chips.map((c, i) => <span key={i} className={`chip${c[1] ? ` ${c[1]}` : ''}`}>{c[0]}</span>)}</SlideBlock>
+      {tip}
+    </a>
+  );
+}
+
+// A folder tile: like a set tile, with the names of the sets inside in its pop-up.
+function FolderTile({ folder, names, chips, className, events, pick }) {
+  const [tipEvents, tip] = useTip(folder.name, names);
+  return (
+    <a href={`#/sets/${folder.id}`} className={`card tile folder${className}`} {...tipEvents} {...events}>
+      <h2>{pick && <Tick on={pick.className !== ''} />}<Icon name="folder" /> {folder.name}</h2>
+      <SlideBlock className="tile-line">{(chips.length ? chips : ['Empty']).map((c) => <span key={c} className="chip">{c}</span>)}</SlideBlock>
+      {tip}
     </a>
   );
 }
@@ -151,7 +162,7 @@ export default function SetsPage({ folderId, theme }) {
               const solved = stats ? Object.values(stats.questions).filter((q) => q.correct > 0).length : 0;
               const active = ongoing.filter((r) => r.setId === set.id).length;
               return (
-                <Tile key={set.id} href={`#/set/${set.id}`} title={set.name} sub={set.description} stacked
+                <Tile key={set.id} href={`#/set/${set.id}`} title={set.name} sub={set.description}
                   chips={[[plural(questionCount(set), 'question')], [`${solved} solved`, solved ? 'ok' : ''], ...(active ? [[`${plural(active, 'run')} in progress`, 'accent']] : [])]} />
               );
             })}
@@ -199,21 +210,19 @@ export default function SetsPage({ folderId, theme }) {
               {folders.map((f) => {
                 const inside = sets.filter((x) => f.items.some((i) => i.setId === x.id));
                 const subs = foldersIn(f.id).length;
+                const questions = setsInFolder(f.id).reduce((n, x) => n + effectiveQuestions(x).length, 0);
                 const pick = selectable(selecting, `f:${f.id}`, picked, bind);
-                const chips = [subs ? plural(subs, 'folder') : '', inside.length ? plural(inside.length, 'set') : ''].filter(Boolean);
+                const chips = [subs ? plural(subs, 'folder') : '', inside.length ? plural(inside.length, 'set') : '', questions ? plural(questions, 'question') : ''].filter(Boolean);
                 return (
                   <div key={f.id} className="folder-wrap">
-                    <a href={`#/sets/${f.id}`} className={`card tile folder${over === f.id ? ' over' : ''}${pick.className}`} {...(selecting ? { onClick: pick.onClick, onPointerDown: pick.onPointerDown, onPointerEnter: pick.onPointerEnter } : target(f.id, f.id))}>
-                      <h2>{selecting && <Tick on={pick.className !== ''} />}<Icon name="folder" /> {f.name}</h2>
-                      {inside.length > 0 && <SlideBlock className="tile-line"><span className="muted">{inside.map((x) => x.title).join(', ')}</span></SlideBlock>}
-                      <SlideBlock className="tile-line">{(chips.length ? chips : ['Empty']).map((c) => <span key={c} className="chip">{c}</span>)}</SlideBlock>
-                    </a>
+                    <FolderTile folder={f} names={inside.map((x) => x.title).join(', ')} chips={chips} className={`${over === f.id ? ' over' : ''}${pick.className}`} pick={selecting ? pick : null}
+                      events={selecting ? { onClick: pick.onClick, onPointerDown: pick.onPointerDown, onPointerEnter: pick.onPointerEnter } : target(f.id, f.id)} />
                     {!selecting && <KebabMenu label={`Options for ${f.name}`} items={[{ label: 'Rename', icon: 'pencil', onClick: () => rename(f) }, { label: 'Delete folder', icon: 'trash', danger: true, onClick: () => remove(f) }]} />}
                   </div>
                 );
               })}
               {here.map((set) => (
-                <Tile key={set.id} href={`#/lib/${encodeURIComponent(set.id)}`} title={set.title} sub={set.course} progress={correctIn(set)} drag onDragStart={(e) => startDrag(e, set.id)} pick={selecting ? selectable(true, `s:${set.id}`, picked, bind) : null}
+                <Tile key={set.id} href={`#/lib/${encodeURIComponent(set.id)}`} title={set.title} sub={set.course} drag onDragStart={(e) => startDrag(e, set.id)} pick={selecting ? selectable(true, `s:${set.id}`, picked, bind) : null}
                   chips={[[plural(set.manifest.questions.length, 'question')], [plural(new Set(set.manifest.questions.map((q) => q.section)).size, 'section')], ...(set.missing.length ? [[`${plural(set.missing.length, 'file')} missing`, 'warn']] : [])]} />
               ))}
             </div>
