@@ -17,7 +17,6 @@ import { toast } from '../components/Toasts.jsx';
 import { sheetsOf } from '../lib/formulas.js';
 import { folderCrumbs } from '../lib/folders.js';
 import { copyText } from '../lib/clipboard.js';
-import { toggleFullScreen } from '../lib/focus.js';
 import { copyPromptAndImage, questionImage, readAgentUrl } from '../lib/solve-agent.js';
 import { CLAUDE_DESKTOP_URL, formatSolvePrompt } from '../../shared/solve-agent.js';
 
@@ -192,6 +191,12 @@ export default function QuestionView({ setId, uid, run, theme }) {
     </Modal>
   ));
 
+  // F: opens the question's own figure in the large viewer (the first one on the page that is not a worked-solution page).
+  const enlargeQuestion = () => {
+    const btn = document.querySelector('.stem .enlarge-btn[aria-label^="Enlarge"]');
+    if (btn) btn.click();
+  };
+
   useEffect(() => {
     if (!question) return undefined;
     const onKey = (e) => {
@@ -201,7 +206,7 @@ export default function QuestionView({ setId, uid, run, theme }) {
       if (e.target.closest && e.target.closest('.formula-side')) return;   // focus in the formula sheet: its keys, not the question's
       if (e.key === 'd') { e.preventDefault(); if (!e.repeat) toggleDifficult(); }
       else if (e.key === 's') { e.preventDefault(); if (!e.repeat) void toggleSolution(); }
-      else if (e.key === 'f') { e.preventDefault(); if (!e.repeat) toggleFullScreen(); }
+      else if (e.key === 'f') { e.preventDefault(); if (!e.repeat) enlargeQuestion(); }
       else if (e.key === 'ArrowRight' && index < questions.length - 1) window.location.hash = go(index + 1);
       else if (e.key === 'ArrowLeft' && index > 0) window.location.hash = go(index - 1);
     };
@@ -298,7 +303,7 @@ export default function QuestionView({ setId, uid, run, theme }) {
             </label>
             {selfParts.map((p) => <SelfMark key={p.label} part={p} value={markedHere ? answers[p.label] : undefined} onChange={(v) => onAnswer(p, v)}>{selfParts.length === 1 && nav}</SelfMark>)}
             {selfParts.length !== 1 && nav && <div className="row scroll-row">{nav}</div>}
-            {!panel && <p className="muted">Shortcuts: <span className="kbd">D</span> difficult, <span className="kbd">S</span> solution, <span className="kbd">F</span> full screen, <span className="kbd">Alt</span>+<span className="kbd">T</span> formula sheets, {run && <><span className="kbd">←</span> <span className="kbd">→</span> move between questions.</>}</p>}
+            {!panel && <p className="muted">Shortcuts: <span className="kbd">D</span> difficult, <span className="kbd">S</span> solution, <span className="kbd">F</span> enlarge the question, <span className="kbd">Alt</span>+<span className="kbd">T</span> formula sheets, {run && <><span className="kbd">←</span> <span className="kbd">→</span> move between questions.</>}</p>}
             {run && pending > 0 && index === questions.length - 1 && (
               <p className="muted">{plural(pending, 'question')} still to check before this session can finish: check each numbered question that is not yet green or red (a question with no answer key cannot be checked, so it does not count).</p>
             )}

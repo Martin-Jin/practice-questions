@@ -3,9 +3,15 @@
 // `${1 + floor(N / 100)}.${N % 100, two digits}` (the 73rd push is 1.72). Every change a user can see adds an entry at the top,
 // sets VERSION to it and drops the oldest, so the window opens on the change log after an update. A new feature also needs
 // its place in the tutorial in Welcome.jsx.
-export const VERSION = '2.71';
+export const VERSION = '2.72';
 
 export const CHANGELOG = [
+  {
+    version: '2.72', date: '2026-11-02', title: 'F enlarges the question',
+    items: [
+      'Pressing F on a question now opens the question\'s picture in the large viewer instead of taking the whole page full screen. Press F or Esc again to close it. A question that is only typed text has nothing to enlarge, so F does nothing there.',
+    ],
+  },
   {
     version: '2.71', date: '2026-11-02', title: 'Held keys toggle once, F for full screen',
     items: [
@@ -28,12 +34,6 @@ export const CHANGELOG = [
     version: '2.68', date: '2026-11-02', title: 'Folders show counts',
     items: [
       'A folder on the Question sets tab now shows tags such as "3 sets" and "1 folder", like a set does, instead of listing the names of the sets inside it.',
-    ],
-  },
-  {
-    version: '2.67', date: '2026-11-02', title: 'Shorter set tiles',
-    items: [
-      'On the Question sets tab, the course and counts of a set now share one line instead of two, and the line slides along when the tile is too narrow to show all of it.',
     ],
   },
 ];

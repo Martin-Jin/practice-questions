@@ -45,6 +45,7 @@ export function Lightbox({ title, render, onClose, pages, initialPage = 0 }) {
     if (e.key === '+' || e.key === '=') { e.preventDefault(); zoom(1); }
     else if (e.key === '-') { e.preventDefault(); zoom(-1); }
     else if (e.key === '0') { e.preventDefault(); setLevel(FIT); }
+    else if (e.key === 'f' && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); e.stopPropagation(); if (!e.repeat) onClose(); }   // stopped, or the page's own F handler would reopen it
     else if (pages && pages.length > 1 && e.key === 'ArrowLeft' && page > 0) { e.preventDefault(); changePage(-1); }
     else if (pages && pages.length > 1 && e.key === 'ArrowRight' && page < pages.length - 1) { e.preventDefault(); changePage(1); }
   };
@@ -91,7 +92,7 @@ export function Lightbox({ title, render, onClose, pages, initialPage = 0 }) {
           {fit > 0 && shownRender(Math.round(fit * LEVELS[level]))}
         </div>
       </div>
-      <div className="lb-hint">Click the figure to zoom, drag to move around{pages && pages.length > 1 ? ', ← → to change page,' : ''}, Esc to close</div>
+      <div className="lb-hint">Click the figure to zoom, drag to move around{pages && pages.length > 1 ? ', ← → to change page,' : ''}, F or Esc to close</div>
     </dialog>
   );
 }

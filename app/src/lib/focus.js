@@ -43,12 +43,6 @@ export function isFullScreen() {
   return window.innerHeight >= screen.height - 1 && window.innerWidth >= screen.width - 1;
 }
 
-// The F shortcut on a question: enters or leaves full screen from the page. Does nothing if the browser has the API off.
-export function toggleFullScreen() {
-  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
-  else if (document.fullscreenEnabled) document.documentElement.requestFullscreen().catch(() => {});
-}
-
 // While a viewer is open, asks the browser to pass Esc to the page instead of leaving full screen, so Esc closes the viewer
 // first (holding Esc still leaves full screen). Keyboard Lock exists in Chrome and Edge only and works only in full screen,
 // so it is re-asked when full screen starts. Returns the function that gives Esc back.
